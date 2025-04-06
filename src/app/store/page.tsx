@@ -1,6 +1,6 @@
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 import Catalogue from "../../components/Main/Catalogue";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/Footer";
 
 export default function Store() {
   return (

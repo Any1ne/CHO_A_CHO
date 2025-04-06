@@ -1,3 +1,16 @@
+import CatalogueHeader from "./Catalogue/CatalogueHeader";
+import Filters from "./Catalogue//Filters";
+import ProductGrid from "./Catalogue//ProductGrid";
+import Pagination from "./Catalogue//Pagination";
+import CategoryList from "./Catalogue/CategoryList";
+
 export default function Catalogue() {
-  return <div className="p-4">Product Catalogue Placeholder</div>;
+  return (
+    <section className="p-4 space-y-4">
+      <CategoryList />
+      <Filters />
+      <ProductGrid />
+      <Pagination />
+    </section>
+  );
 }

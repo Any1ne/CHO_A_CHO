@@ -1,7 +1,13 @@
-export default function Basket() {
+import { Button } from "../ui/button";
+
+type BasketProps = {
+  onOpen: () => void;
+};
+
+export default function Basket({ onOpen }: BasketProps) {
   return (
-    <div className="p-4 box shadow-xl row-start-2">
-      <p className="text-end">Basket</p>
+    <div className="box px-4 row-start-2 flex items-center justify-end">
+      <Button onClick={onOpen}>Basket</Button>
     </div>
   );
 }

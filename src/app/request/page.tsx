@@ -1,6 +1,6 @@
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header";
 import Hero from "../../components/Main/Hero";
-import Footer from "../../components/Footer/Footer";
+import Footer from "../../components/Footer";
 
 export default function Request() {
   return (

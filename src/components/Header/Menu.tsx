@@ -1,7 +1,7 @@
 import Link from "next/link";
 export default function Menu() {
   return (
-    <nav className="flex p-4 box items-center justify-self-stretch  row-start-2">
+    <nav className="flex box px-4 items-center justify-self-stretch  row-start-2">
       <ul className="flex space-x-4 ">
         <li>
           <Link href="/">Home</Link>

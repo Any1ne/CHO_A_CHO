@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 
 export default function Gateway() {
   return (
-    <div className="box flex justify-center space-x-4 p-4">
+    <div className="box h-30 space-x-4 flex justify-center items-center">
       <Link href="/store">
         <Button> Go to Store</Button>
       </Link>
