@@ -10,7 +10,7 @@ export default function Menu() {
           <Link href="/store">Store</Link>
         </li>
         <li>
-          <Link href="/request">Request</Link>
+          <Link href="/branded">Branded</Link>
         </li>
       </ul>
     </nav>

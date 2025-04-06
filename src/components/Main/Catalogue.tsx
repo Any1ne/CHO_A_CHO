@@ -1,7 +1,6 @@
 import CatalogueHeader from "./Catalogue/CatalogueHeader";
 import Filters from "./Catalogue//Filters";
 import ProductGrid from "./Catalogue//ProductGrid";
-import Pagination from "./Catalogue//Pagination";
 import CategoryList from "./Catalogue/CategoryList";
 
 export default function Catalogue() {
@@ -10,7 +9,6 @@ export default function Catalogue() {
       <CategoryList />
       <Filters />
       <ProductGrid />
-      <Pagination />
     </section>
   );
 }

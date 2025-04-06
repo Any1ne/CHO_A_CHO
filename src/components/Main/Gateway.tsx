@@ -7,8 +7,8 @@ export default function Gateway() {
       <Link href="/store">
         <Button> Go to Store</Button>
       </Link>
-      <Link href="/request">
-        <Button> Leave Request</Button>
+      <Link href="/branded">
+        <Button> Branded offer</Button>
       </Link>
     </div>
   );

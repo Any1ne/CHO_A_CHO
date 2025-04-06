@@ -6,7 +6,7 @@ type BasketProps = {
 
 export default function Basket({ onOpen }: BasketProps) {
   return (
-    <div className="box px-4 row-start-2 flex items-center justify-end">
+    <div>
       <Button onClick={onOpen}>Basket</Button>
     </div>
   );
