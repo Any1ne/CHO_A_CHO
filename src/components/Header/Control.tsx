@@ -3,6 +3,7 @@ import Basket from "./Basket";
 import BasketModal from "../Basket/BasketModal";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { User } from "lucide-react";
 
 export default function Control() {
   const pathname = usePathname();
@@ -11,8 +12,10 @@ export default function Control() {
   const isStorePage = pathname === "/store";
 
   return (
-    <section className="box px-4 row-start-2 flex items-center justify-end">
-      <p className="px-4">Account</p>
+    <section className="flex box h-15 px-4 row-start-2 items-center justify-self-stretch justify-end">
+      <p className="hidden px-4">
+        <User />
+      </p>
 
       {isStorePage && (
         <>

@@ -1,3 +1,4 @@
+import { ShoppingBasket } from "lucide-react";
 import { Button } from "../ui/button";
 
 type BasketProps = {
@@ -7,7 +8,9 @@ type BasketProps = {
 export default function Basket({ onOpen }: BasketProps) {
   return (
     <div>
-      <Button onClick={onOpen}>Basket</Button>
+      <Button onClick={onOpen}>
+        <ShoppingBasket />
+      </Button>
     </div>
   );
 }

@@ -5,9 +5,13 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationPrevious,
-  PaginationNext,
 } from "@/components/ui/pagination";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 type SmartPaginationProps = {
   totalPages: number;
@@ -16,7 +20,6 @@ type SmartPaginationProps = {
 };
 
 export default function SmartPagination({
-  //! FIX butons and positioning of element
   totalPages,
   currentPage,
   onPageChange,
@@ -35,30 +38,41 @@ export default function SmartPagination({
     }
   }
 
+  const isFirstPage = currentPage === 1;
+  const isLastPage = currentPage === totalPages;
+
   return (
-    <Pagination className="mt-6">
+    <Pagination className="mt-6 justify-center">
       <PaginationContent>
-        {/* Перехід на першу сторінку */}
-        {currentPage > 2 && (
+        {/* First */}
+        {currentPage > 1 && (
           <PaginationItem>
             <PaginationLink
               onClick={() => onPageChange(1)}
               aria-label="First page"
+              className="flex items-center justify-center"
             >
-              {"<<"}
+              <ChevronsLeft className="w-4 h-4" />
             </PaginationLink>
           </PaginationItem>
         )}
 
-        {/* Кнопка назад */}
+        {/* Back */}
         <PaginationItem>
-          <PaginationPrevious
-            onClick={() => onPageChange(currentPage - 1)}
+          <PaginationLink
+            onClick={
+              !isFirstPage ? () => onPageChange(currentPage - 1) : undefined
+            }
             aria-label="Previous page"
-          />
+            className={`flex items-center justify-center ${
+              isFirstPage ? "pointer-events-none opacity-50" : ""
+            }`}
+          >
+            <ChevronLeft />
+          </PaginationLink>
         </PaginationItem>
 
-        {/* Кнопки сторінок */}
+        {/* Pages */}
         {visiblePages.map((page) => (
           <PaginationItem key={page}>
             <PaginationLink
@@ -70,22 +84,30 @@ export default function SmartPagination({
           </PaginationItem>
         ))}
 
-        {/* Кнопка вперед */}
+        {/* Forward */}
         <PaginationItem>
-          <PaginationNext
-            onClick={() => onPageChange(currentPage + 1)}
+          <PaginationLink
+            onClick={
+              !isLastPage ? () => onPageChange(currentPage + 1) : undefined
+            }
             aria-label="Next page"
-          />
+            className={`flex items-center justify-center ${
+              isLastPage ? "pointer-events-none opacity-50" : ""
+            }`}
+          >
+            <ChevronRight />
+          </PaginationLink>
         </PaginationItem>
 
-        {/* Перехід на останню сторінку */}
+        {/* Last */}
         {currentPage < totalPages - 1 && (
           <PaginationItem>
             <PaginationLink
               onClick={() => onPageChange(totalPages)}
               aria-label="Last page"
+              className="flex items-center justify-center"
             >
-              {">>"}
+              <ChevronsRight className="w-4 h-4" />
             </PaginationLink>
           </PaginationItem>
         )}

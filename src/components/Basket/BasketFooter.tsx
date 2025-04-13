@@ -1,3 +1,5 @@
+import { Button } from "../ui/button";
+
 export default function BasketFooter() {
   return (
     <div className="mt-4">
@@ -5,9 +7,9 @@ export default function BasketFooter() {
         <span>Total:</span>
         <span>$27.98</span> {/* динамічно пізніше */}
       </div>
-      <button className="mt-4 w-full bg-black text-white py-2 rounded">
+      <Button className="mt-4 w-full bg-black text-white py-2 rounded">
         Checkout
-      </button>
+      </Button>
     </div>
   );
 }

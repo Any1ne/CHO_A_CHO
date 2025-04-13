@@ -8,7 +8,7 @@ export default function Hero() {
   const [isRequestOpen, setIsRequestOpen] = useState(false);
 
   return (
-    <section className="box flex justify-center items-center p-10">
+    <section className="box flex justify-center items-center p-10 h-[calc(100vh-10vh)]">
       <Button onClick={() => setIsRequestOpen(true)}>Leave Request</Button>
 
       {isRequestOpen && (
