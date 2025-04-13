@@ -2,15 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToBasket } from "@/store/slices/basketSlice";
+import { Item } from "@/types/products";
 
-type ProductCardProps = {
-  title: string;
-  price: number;
-  image?: string;
-};
-
-export default function ProductCard({ title, price, image }: ProductCardProps) {
+export default function ProductCard({ id, title, price, image }: Item) {
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleAddToBasket = () => {
+    dispatch(addToBasket({ id, title, price, quantity: 1 }));
+    console.log(`dispatch(addToBasket({ ${id}, ${title}, ${price}))`);
+  };
 
   return (
     <div
@@ -30,7 +33,9 @@ export default function ProductCard({ title, price, image }: ProductCardProps) {
       </div>
 
       <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <Button className="w-full">Придбати</Button>
+        <Button className="w-full" onClick={handleAddToBasket}>
+          Придбати
+        </Button>
       </div>
     </div>
   );

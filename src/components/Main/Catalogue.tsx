@@ -1,7 +1,6 @@
-import CatalogueHeader from "./Catalogue/CatalogueHeader";
-import Filters from "./Catalogue//Filters";
-import ProductGrid from "./Catalogue//ProductGrid";
-import CategoryList from "./Catalogue/CategoryList";
+import Filters from "@/components/Catalogue/Filters";
+import ProductGrid from "@/components/Catalogue/ProductGrid";
+import CategoryList from "@/components/Catalogue/CategoryList";
 
 export default function Catalogue() {
   return (

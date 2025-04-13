@@ -1,1 +1,2 @@
 For database
+// json-server --watch "./src/db/products.json" --port 3001
