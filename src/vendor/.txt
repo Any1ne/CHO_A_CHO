@@ -1,0 +1,1 @@
+For external api request (Nova Poshta, Google maps, Monobank https://monobank.ua/plata-by-mono)
