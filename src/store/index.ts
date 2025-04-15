@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import basketReducer from "./slices/basketSlice";
+import catalogueReducer from "./slices/catalogueSlice";
 
 export const store = configureStore({
   reducer: {
     basket: basketReducer,
+    catalogue: catalogueReducer,
   },
 });
 

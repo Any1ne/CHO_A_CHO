@@ -2,7 +2,7 @@
 
 import { Button } from "../ui/button";
 import { useState } from "react";
-import RequestModal from "../Request/RequestModal";
+import RequestModal from "@/components/Main/Request/RequestModal";
 
 export default function Hero() {
   const [isRequestOpen, setIsRequestOpen] = useState(false);

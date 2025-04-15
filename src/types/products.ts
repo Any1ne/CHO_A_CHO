@@ -1,17 +1,15 @@
-export type Product = {
+export type ProductType = {
   id: string;
   title: string;
   description: string;
   price: number;
-  image_urls: string[];
+  images?: string[];
 };
 
-export type Item = {
+export type BasketItemType = {
   id: string;
   title: string;
-  description?: string;
   price: number;
   quantity: number;
-  image?: string;
-  image_urls?: string[];
+  images?: string;
 };

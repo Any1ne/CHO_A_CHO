@@ -3,7 +3,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import BasketItem from "./BasketItem";
-import { Item } from "@/types/products";
 
 export default function BasketItemsList() {
   const items = useSelector((state: RootState) => state.basket.items);

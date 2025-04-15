@@ -1,13 +1,17 @@
 "use client";
 
-import { Item } from "@/types/products";
+import { BasketItemType } from "@/types/products";
 import { useDispatch } from "react-redux";
-import { increaseQuantity, decreaseQuantity } from "@/store/slices/basketSlice";
+import {
+  increaseQuantity,
+  decreaseQuantity,
+  removeFromBasket,
+} from "@/store/slices/basketSlice";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
 type Props = {
-  item: Item;
+  item: BasketItemType;
 };
 
 export default function BasketItem({ item }: Props) {
@@ -33,6 +37,13 @@ export default function BasketItem({ item }: Props) {
           onClick={() => dispatch(increaseQuantity(item.id))}
         >
           <Plus />
+        </Button>
+        <Button
+          size="sm"
+          variant="destructive"
+          onClick={() => dispatch(removeFromBasket(item.id))}
+        >
+          <Trash2 className="h-4 w-4" />
         </Button>
       </div>
     </li>

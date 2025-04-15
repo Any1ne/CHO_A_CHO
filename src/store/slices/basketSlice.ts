@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Item } from "@/types/products";
+import { BasketItemType } from "@/types/products";
 
 type BasketState = {
-  items: Item[];
+  items: BasketItemType[];
 };
 
 const initialState: BasketState = {
@@ -13,7 +13,7 @@ export const basketSlice = createSlice({
   name: "basket",
   initialState,
   reducers: {
-    addToBasket: (state, action: PayloadAction<Item>) => {
+    addToBasket: (state, action: PayloadAction<BasketItemType>) => {
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );
@@ -34,9 +34,15 @@ export const basketSlice = createSlice({
       }
     },
     decreaseQuantity: (state, action: PayloadAction<string>) => {
-      const item = state.items.find((item) => item.id === action.payload);
-      if (item && item.quantity > 1) {
-        item.quantity -= 1;
+      const itemIndex = state.items.findIndex(
+        (item) => item.id === action.payload
+      );
+      if (itemIndex !== -1) {
+        if (state.items[itemIndex].quantity > 1) {
+          state.items[itemIndex].quantity -= 1;
+        } else {
+          state.items.splice(itemIndex, 1);
+        }
       }
     },
   },

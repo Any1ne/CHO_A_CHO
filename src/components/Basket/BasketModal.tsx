@@ -11,7 +11,7 @@ type Props = {
 export default function BasketModal({ onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 bg-black/40">
-      <aside className="fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-50 p-4 flex flex-col">
+      <aside className="fixed right-0 top-0 h-full w-100 bg-white shadow-lg z-50 p-4 flex flex-col">
         <Button
           variant="ghost"
           className="p-2 justify-end"
