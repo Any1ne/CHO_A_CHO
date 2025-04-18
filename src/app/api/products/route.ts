@@ -6,11 +6,23 @@ export async function GET(request: NextRequest) {
 
   const url =
     category && category !== "All"
-      ? `http://localhost:3001/products?category=${category}`
-      : `http://localhost:3001/products`;
+      ? `http://localhost:3000/api/json/products?category=${category}`
+      : `http://localhost:3000/api/json/products`;
 
-  const res = await fetch(url);
-  const products = await res.json();
+  try {
+    const res = await fetch(url);
 
-  return NextResponse.json(products);
+    if (!res.ok) {
+      throw new Error("API responded with error");
+    }
+
+    const products = await res.json();
+    return NextResponse.json(products);
+  } catch (error) {
+    console.error("🔴 Error fetching from JSON server:", error);
+    return NextResponse.json(
+      { error: "Error on accessing server" },
+      { status: 500 }
+    );
+  }
 }

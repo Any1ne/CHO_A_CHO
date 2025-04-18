@@ -9,7 +9,7 @@ export default function MobileMenuButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div className="row-start-2">
       <Button
         onClick={() => setIsOpen((prev) => !prev)}
         className="p-2"
@@ -19,6 +19,6 @@ export default function MobileMenuButton() {
       </Button>
 
       {isOpen && <MobileMenuModal onClose={() => setIsOpen(false)} />}
-    </>
+    </div>
   );
 }

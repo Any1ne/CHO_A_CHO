@@ -9,6 +9,7 @@ export default function SortingSearching() {
   return (
     <div className="flex items-center gap-4">
       <select
+        id="sortOption"
         value={sortOption}
         onChange={(e) => dispatch(setSortOption(e.target.value))}
         className="border p-1 rounded"
@@ -18,6 +19,7 @@ export default function SortingSearching() {
         <option value="high">Price: High to Low</option>
       </select>
       <input
+        id="searchBar"
         type="text"
         value={searchTerm}
         onChange={(e) => dispatch(setSearchTerm(e.target.value))}

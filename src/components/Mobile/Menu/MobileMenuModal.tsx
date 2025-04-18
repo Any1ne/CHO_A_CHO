@@ -10,7 +10,7 @@ type Props = {
 
 export default function MobileMenuModal({ onClose }: Props) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/40">
+    <div className="fixed inset-0 z-20 bg-black/40">
       <div className="fixed top-0 left-0 h-full w-64 bg-white p-4 shadow-lg flex flex-col">
         <div className="flex justify-end">
           <Button

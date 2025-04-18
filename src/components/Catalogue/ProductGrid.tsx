@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import ProductCard from "./ProductCard";
+import ProductCard from "@/components/Catalogue/Product/ProductCard";
 import SmartPagination from "./SmartPagination";
 import { fetchProducts } from "@/lib/api";
 import { ProductType } from "@/types/products";
@@ -51,7 +51,7 @@ export default function ProductGrid() {
 
   return (
     <>
-      <div className="grid grid-cols-2 lg:grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-x-3 gap-y-5 mt-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-x-3 gap-y-5 mt-4 z-2">
         {visibleProducts.map((product) => (
           <ProductCard
             key={product.id}

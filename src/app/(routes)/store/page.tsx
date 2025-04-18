@@ -1,9 +1,9 @@
-import Catalogue from "@/components/Main/Catalogue";
+import Catalogue from "@/components/Catalogue/Catalogue";
 
 export default function Store() {
   return (
-    <div>
+    <main className="mt-[12vh] min-h-[88vh]">
       <Catalogue />
-    </div>
+    </main>
   );
 }
