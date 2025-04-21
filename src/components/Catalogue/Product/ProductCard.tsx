@@ -35,14 +35,20 @@ export default function ProductCard({
 
         <div className="p-3">
           <h3
-            className="font-medium overflow-hidden cursor-pointer"
+            className="font-medium h-max-[3rem] overflow-hidden text-ellipsis line-clamp-2 cursor-pointer "
             onClick={() => setIsModalOpen(true)}
           >
             {title}
           </h3>
+
           <p className="text-sm text-gray-600">${price.toFixed(2)}</p>
           <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <BasketControls id={id} title={title} price={price} />
+            <BasketControls
+              id={id}
+              title={title}
+              price={price}
+              showQuantityController={false}
+            />
           </div>
         </div>
       </div>

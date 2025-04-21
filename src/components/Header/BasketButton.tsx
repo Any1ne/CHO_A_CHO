@@ -10,20 +10,21 @@ type BasketProps = {
   onOpen: () => void;
 };
 
-export default function Basket({ onOpen }: BasketProps) {
+export default function BasketButton({ onOpen }: BasketProps) {
   const itemsCount = useSelector((state: RootState) =>
     state.basket.items.reduce((total, item) => total + item.quantity, 0)
   );
 
   return (
-    <div className="relative">
-      <Button onClick={onOpen}>
+    <div>
+      <Button className="relative" onClick={onOpen}>
         <ShoppingBasket />
         {itemsCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
             {itemsCount}
           </span>
         )}
+        <span className="hidden md:inline">Shoping</span>
       </Button>
     </div>
   );

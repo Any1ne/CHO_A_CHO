@@ -9,7 +9,7 @@ export default function Menu() {
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-lg text-gray-800 hover:text-blue-600"
+              className="text-xl text-gray-800 hover:text-blue-600"
             >
               {link.label}
             </Link>

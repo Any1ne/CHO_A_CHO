@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 export default function RequestForm() {
+  const router = useRouter();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -18,8 +21,15 @@ export default function RequestForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Тут буде логіка запиту на бекенд
     console.log("Form submitted:", form);
-    // TODO: submit logic here
+
+    toast.success("Запит надіслано! Ми зв'яжемося з вами найближчим часом.");
+
+    setTimeout(() => {
+      router.push("/");
+    }, 2000);
   };
 
   return (

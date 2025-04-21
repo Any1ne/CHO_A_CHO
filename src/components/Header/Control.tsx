@@ -1,5 +1,5 @@
 "use client";
-import Basket from "./Basket";
+import Basket from "./BasketButton";
 import BasketModal from "../Basket/BasketModal";
 import { useState } from "react";
 import { usePathname } from "next/navigation";

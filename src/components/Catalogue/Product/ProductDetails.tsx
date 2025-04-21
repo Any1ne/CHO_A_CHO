@@ -1,5 +1,8 @@
 "use client";
+
 import BasketControls from "@/components/Catalogue/BasketControls";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
 
 type Props = {
   title: string;
@@ -14,25 +17,31 @@ export default function ProductDetails({
   price,
   id,
 }: Props) {
+  const itemInBasket = useSelector((state: RootState) =>
+    state.basket.items.find((item) => item.id === id)
+  );
+
   return (
-    <div className="w-full md:w-1/2 flex flex-col gap-6 border-1 p-4">
-      <div className="border-b-1 p-1">
-        <h2 className="text-3xl font-bold mb-2">{title}</h2>
+    <div className="shrink w-full md:w-1/2 grid border rounded overflow-hidden">
+      {/* Заголовок */}
+      <div className="p-4 border-b">
+        <h2 className="text-3xl font-bold">{title}</h2>
       </div>
 
-      <div className="border-b-1 p-1">
-        <p className="text-gray-700 mb-4">Controls</p>
+      {/* Пояснення до контролів */}
+      <div className="p-4 border-b">
+        <p className="text-gray-700">Controls</p>
       </div>
 
-      <div className="border-b-1 flex gap-4 p-1">
+      {/* Ціна + кнопка */}
+      <div className="p-4 border-b grid grid-cols-[auto_1fr] items-center gap-4">
         <p className="text-xl font-semibold">${price.toFixed(2)}</p>
-        <div>
-          <BasketControls id={id} title={title} price={price} />
-        </div>
+        <BasketControls id={id} title={title} price={price} />
       </div>
 
-      <div className="border-b-1 p-1">
-        <p className="text-gray-700 mb-4">{description}</p>
+      {/* Опис */}
+      <div className="p-4">
+        <p className="text-gray-700">{description}</p>
       </div>
     </div>
   );
