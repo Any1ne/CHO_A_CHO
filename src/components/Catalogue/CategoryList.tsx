@@ -19,8 +19,7 @@ export default function CategoryList({
   ];
 
   return (
-    <div className="border-b pb-2">
-      <h2 className="text-lg font-semibold mb-2">Categories</h2>
+    <div className="border-b">
       <ul className="flex gap-3 flex-wrap">
         {categories.map((category) => (
           <li

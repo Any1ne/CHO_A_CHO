@@ -1,0 +1,45 @@
+Front-end (UX):
+Home: 
+1) arows control on carousel (Loop) when hover
+2) Footer (Contact us, Social, Pages )
+
+Header:
+1) Header min height
+
+Catalogue:
+1) ProductPhoto 
+2) ProductDescription (control *choose flavour SELECT*)
+3) Card aspect-ratio (need to be wider and higher)
+4) photo carousel (with preview)
+5) Categorise and filtration in one component
+6) select and serch must have same height
+7) Mobile layout x-pading must be zero
+8) 
+
+Branded:
+1) Title text (OVERALL LAYOUT)
+
+Basket:
+1) Free delivery (Title+text, progress bar+icon)
+2) Item list (layout)
+3) closing button
+
+Checkout:
+1) Accordion
+2) Vendor Api (Google maps)
+3) Checkout Soner
+4) checkout achieved page
+5) Margin top
+
+
+Mobile layout:
+1) Basket modal on full width
+
+
+Initialize DB
+Asign DB
+Connect to DB
+Download Photos from https://petrovka-horeca.com.ua/uk/shokolad-s-predskazaniyami/
+Use Prisma
+Use CDN
+

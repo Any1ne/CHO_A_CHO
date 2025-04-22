@@ -13,11 +13,11 @@ export default function Catalogue() {
 
   return (
     <section className="py-4 px-30 space-y-4 z-2 ">
+      <SortingSearching />
       <CategoryList
         selectedCategory={selectedCategory}
         onCategoryChange={(value) => dispatch(setCategory(value))}
       />
-      <SortingSearching />
       <ProductGrid />
     </section>
   );

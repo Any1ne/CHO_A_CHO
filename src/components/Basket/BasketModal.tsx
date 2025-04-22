@@ -14,7 +14,7 @@ export default function BasketModal({ onClose }: Props) {
       <aside className="fixed right-0 top-0 h-full w-100 bg-white shadow-lg z-50 p-4 flex flex-col">
         <Button
           variant="ghost"
-          className="p-2 justify-end"
+          className="p-2 self-end"
           onClick={onClose}
           aria-label="Close menu"
         >
