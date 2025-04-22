@@ -1,5 +1,5 @@
 import WebBanner from "@/components/Main/WebBanner";
-import Gateway from "@/components/Main/Gateway";
+import Gateway from "@/components/Main/Pathway";
 
 export default function Home() {
   return (

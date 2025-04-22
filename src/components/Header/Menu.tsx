@@ -3,8 +3,8 @@ import links from "../../constants/Links/links";
 
 export default function Menu() {
   return (
-    <nav className="flex items-center justify-start row-start-2 box-border">
-      <ul className="flex space-x-4">
+    <nav className="flex justify-stretch row-start-2 box-border">
+      <ul className="flex space-x-10 justify-stretch">
         {links.map((link) => (
           <li key={link.href}>
             <Link
