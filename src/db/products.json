@@ -3,210 +3,218 @@
     {
       "id": "1-001",
       "title": "Бельгійський шоколад 15г 'ПРАПОР'",
-      "flavor": "ПРАПОР",
+      "flavour": "ПРАПОР",
       "category": "Mini",
-      "price": 17
+      "price": 17,
+      "images": [
+        "https://petrovka-horeca.com.ua/images/thumbnails/240/290/detailed/17/4536335656_shokolad-belgijskij-cho.jpg",
+        "https://petrovka-horeca.com.ua/images/detailed/16/4424930790_shokolad-belgijskij-s.jpg"
+      ]
     },
     {
       "id": "1-002",
       "title": "Бельгійський шоколад 15г 'ОРЕО'",
-      "flavor": "ОРЕО",
+      "flavour": "ОРЕО",
       "category": "Mini",
-      "price": 17
+      "price": 17,
+      "images": [
+        "https://petrovka-horeca.com.ua/images/thumbnails/240/290/detailed/16/4424930790_shokolad-belgijskij-s.jpg",
+        "https://petrovka-horeca.com.ua/images/detailed/16/4424930790_shokolad-belgijskij-s.jpg"
+      ]
     },
     {
       "id": "1-003",
       "title": "Бельгійський шоколад 15г 'КОКОС'",
-      "flavor": "КОКОС",
+      "flavour": "КОКОС",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-004",
       "title": "Бельгійський шоколад 15г 'ВАНІЛЬ'",
-      "flavor": "ВАНІЛЬ",
+      "flavour": "ВАНІЛЬ",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-005",
       "title": "Бельгійський шоколад 15г 'МАТЧА-МАЛИНА'",
-      "flavor": "МАТЧА-МАЛИНА",
+      "flavour": "МАТЧА-МАЛИНА",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-006",
       "title": "Бельгійський шоколад 15г 'ПОЛУНИЦЯ'",
-      "flavor": "ПОЛУНИЦЯ",
+      "flavour": "ПОЛУНИЦЯ",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-007",
       "title": "Бельгійський шоколад 15г 'АПЕЛЬСИН'",
-      "flavor": "АПЕЛЬСИН",
+      "flavour": "АПЕЛЬСИН",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-008",
       "title": "Бельгійський шоколад 15г 'ЛАЙМ'",
-      "flavor": "ЛАЙМ",
+      "flavour": "ЛАЙМ",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-009",
       "title": "Бельгійський шоколад 15г 'ЯГОДА'",
-      "flavor": "ЯГОДА",
+      "flavour": "ЯГОДА",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-010",
       "title": "Бельгійський шоколад 15г 'ЧОРНА'",
-      "flavor": "ЧОРНА",
+      "flavour": "ЧОРНА",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-011",
       "title": "Бельгійський шоколад 15г 'МОЛОЧНА'",
-      "flavor": "МОЛОЧНА",
+      "flavour": "МОЛОЧНА",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "1-012",
       "title": "Бельгійський шоколад 15г 'ТОФІ'",
-      "flavor": "ТОФІ",
+      "flavour": "ТОФІ",
       "category": "Mini",
       "price": 17
     },
     {
       "id": "2-001",
       "title": "Бельгійський шоколад 30г 'ПРАПОР'",
-      "flavor": "ПРАПОР",
+      "flavour": "ПРАПОР",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-002",
       "title": "Бельгійський шоколад 30г 'ОРЕО'",
-      "flavor": "ОРЕО",
+      "flavour": "ОРЕО",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-003",
       "title": "Бельгійський шоколад 30г 'КОКОС'",
-      "flavor": "КОКОС",
+      "flavour": "КОКОС",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-004",
       "title": "Бельгійський шоколад 30г 'ВАНІЛЬ'",
-      "flavor": "ВАНІЛЬ",
+      "flavour": "ВАНІЛЬ",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-005",
       "title": "Бельгійський шоколад 30г 'МАТЧА-МАЛИНА'",
-      "flavor": "МАТЧА-МАЛИНА",
+      "flavour": "МАТЧА-МАЛИНА",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-006",
       "title": "Бельгійський шоколад 30г 'ПОЛУНИЦЯ'",
-      "flavor": "ПОЛУНИЦЯ",
+      "flavour": "ПОЛУНИЦЯ",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-007",
       "title": "Бельгійський шоколад 30г 'АПЕЛЬСИН'",
-      "flavor": "АПЕЛЬСИН",
+      "flavour": "АПЕЛЬСИН",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-008",
       "title": "Бельгійський шоколад 30г 'ЛАЙМ'",
-      "flavor": "ЛАЙМ",
+      "flavour": "ЛАЙМ",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-009",
       "title": "Бельгійський шоколад 30г 'ЯГОДА'",
-      "flavor": "ЯГОДА",
+      "flavour": "ЯГОДА",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-010",
       "title": "Бельгійський шоколад 30г 'ЧОРНА'",
-      "flavor": "ЧОРНА",
+      "flavour": "ЧОРНА",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-011",
       "title": "Бельгійський шоколад 30г 'МОЛОЧНА'",
-      "flavor": "МОЛОЧНА",
+      "flavour": "МОЛОЧНА",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "2-012",
       "title": "Бельгійський шоколад 30г 'ТОФІ'",
-      "flavor": "ТОФІ",
+      "flavour": "ТОФІ",
       "category": "Popular",
       "price": 28
     },
     {
       "id": "3-001",
       "title": "Бельгійський шоколад 30г з мигдалем 'ПРАПОР'",
-      "flavor": "ПРАПОР",
+      "flavour": "ПРАПОР",
       "category": "Nutty",
       "price": 33
     },
     {
       "id": "3-002",
       "title": "Бельгійський шоколад 30г з мигдалем 'ОРЕО'",
-      "flavor": "ОРЕО",
+      "flavour": "ОРЕО",
       "category": "Nutty",
       "price": 33
     },
     {
       "id": "3-003",
       "title": "Бельгійський шоколад 30г з мигдалем 'КОКОС'",
-      "flavor": "КОКОС",
+      "flavour": "КОКОС",
       "category": "Nutty",
       "price": 33
     },
     {
       "id": "3-004",
       "title": "Бельгійський шоколад 30г з мигдалем 'ВАНІЛЬ'",
-      "flavor": "ВАНІЛЬ",
+      "flavour": "ВАНІЛЬ",
       "category": "Nutty",
       "price": 33
     },
     {
       "id": "3-005",
       "title": "Бельгійський шоколад 30г з мигдалем 'МАТЧА-МАЛИНА'",
-      "flavor": "МАТЧА-МАЛИНА",
+      "flavour": "МАТЧА-МАЛИНА",
       "category": "Nutty",
       "price": 33
     },
     {
       "id": "3-006",
       "title": "Бельгійський шоколад 30г з мигдалем 'ПОЛУНИЦЯ'",
-      "flavor": "ПОЛУНИЦЯ",
+      "flavour": "ПОЛУНИЦЯ",
       "category": "Nutty",
       "price": 33
     }

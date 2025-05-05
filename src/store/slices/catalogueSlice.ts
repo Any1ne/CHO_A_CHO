@@ -16,7 +16,7 @@ const catalogueSlice = createSlice({
   name: "catalogue",
   initialState,
   reducers: {
-    setCategory(state, action: PayloadAction<string>) {
+    setSelectedCategory(state, action: PayloadAction<string>) {
       state.selectedCategory = action.payload;
     },
     setSortOption(state, action: PayloadAction<string>) {
@@ -28,6 +28,6 @@ const catalogueSlice = createSlice({
   },
 });
 
-export const { setCategory, setSortOption, setSearchTerm } =
+export const { setSelectedCategory, setSortOption, setSearchTerm } =
   catalogueSlice.actions;
 export default catalogueSlice.reducer;

@@ -1,24 +1,17 @@
 "use client";
-import SortingSearching from "@/components/Catalogue/SortingSearching";
+
 import ProductGrid from "@/components/Catalogue/ProductGrid";
-import CategoryList from "@/components/Catalogue/CategoryList";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { setCategory } from "@/store/slices/catalogueSlice";
+import ProductModal from "./Product/ProductModal";
+import CatalogueHeader from "./CatalogueHeader";
+import ProductFilterPanel from "@/components/Catalogue/ProductFilterPanel";
 
 export default function Catalogue() {
-  const dispatch = useAppDispatch();
-  const selectedCategory = useAppSelector(
-    (state) => state.catalogue.selectedCategory
-  );
-
   return (
-    <section className="py-4 px-30 space-y-4 z-2 ">
-      <SortingSearching />
-      <CategoryList
-        selectedCategory={selectedCategory}
-        onCategoryChange={(value) => dispatch(setCategory(value))}
-      />
+    <section className="py-4 px-2 md:px-10 lg:px-30 space-y-4 z-2">
+      <CatalogueHeader />
+      <ProductFilterPanel />
       <ProductGrid />
+      <ProductModal />
     </section>
   );
 }

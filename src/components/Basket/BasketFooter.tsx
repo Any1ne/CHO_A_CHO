@@ -25,7 +25,7 @@ export default function BasketFooter() {
     <div className="mt-4">
       <div className="flex justify-between font-semibold">
         <span>Total:</span>
-        <span>${total.toFixed(2)}</span>
+        <span>₴{total.toFixed(2)}</span>
       </div>
       <Button
         className="mt-4 w-full bg-black text-white py-2 rounded"

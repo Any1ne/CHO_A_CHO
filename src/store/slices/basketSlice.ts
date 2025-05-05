@@ -45,6 +45,20 @@ export const basketSlice = createSlice({
         }
       }
     },
+    setQuantity: (
+      state,
+      action: PayloadAction<{ productId: string; quantity: number }>
+    ) => {
+      const item = state.items.find(
+        (item) => item.id === action.payload.productId
+      );
+      if (item) {
+        item.quantity = Math.max(1, action.payload.quantity); // гарантуємо ≥1
+      }
+    },
+    clearBasket: (state) => {
+      state.items = [];
+    },
   },
 });
 
@@ -53,5 +67,7 @@ export const {
   removeFromBasket,
   increaseQuantity,
   decreaseQuantity,
+  setQuantity,
+  clearBasket,
 } = basketSlice.actions;
 export default basketSlice.reducer;

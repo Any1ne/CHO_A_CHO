@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/hooks";
 import { setSortOption, setSearchTerm } from "@/store/slices/catalogueSlice";
 
 export default function SortingSearching() {

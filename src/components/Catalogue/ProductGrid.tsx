@@ -1,20 +1,18 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "@/components/Catalogue/Product/ProductCard";
 import SmartPagination from "./SmartPagination";
 import { fetchProducts } from "@/lib/api";
 import { ProductType } from "@/types/products";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 
 const ITEMS_PER_PAGE = 10;
-type Props = {
-  selectedCategory: string;
-  sortOption: string;
-  searchTerm: string;
-};
 
 export default function ProductGrid() {
+  const dispatch = useAppDispatch();
+
   const selectedCategory = useAppSelector(
     (state) => state.catalogue.selectedCategory
   );
@@ -51,13 +49,14 @@ export default function ProductGrid() {
 
   return (
     <>
-      <div className="grid grid-cols-2 lg:grid-cols-5 sm:grid-cols-3 md:grid-cols-4 justify-center gap-x-3 gap-y-5 mt-4 z-2 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  lg:grid-cols-5 justify-center gap-x-3 gap-y-5 mt-4 z-2 p-4">
         {visibleProducts.map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
             title={product.title}
             price={product.price}
+            preview={product.preview}
             description={product.description}
           />
         ))}
