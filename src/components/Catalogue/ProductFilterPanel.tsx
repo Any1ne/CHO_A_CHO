@@ -21,7 +21,7 @@ export default function ProductFilterPanel() {
     "Popular",
     "Nutty",
     "Hearts",
-    "Shugar free",
+    "Shugar Free",
     "Big",
   ];
 

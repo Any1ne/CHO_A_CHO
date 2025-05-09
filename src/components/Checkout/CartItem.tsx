@@ -11,7 +11,10 @@ export default function CartItem({ item }: Props) {
     <div className="flex items-center justify-between gap-2 py-2 border-b">
       <div className="flex items-center gap-3">
         <Image
-          src={item.images?.[0] || "/placeholder.png"}
+          src={
+            item.preview ||
+            "https://petrovka-horeca.com.ua/images/thumbnails/240/290/detailed/16/4424930790_shokolad-belgijskij-s.jpg"
+          }
           alt={item.title}
           width={50}
           height={50}

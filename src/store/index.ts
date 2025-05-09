@@ -3,6 +3,7 @@ import basketReducer from "./slices/basketSlice";
 import catalogueReducer from "./slices/catalogueSlice";
 // import productsReducer from "./slices/productsSlice";
 import productModalReducer from "./slices/productModalSlice";
+import checkoutSliceReducer from "./slices/checkoutSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     catalogue: catalogueReducer,
     // products: productsReducer,
     productModal: productModalReducer,
+    checkout: checkoutSliceReducer,
   },
 });
 

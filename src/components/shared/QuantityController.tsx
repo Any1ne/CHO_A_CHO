@@ -20,17 +20,17 @@ export default function QuantityController({
   onQuantityChange,
 }: Props) {
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState(quantity);
+  const [inputValue, setInputValue] = useState<string>(quantity.toString());
 
   const handleDecrease = () => {
-    const newQty = Math.max(1, inputValue - 1);
-    setInputValue(newQty);
+    const newQty = Math.max(1, parseInt(inputValue || "1", 10) - 1);
+    setInputValue(newQty.toString());
     handleQuantityChange(newQty);
   };
 
   const handleIncrease = () => {
-    const newQty = inputValue + 1;
-    setInputValue(newQty);
+    const newQty = parseInt(inputValue || "1", 10) + 1;
+    setInputValue(newQty.toString());
     handleQuantityChange(newQty);
   };
 
@@ -43,12 +43,14 @@ export default function QuantityController({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value)) {
-      const safeValue = Math.max(1, value);
-      setInputValue(safeValue);
-      handleQuantityChange(safeValue);
-    }
+    setInputValue(e.target.value);
+  };
+
+  const handleBlur = () => {
+    const parsed = parseInt(inputValue, 10);
+    const safeValue = isNaN(parsed) || parsed < 1 ? 1 : parsed;
+    setInputValue(safeValue.toString());
+    handleQuantityChange(safeValue);
   };
 
   const handleRemove = () => {
@@ -64,6 +66,7 @@ export default function QuantityController({
         type="number"
         value={inputValue}
         onChange={handleInputChange}
+        onBlur={handleBlur}
         className="w-12 text-center border rounded h-9"
         min={1}
       />

@@ -1,8 +1,11 @@
-/** @type {import('jest').Config} */
-module.exports = {
-  preset: "ts-jest",
+import nextJest from "next/jest";
+
+const createJestConfig = nextJest({ dir: "./" });
+
+const customJestConfig = {
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  moduleDirectories: ["node_modules", "<rootDir>/"],
   testEnvironment: "node",
-  testMatch: ["**/*.test.ts", "**/*.spec.ts"],
-  moduleFileExtensions: ["ts", "js", "json", "node"],
-  roots: ["<rootDir>/src"],
 };
+
+export default createJestConfig(customJestConfig);

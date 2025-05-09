@@ -13,7 +13,7 @@ export type BasketItemType = {
   title: string;
   price: number;
   quantity: number;
-  images?: string;
+  preview?: string;
 };
 
 export type FormData = {

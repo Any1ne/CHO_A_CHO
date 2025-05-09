@@ -5,8 +5,22 @@ type BasketState = {
   items: BasketItemType[];
 };
 
+const loadBasketFromStorage = (): BasketItemType[] => {
+  if (typeof window !== "undefined") {
+    const data = localStorage.getItem("basket");
+    return data ? JSON.parse(data) : [];
+  }
+  return [];
+};
+
 const initialState: BasketState = {
-  items: [],
+  items: loadBasketFromStorage(),
+};
+
+const saveBasketToStorage = (items: BasketItemType[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("basket", JSON.stringify(items));
+  }
 };
 
 export const basketSlice = createSlice({
@@ -22,15 +36,17 @@ export const basketSlice = createSlice({
       } else {
         state.items.push(action.payload);
       }
+      saveBasketToStorage(state.items);
     },
-
     removeFromBasket: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
+      saveBasketToStorage(state.items);
     },
     increaseQuantity: (state, action: PayloadAction<string>) => {
       const item = state.items.find((item) => item.id === action.payload);
       if (item) {
         item.quantity += 1;
+        saveBasketToStorage(state.items);
       }
     },
     decreaseQuantity: (state, action: PayloadAction<string>) => {
@@ -43,6 +59,7 @@ export const basketSlice = createSlice({
         } else {
           state.items.splice(itemIndex, 1);
         }
+        saveBasketToStorage(state.items);
       }
     },
     setQuantity: (
@@ -53,11 +70,13 @@ export const basketSlice = createSlice({
         (item) => item.id === action.payload.productId
       );
       if (item) {
-        item.quantity = Math.max(1, action.payload.quantity); // гарантуємо ≥1
+        item.quantity = Math.max(1, action.payload.quantity);
+        saveBasketToStorage(state.items);
       }
     },
     clearBasket: (state) => {
       state.items = [];
+      saveBasketToStorage([]);
     },
   },
 });

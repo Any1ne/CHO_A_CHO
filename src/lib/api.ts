@@ -66,14 +66,17 @@ export interface OrderData {
   };
 }
 
-export const submitOrder = async ({
-  total,
-  items,
-  data,
-  clearBasket,
-  toast,
-  router,
-}: Omit<OrderData, "generateOrderNumber">) => {
+type OrderPayload = {
+  total: number;
+  items: any[];
+  data: {
+    contact: any;
+    delivery: any;
+    payment: any;
+  };
+};
+
+export const submitOrder = async ({ total, items, data }: OrderPayload) => {
   const orderData = {
     ...data,
     total,
@@ -86,11 +89,32 @@ export const submitOrder = async ({
     body: JSON.stringify(orderData),
   });
 
-  if (response.ok) {
-    clearBasket();
-    toast.success("Замовлення успішно оформлено!");
-    router.push("/checkout/success");
+  const json = await response.json();
+
+  if (response.ok && json.orderId) {
+    return json; // Повертаємо обʼєкт з orderId
   } else {
-    toast.error("Помилка при створенні замовлення.");
+    throw new Error(json.error || "Помилка оформлення замовлення");
   }
 };
+
+export async function fetchCities() {
+  const res = await fetch("/api/nova_poshta/cities");
+  if (!res.ok) throw new Error("Failed to fetch cities");
+  const data = await res.json();
+  return data.cities;
+}
+
+export async function fetchWarehouses(cityRef: string) {
+  const res = await fetch(`/api/nova_poshta/warehouses?cityRef=${cityRef}`);
+  if (!res.ok) throw new Error("Failed to fetch warehouses");
+  const data = await res.json();
+  return data.warehouses;
+}
+
+export async function fetchStreets(cityRef: string) {
+  const res = await fetch(`/api/nova_poshta/streets?cityRef=${cityRef}`);
+  if (!res.ok) throw new Error("Failed to fetch streets");
+  const data = await res.json();
+  return data.streets;
+}

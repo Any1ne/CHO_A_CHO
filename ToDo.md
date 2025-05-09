@@ -55,7 +55,7 @@
 - [ ] Checkout achieved page
 - [x] Margin top
 
-## Mobile Layout
+## Mobile Layout₴
 
 - [ ] Basket modal on full width
 - [ ] Web banner layout
@@ -64,9 +64,9 @@
 
 ## Backend / DB
 
-- [ ] Initialize DB
-- [ ] Assign DB
-- [ ] Connect to DB
+- [x] Initialize DB
+- [x] Assign DB
+- [?] Connect to DB
 - [ ] Download Photos from [petrovka-horeca.com.ua](https://petrovka-horeca.com.ua/uk/shokolad-s-predskazaniyami/)
 - [ ] Use Prisma
 - [ ] Use CDN

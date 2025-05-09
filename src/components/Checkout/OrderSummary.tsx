@@ -1,10 +1,21 @@
 "use client";
 
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
 import CartItem from "./CartItem";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { confirmOrder } from "@/store/slices/checkoutSlice";
 
 export default function OrderSummary() {
+  const completedSteps = useSelector(
+    (state: RootState) => state.checkout.completedSteps
+  );
+  const isReadyToPay = completedSteps.includes("payment");
+
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
   const items = useSelector((state: RootState) => state.basket.items);
   const total = useSelector((state: RootState) =>
     state.basket.items.reduce(
@@ -12,6 +23,14 @@ export default function OrderSummary() {
       0
     )
   );
+
+  const isSubmitting = useSelector(
+    (state: RootState) => state.checkout.isSubmitting
+  );
+
+  const handleConfirmOrder = () => {
+    dispatch(confirmOrder({ router }));
+  };
 
   return (
     <div className="w-full border rounded-xl p-6 shadow-sm bg-white h-fit">
@@ -34,6 +53,20 @@ export default function OrderSummary() {
           <span>₴{total.toFixed(2)}</span>
         </div>
       </div>
+
+      {items.length > 0 && (
+        <div className="pt-4 border-t mt-6">
+          <div className="font-semibold text-lg mb-2">
+            До сплати: ₴{total.toFixed(2)}
+          </div>
+          <Button
+            disabled={!isReadyToPay}
+            onClick={() => dispatch(confirmOrder({ router }))}
+          >
+            Оплатити замовлення
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

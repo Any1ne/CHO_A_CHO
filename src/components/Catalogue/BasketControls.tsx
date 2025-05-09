@@ -29,10 +29,6 @@ export default function BasketControls({
 
     dispatch(addToBasket({ id, title, price, quantity: quantityToAdd }));
 
-    if (showQuantityController) {
-      setLocalQty(1);
-    }
-
     toast.success(`Товар "${title}" додано до кошика`);
   };
 

@@ -15,39 +15,51 @@ const pool = new Pool({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+
     const {
-      fullName,
-      phone,
-      email,
+      contact,
+      delivery,
+      payment,
+      total,
       items,
-      paymentMethod,
-      deliveryMethod,
-      deliveryService,
-      deliveryType,
-      branchNumber,
-      fullAddress,
     }: {
-      fullName: string;
-      phone?: string;
-      email?: string;
-      items: { id: string; quantity: number; price: number }[];
-      paymentMethod: string;
-      deliveryMethod: string;
-      deliveryService: string;
-      deliveryType: "Branch" | "Address";
-      branchNumber?: string;
-      fullAddress?: string;
+      contact: {
+        firstName: string;
+        lastName: string;
+        middleName?: string;
+        phone: string;
+        email: string;
+      };
+      delivery: {
+        city: string;
+        deliveryMethod: "branch" | "address";
+        branchNumber?: string;
+        address?: string;
+      };
+      payment: {
+        paymentMethod: "cod" | "monobank";
+      };
+      total: number;
+      items: { id: string; title: string; price: number; quantity: number }[];
     } = body;
+
+    const fullName = `${contact.lastName} ${contact.firstName}${
+      contact.middleName ? " " + contact.middleName : ""
+    }`;
+    const deliveryType =
+      delivery.deliveryMethod === "branch" ? "Branch" : "Address";
 
     const client = await pool.connect();
     await client.query("BEGIN");
 
-    // 1. Створити покупця
+    // ✅ 1. Вставити або оновити покупця
     const customerResult = await client.query(
       `INSERT INTO Customers (name, phone, email)
        VALUES ($1, $2, $3)
+       ON CONFLICT (email) DO UPDATE
+       SET name = EXCLUDED.name, phone = EXCLUDED.phone
        RETURNING id`,
-      [fullName, phone || null, email || null]
+      [fullName, contact.phone || null, contact.email || null]
     );
     const customerId = customerResult.rows[0].id;
 
@@ -56,7 +68,7 @@ export async function POST(req: NextRequest) {
       `INSERT INTO Orders (customer_id, payment_method, delivery_method)
        VALUES ($1, $2, $3)
        RETURNING id`,
-      [customerId, paymentMethod, deliveryMethod]
+      [customerId, payment.paymentMethod, delivery.deliveryMethod]
     );
     const orderId = orderResult.rows[0].id;
 
@@ -67,10 +79,10 @@ export async function POST(req: NextRequest) {
        VALUES ($1, $2, $3, $4, $5)`,
       [
         orderId,
-        deliveryService,
+        "Nova Poshta",
         deliveryType,
-        deliveryType === "Branch" ? branchNumber : null,
-        deliveryType === "Address" ? fullAddress : null,
+        deliveryType === "Branch" ? delivery.branchNumber : null,
+        deliveryType === "Address" ? delivery.address : null,
       ]
     );
 
