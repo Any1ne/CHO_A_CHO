@@ -1,7 +1,7 @@
 import { ProductType, FormData } from "@/types/products";
 
 export async function fetchProducts(category?: string): Promise<ProductType[]> {
-  const url = new URL("http://134.249.60.9:3000/api/products");
+  const url = new URL("http://localhost/api/products");
 
   if (category && category !== "All") {
     url.searchParams.set("category", category);
