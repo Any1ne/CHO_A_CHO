@@ -22,7 +22,6 @@ const transformStreets = (data: any[]) =>
     StreetsType: street.StreetsType,
     Ref: street.Ref,
   }));
-      
 
 const fetchNovaPoshta = async (
   modelName: string,
@@ -44,7 +43,6 @@ const fetchNovaPoshta = async (
   });
 
   const data = await response.json();
-  console.log(`[Nova Poshta] Отримано дані:`, data);
   return data.data;
 };
 
@@ -123,4 +121,3 @@ export async function getStreets(cityRef: string) {
 
   return transformed;
 }
-
