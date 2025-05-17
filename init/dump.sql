@@ -21,37 +21,6 @@ CREATE TABLE flavours(
     PRIMARY KEY(id)
 );
 
-CREATE TABLE order_delivery_details(
-    order_id integer NOT NULL,
-    delivery_service varchar(100),
-    delivery_type varchar(50),
-    branch_number varchar(20),
-    full_address text,
-    city varchar(20),
-    PRIMARY KEY(order_id),
-    CONSTRAINT order_delivery_details_order_id_fkey FOREIGN key(order_id) REFERENCES orders(id)
-);
-
-CREATE TABLE orderitems(
-    id SERIAL NOT NULL,
-    order_id integer,
-    product_id varchar,
-    quantity integer NOT NULL,
-    PRIMARY KEY(id),
-    CONSTRAINT orderitems_order_id_fkey FOREIGN key(order_id) REFERENCES orders(id),
-    CONSTRAINT orderitems_product_id_fkey FOREIGN key(product_id) REFERENCES products(id)
-);
-
-CREATE TABLE orderitems(
-    id SERIAL NOT NULL,
-    order_id integer,
-    product_id varchar,
-    quantity integer NOT NULL,
-    PRIMARY KEY(id),
-    CONSTRAINT orderitems_order_id_fkey FOREIGN key(order_id) REFERENCES orders(id),
-    CONSTRAINT orderitems_product_id_fkey FOREIGN key(product_id) REFERENCES products(id)
-);
-
 CREATE TABLE orders(
     id SERIAL NOT NULL,
     customer_id integer,
@@ -59,6 +28,7 @@ CREATE TABLE orders(
     status text DEFAULT 'нове'::text,
     delivery_method text,
     payment_method text,
+    is_free_delivery boolean DEFAULT false,
     PRIMARY KEY(id),
     CONSTRAINT orders_customer_id_fkey FOREIGN key(customer_id) REFERENCES customers(id)
 );
@@ -75,7 +45,26 @@ CREATE TABLE products(
     CONSTRAINT products_flavour_id_fkey FOREIGN key(flavour_id) REFERENCES flavours(id)
 );
 
+CREATE TABLE order_delivery_details(
+    order_id integer NOT NULL,
+    delivery_service varchar(100),
+    delivery_type varchar(50),
+    branch_number varchar(100),
+    full_address text,
+    city varchar(20),
+    PRIMARY KEY(order_id),
+    CONSTRAINT order_delivery_details_order_id_fkey FOREIGN key(order_id) REFERENCES orders(id)
+);
 
+CREATE TABLE orderitems(
+    id SERIAL NOT NULL,
+    order_id integer,
+    product_id varchar,
+    quantity integer NOT NULL,
+    PRIMARY KEY(id),
+    CONSTRAINT orderitems_order_id_fkey FOREIGN key(order_id) REFERENCES orders(id),
+    CONSTRAINT orderitems_product_id_fkey FOREIGN key(product_id) REFERENCES products(id)
+);
 
 -- INSERTION --
 INSERT INTO Categories (id, name) VALUES
@@ -103,7 +92,7 @@ INSERT INTO Flavours (id, name) VALUES
 (14, 'БІЛА'),
 (15, 'ВЕСНЯНА');
 
-INSERT INTO PRODUCTS (ID, NAME, CATEGORY_ID, PRICE, FLAVOUR_ID, PREVIEW_IMAGE) VALUES
+INSERT INTO PRODUCTS (ID, title, CATEGORY_ID, PRICE, FLAVOUR_ID, PREVIEW_IMAGE) VALUES
 ('1-001', 'Бельгійський шоколад 15г "ПРАПОР"', 1, 17, 1, NULL),
 ('1-002', 'Бельгійський шоколад 15г "ОРЕО"', 1, 17, 2, NULL),
 ('1-003', 'Бельгійський шоколад 15г "КОКОС"', 1, 17, 3, NULL),

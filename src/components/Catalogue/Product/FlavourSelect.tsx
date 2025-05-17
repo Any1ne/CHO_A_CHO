@@ -20,12 +20,21 @@ type Props = {
 
 export default function FlavourSelect({ currentId }: { currentId: string }) {
   const dispatch = useDispatch<AppDispatch>();
-  const { product, flavours } = useSelector(
-    (state: RootState) => state.productModal
-  );
+  const { product, flavours } = useSelector((state: RootState) => state.productModal);
+  
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedId(product.id); // оновити, коли новий продукт приходить
+    }
+  }, [product]);
 
   const handleFlavourChange = (id: string) => {
-    dispatch(updateProductInModalAsync(id));
+    setSelectedId(id); // оновлюємо локальний стан
+    if (id !== product?.id) {
+      dispatch(updateProductInModalAsync(id));
+    }
   };
 
   if (!product) return <span>Завантаження товару...</span>;
@@ -41,7 +50,7 @@ export default function FlavourSelect({ currentId }: { currentId: string }) {
 
       <div>
         <p className="text-sm text-gray-500 uppercase mb-1">Оберіть смак</p>
-        <Select defaultValue={product.id} onValueChange={handleFlavourChange}>
+        <Select value={selectedId} onValueChange={handleFlavourChange}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Оберіть смак" />
           </SelectTrigger>

@@ -13,65 +13,64 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-interface City {
+interface Warehouse {
   Ref: string;
   Description: string;
 }
 
-interface CitySelectProps {
-  cities: City[];
-  selectedCity: string;
-  onSelect: (city: string) => void;
+interface WarehouseSelectProps {
+  warehouses: Warehouse[];
+  selectedWarehouse: string;
+  onSelect: (warehouse: string) => void;
 }
 
-export function CitySelect({
-  cities,
-  selectedCity,
+export function WarehouseSelect({
+  warehouses,
+  selectedWarehouse,
   onSelect,
-}: CitySelectProps) {
+}: WarehouseSelectProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  // 🔍 Оптимізований фільтр: мін. 2 символи та ліміт
-  const filteredCities = useMemo(() => {
-    if (search.length < 2) return [];
-    return cities
-      .filter((city) =>
-        city.Description.toLowerCase().includes(search.toLowerCase())
+  const filteredWarehouses = useMemo(() => {
+    if (search.length < 1) return [];
+    return warehouses
+      .filter((w) =>
+        w.Description.toLowerCase().includes(search.toLowerCase())
       )
-      .slice(0, 100); // 🔢 Ліміт до 20 результатів
-  }, [search, cities]);
+      .slice(0, 100);
+  }, [search, warehouses]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" className="w-full justify-start">
-          {selectedCity || "Оберіть місто"}
+          {selectedWarehouse || "Оберіть відділення"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput
-            placeholder="Пошук міста..."
+            placeholder="Пошук відділення..."
             value={search}
             onValueChange={setSearch}
           />
           <CommandList>
             {search.length < 2 ? (
-              <CommandEmpty>Введіть щонайменше 2 символи.</CommandEmpty>
-            ) : filteredCities.length === 0 ? (
-              <CommandEmpty>Місто не знайдено.</CommandEmpty>
+              <CommandEmpty>Введіть щонайменше 1 символ.</CommandEmpty>
+            ) : filteredWarehouses.length === 0 ? (
+              <CommandEmpty>Відділення не знайдено.</CommandEmpty>
             ) : (
-              filteredCities.map((city) => (
+              filteredWarehouses.map((warehouse) => (
                 <CommandItem
-                  key={city.Ref}
-                  value={city.Description}
+                  key={warehouse.Ref}
+                  value={warehouse.Description}
                   onSelect={() => {
-                    onSelect(city.Description);
+                    onSelect(warehouse.Description);
                     setOpen(false);
                   }}
                 >
-                  {city.Description}
+                  {warehouse.Description}
                 </CommandItem>
               ))
             )}

@@ -1,8 +1,10 @@
 import { ProductType, FormData } from "@/types/products";
 
 export async function fetchProducts(category?: string): Promise<ProductType[]> {
-  const url = new URL("http://localhost/api/products");
+  
+  const url = new URL("/api/products", window.location.origin);
 
+  console.log(`Category ${category}`);
   if (category && category !== "All") {
     url.searchParams.set("category", category);
   }
@@ -73,6 +75,7 @@ type OrderPayload = {
     contact: any;
     delivery: any;
     payment: any;
+    isFreeDelivery: Boolean,
   };
 };
 
@@ -81,6 +84,7 @@ export const submitOrder = async ({ total, items, data }: OrderPayload) => {
     ...data,
     total,
     items,
+    
   };
 
   const response = await fetch("/api/orders", {
@@ -118,3 +122,23 @@ export async function fetchStreets(cityRef: string) {
   const data = await res.json();
   return data.streets;
 }
+
+export const sendContactRequest = async (data: {
+  name: string;
+  email: string;
+  message: string;
+}) => {
+  const response = await fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    throw new Error(json.error || "Помилка надсилання запиту");
+  }
+
+  return json;
+};

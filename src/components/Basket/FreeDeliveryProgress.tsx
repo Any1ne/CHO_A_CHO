@@ -2,10 +2,13 @@
 
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "@/store";
+import { useEffect } from "react";
+import { updateFreeDelivery } from "@/store/slices/checkoutSlice";
 
 export default function FreeDeliveryProgress() {
+  const dispatch = useDispatch();
   const total = useSelector((state: RootState) =>
     state.basket.items.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -16,6 +19,11 @@ export default function FreeDeliveryProgress() {
   const freeLimit = 1000;
   const progress = Math.min((total / freeLimit) * 100, 100);
   const isFree = total >= freeLimit;
+
+  // Оновлюємо флаг в checkoutSlice при зміні total
+  useEffect(() => {
+    dispatch(updateFreeDelivery(total));
+  }, [total, dispatch]);
 
   return (
     <div className="bg-muted p-4 rounded-lg space-y-2 mt-4">

@@ -15,6 +15,7 @@ type OrderSummary = {
   paymentMethod: string;
   total: number;
   orderNumber: string;
+  isFreeDelivery: boolean;
 };
 
 export default function CheckoutSuccessPage() {
@@ -55,11 +56,15 @@ export default function CheckoutSuccessPage() {
             <strong>Місто:</strong> {order.city}
           </p>
           <p>
-            <strong>Доставка:</strong>{" "}
-            {order.deliveryMethod === "branch"
-              ? `У відділення №${order.branchNumber}`
-              : `На адресу: ${order.address}`}
-          </p>
+  <strong>Доставка:</strong>{" "}
+  {order.deliveryMethod === "branch"
+    ? `У відділення №${order.branchNumber}`
+    : `На адресу: ${order.address}`}
+</p>
+<p>
+  <strong>Безкоштовна доставка:</strong>{" "}
+  {order.isFreeDelivery ? "Так" : "Ні"}
+</p>
           <p>
             <strong>Оплата:</strong>{" "}
             {order.paymentMethod === "cod" ? "При отриманні" : "Monobank Pay"}
@@ -67,6 +72,7 @@ export default function CheckoutSuccessPage() {
           <p className="mt-2 font-bold text-lg">
             До сплати: ₴{order.total.toFixed(2)}
           </p>
+          
         </div>
       )}
 

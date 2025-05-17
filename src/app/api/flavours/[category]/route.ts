@@ -11,11 +11,11 @@ export async function GET(req: Request) {
     }
 
     const flavours = await getFlavoursByCategory(category);
-    console.log("🟢 API /flavours/:category response");
 
+    console.log("🟢 GET /api/flavours/[category]:", flavours);
     return NextResponse.json(flavours);
   } catch (error) {
-    console.error("🔴 API /flavours/:category error:", error);
+    console.error("🔴 Error fetching flavours by category:", error);
     return NextResponse.json(
       { error: "Failed to fetch flavours" },
       { status: 500 }

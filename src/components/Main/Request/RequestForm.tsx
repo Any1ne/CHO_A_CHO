@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { sendContactRequest } from "@/lib/api";
 
 export default function RequestForm() {
   const router = useRouter();
@@ -19,17 +20,20 @@ export default function RequestForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Тут буде логіка запиту на бекенд
-    console.log("Form submitted:", form);
+    try {
+      await sendContactRequest(form);
+      toast.success("Запит надіслано! Ми зв'яжемося з вами найближчим часом.");
+      setForm({ name: "", email: "", message: "" });
 
-    toast.success("Запит надіслано! Ми зв'яжемося з вами найближчим часом.");
-
-    setTimeout(() => {
-      router.push("/");
-    }, 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } catch (error: any) {
+      toast.error(error.message || "Помилка надсилання запиту");
+    }
   };
 
   return (
@@ -37,7 +41,7 @@ export default function RequestForm() {
       <input
         type="text"
         name="name"
-        placeholder="Your name"
+        placeholder="Ваше імʼя"
         value={form.name}
         onChange={handleChange}
         className="w-full border p-2 rounded"
@@ -45,20 +49,20 @@ export default function RequestForm() {
       <input
         type="email"
         name="email"
-        placeholder="Your email"
+        placeholder="Ваш email"
         value={form.email}
         onChange={handleChange}
         className="w-full border p-2 rounded"
       />
       <textarea
         name="message"
-        placeholder="Message"
+        placeholder="Ваше повідомлення"
         value={form.message}
         onChange={handleChange}
         className="w-full border p-2 rounded h-24"
       />
       <Button type="submit" className="w-full">
-        Send Request
+        Надіслати запит
       </Button>
     </form>
   );

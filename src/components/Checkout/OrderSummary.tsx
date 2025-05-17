@@ -11,6 +11,9 @@ export default function OrderSummary() {
   const completedSteps = useSelector(
     (state: RootState) => state.checkout.completedSteps
   );
+  const isFreeDelivery = useSelector(
+    (state: RootState) => state.checkout.isFreeDelivery
+  );
   const isReadyToPay = completedSteps.includes("payment");
 
   const dispatch = useDispatch<AppDispatch>();
@@ -44,10 +47,12 @@ export default function OrderSummary() {
       </div>
 
       <div className="mt-6 border-t pt-4 space-y-2 text-sm">
-        <div className="flex justify-between">
-          <span>Доставка:</span>
-          <span className="text-green-600 font-medium">Безкоштовно</span>
-        </div>
+      <div className="flex justify-between">
+  <span>Доставка:</span>
+  <span className={`font-medium ${isFreeDelivery ? "text-green-600" : "text-red-500"}`}>
+    {isFreeDelivery ? "Безкоштовно" : "Не безкоштовно"}
+  </span>
+</div>
         <div className="flex justify-between font-semibold text-base">
           <span>Сума до оплати:</span>
           <span>₴{total.toFixed(2)}</span>

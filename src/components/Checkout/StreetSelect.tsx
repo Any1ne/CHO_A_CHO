@@ -13,65 +13,64 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-interface City {
+interface Street {
   Ref: string;
   Description: string;
 }
 
-interface CitySelectProps {
-  cities: City[];
-  selectedCity: string;
-  onSelect: (city: string) => void;
+interface StreetSelectProps {
+  streets: Street[];
+  selectedStreet: string;
+  onSelect: (street: string) => void;
 }
 
-export function CitySelect({
-  cities,
-  selectedCity,
+export function StreetSelect({
+  streets,
+  selectedStreet,
   onSelect,
-}: CitySelectProps) {
+}: StreetSelectProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  // 🔍 Оптимізований фільтр: мін. 2 символи та ліміт
-  const filteredCities = useMemo(() => {
+  const filteredStreets = useMemo(() => {
     if (search.length < 2) return [];
-    return cities
-      .filter((city) =>
-        city.Description.toLowerCase().includes(search.toLowerCase())
+    return streets
+      .filter((street) =>
+        street.Description.toLowerCase().includes(search.toLowerCase())
       )
-      .slice(0, 100); // 🔢 Ліміт до 20 результатів
-  }, [search, cities]);
+      .slice(0, 100);
+  }, [search, streets]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" className="w-full justify-start">
-          {selectedCity || "Оберіть місто"}
+          {selectedStreet || "Оберіть вулицю"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput
-            placeholder="Пошук міста..."
+            placeholder="Пошук вулиці..."
             value={search}
             onValueChange={setSearch}
           />
           <CommandList>
             {search.length < 2 ? (
               <CommandEmpty>Введіть щонайменше 2 символи.</CommandEmpty>
-            ) : filteredCities.length === 0 ? (
-              <CommandEmpty>Місто не знайдено.</CommandEmpty>
+            ) : filteredStreets.length === 0 ? (
+              <CommandEmpty>Вулицю не знайдено.</CommandEmpty>
             ) : (
-              filteredCities.map((city) => (
+              filteredStreets.map((street) => (
                 <CommandItem
-                  key={city.Ref}
-                  value={city.Description}
+                  key={street.Ref}
+                  value={street.Description}
                   onSelect={() => {
-                    onSelect(city.Description);
+                    onSelect(street.Description);
                     setOpen(false);
                   }}
                 >
-                  {city.Description}
+                  {street.Description}
                 </CommandItem>
               ))
             )}

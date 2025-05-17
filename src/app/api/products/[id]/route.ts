@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { redis } from "@/db/redis/client";
-import { ProductType } from "@/types/products";
+import { getProductById } from "@/lib/redisCatalog";
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // Отримуємо `id` з URL
+    const id = url.pathname.split("/").pop();
 
     if (!id) {
       return NextResponse.json(
@@ -14,13 +13,13 @@ export async function GET(req: Request) {
       );
     }
 
-    const cached = await redis.get(`product:${id}`);
-    if (!cached) {
+    const product = await getProductById(id);
+
+    if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    const product: ProductType = JSON.parse(cached);
-    console.log("🟢 GET /api/products/[id]:");
+    console.log("🟢 GET /api/products/[id]:", product);
     return NextResponse.json(product);
   } catch (error) {
     console.error("🔴 Error fetching product by ID:", error);

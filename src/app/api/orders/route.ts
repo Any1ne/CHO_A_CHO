@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendOrderConfirmation } from "@/lib/email";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
       payment,
       total,
       items,
+      isFreeDelivery,
     }: {
       contact: {
         firstName: string;
@@ -41,6 +43,7 @@ export async function POST(req: NextRequest) {
       };
       total: number;
       items: { id: string; title: string; price: number; quantity: number }[];
+      isFreeDelivery: boolean;
     } = body;
 
     const fullName = `${contact.lastName} ${contact.firstName}${
@@ -65,10 +68,10 @@ export async function POST(req: NextRequest) {
 
     // 2. Створити замовлення
     const orderResult = await client.query(
-      `INSERT INTO Orders (customer_id, payment_method, delivery_method)
-       VALUES ($1, $2, $3)
+      `INSERT INTO Orders (customer_id, payment_method, delivery_method, is_free_delivery)
+       VALUES ($1, $2, $3, $4)
        RETURNING id`,
-      [customerId, payment.paymentMethod, delivery.deliveryMethod]
+      [customerId, payment.paymentMethod, delivery.deliveryMethod, isFreeDelivery]
     );
     const orderId = orderResult.rows[0].id;
 
@@ -97,6 +100,34 @@ export async function POST(req: NextRequest) {
 
     await client.query("COMMIT");
     client.release();
+
+    const orderInfoHtml = `
+  <h2>Дякуємо за замовлення, ${contact.firstName}!</h2>
+  <p>Ваше замовлення №${orderId} було прийнято.</p>
+  <p>Сума: <strong>${total} грн</strong></p>
+  <ul>
+    ${items.map(item => `<li>${item.title} – ${item.quantity} x ${item.price} грн</li>`).join('')}
+  </ul>
+  <p>Доставка: ${deliveryType === 'Branch' ? `відділення №${delivery.branchNumber}` : delivery.address}</p>
+  <p>Оплата: ${payment.paymentMethod === 'cod' ? "Готівка" : "Monobank"}</p>
+`;
+
+// await sendOrderConfirmation({
+//   to: contact.email,
+//   subject: "Ваше замовлення прийнято!",
+//   html: orderInfoHtml,
+// });
+
+await sendOrderConfirmation({
+  to: `${process.env.ADMIN_EMAIL}`,
+  subject: `Нове замовлення №${orderId}`,
+  html: `
+    <h2>Нове замовлення від ${fullName}</h2>
+    <p>Email: ${contact.email}</p>
+    <p>Телефон: ${contact.phone}</p>
+    ${orderInfoHtml}
+  `,
+});
 
     return NextResponse.json({ success: true, orderId });
   } catch (error) {

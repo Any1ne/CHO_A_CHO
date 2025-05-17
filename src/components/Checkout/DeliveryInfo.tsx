@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CitySelect } from "./CitySelect";
+import { WarehouseSelect } from "./WarehouseSelect";
+import { StreetSelect } from "./StreetSelect";
 import { fetchCities, fetchWarehouses, fetchStreets } from "@/lib/api";
 import clsx from "clsx";
 
@@ -19,8 +21,12 @@ type DeliveryFormData = {
   city: string;
   deliveryMethod: "branch" | "address";
   branchNumber?: string;
-  address?: string;
+  street?: string; // окремо для обрання
+  house?: string;
+  apartment?: string;
+  address?: string; // автоматично сформована повна адреса
 };
+
 
 export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
   const dispatch = useAppDispatch();
@@ -39,6 +45,8 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
 
   const deliveryMethod = watch("deliveryMethod");
   const selectedCity = watch("city");
+  const selectedStreet = watch("street");
+  const selectedWarehouse = watch("branchNumber");
   const isCompleted = !!defaultValues?.city;
 
   const [cities, setCities] = useState<any[]>([]);
@@ -69,7 +77,20 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
     const valid = await trigger();
     if (!valid) return;
 
-    dispatch(setDeliveryInfo(data));
+    let fullAddress: string | undefined = undefined;
+
+    if (data.deliveryMethod === "address") {
+      fullAddress = `вул. ${data.street}, буд. ${data.house}${
+        data.apartment ? `, кв. ${data.apartment}` : ""
+      }`;
+    }
+
+    const finalData: DeliveryFormData = {
+      ...data,
+      address: fullAddress,
+    };
+
+    dispatch(setDeliveryInfo(finalData));
     dispatch(completeStep("delivery"));
     dispatch(setStep("payment"));
   };
@@ -174,40 +195,55 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
         </label>
       </div>
 
-      {/* Відділення */}
       {deliveryMethod === "branch" && (
-        <label className="block">
-          <span className="text-sm">Оберіть відділення</span>
-          <select
-            {...register("branchNumber", {
-              required: "Вкажіть номер відділення",
-            })}
-            className="w-full p-2 border rounded-md"
-          >
-            <option value="">Оберіть відділення</option>
-            {warehouses.map((w) => (
-              <option key={w.Ref} value={w.Number}>
-                {w.Description}
-              </option>
-            ))}
-          </select>
-          {errors.branchNumber && (
-            <p className="text-red-500 text-sm">
-              {errors.branchNumber.message}
-            </p>
-          )}
-        </label>
-      )}
+  <label className="block">
+    <span className="text-sm">Оберіть відділення</span>
+    <WarehouseSelect
+      warehouses={warehouses}
+      selectedWarehouse={selectedWarehouse || ""}
+      onSelect={(value) => setValue("branchNumber", value)}
+    />
+    {errors.branchNumber && (
+      <p className="text-red-500 text-sm">
+        {errors.branchNumber.message}
+      </p>
+    )}
+  </label>
+)}
+
 
       {/* Адреса */}
       {deliveryMethod === "address" && (
-        <Input
-          placeholder="Адреса"
-          {...register("address", {
-            required: "Вкажіть адресу доставки",
-          })}
-        />
-      )}
+  <>
+    <label className="block">
+      <span className="text-sm">Вулиця</span>
+      <StreetSelect
+        streets={streets}
+        selectedStreet={selectedStreet || ""}
+        onSelect={(street) => setValue("street", street)}
+      />
+    </label>
+
+    <label className="block">
+      <span className="text-sm">Будинок</span>
+      <Input
+        placeholder="№ будинку"
+        {...register("house", {
+          required: "Вкажіть номер будинку",
+        })}
+      />
+    </label>
+
+    <label className="block">
+      <span className="text-sm">Квартира</span>
+      <Input
+        placeholder="№ квартири (необов’язково)"
+        {...register("apartment")}
+      />
+    </label>
+  </>
+)}
+
 
       <Button type="submit">Далі</Button>
     </form>

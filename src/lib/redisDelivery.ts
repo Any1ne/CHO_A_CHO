@@ -2,6 +2,28 @@ import { redis } from "@/db/redis/client";
 
 const CACHE_TTL = 60 * 60;
 
+const transformCities = (data: any[]) =>
+  data.map((city) => ({
+    Description: city.Description,
+    SettlementTypeDescription: city.SettlementTypeDescription,
+    Ref: city.Ref,
+  }));
+
+const transformWarehouses = (data: any[]) =>
+  data.map((wh) => ({
+    Description: wh.Description,
+    CityRef: wh.CityRef,
+    Ref: wh.Ref,
+  }));
+
+const transformStreets = (data: any[]) =>
+  data.map((street) => ({
+    Description: street.Description,
+    StreetsType: street.StreetsType,
+    Ref: street.Ref,
+  }));
+      
+
 const fetchNovaPoshta = async (
   modelName: string,
   method: string,
@@ -37,10 +59,11 @@ export async function getCities() {
   }
 
   console.log(`[Nova Poshta] Кеш порожній. Виконуємо запит...`);
-  const data = await fetchNovaPoshta("Address", "getCities");
-  await redis.set(cacheKey, JSON.stringify(data), "EX", CACHE_TTL);
+  const fullData = await fetchNovaPoshta("Address", "getCities");
+  const transformed = transformCities(fullData);
+  await redis.set(cacheKey, JSON.stringify(transformed), "EX", CACHE_TTL);
   console.log(`[Nova Poshta] Кеш оновлено: ${cacheKey}`);
-  return data;
+  return transformed;
 }
 
 export async function getWarehouses(cityRef: string) {
@@ -49,17 +72,16 @@ export async function getWarehouses(cityRef: string) {
   const cached = await redis.get(cacheKey);
 
   if (cached) {
-    console.log(`[Nova Poshta] Дані з кешу: ${cacheKey}`);
     return JSON.parse(cached);
   }
 
   console.log(`[Nova Poshta] Кеш порожній. Виконуємо запит...`);
-  const data = await fetchNovaPoshta("AddressGeneral", "getWarehouses", {
+  const fullData = await fetchNovaPoshta("AddressGeneral", "getWarehouses", {
     CityRef: cityRef,
   });
-  await redis.set(cacheKey, JSON.stringify(data), "EX", CACHE_TTL);
-  console.log(`[Nova Poshta] Кеш оновлено: ${cacheKey}`);
-  return data;
+  const transformed = transformWarehouses(fullData);
+  await redis.set(cacheKey, JSON.stringify(transformed), "EX", CACHE_TTL);
+  return transformed;
 }
 
 export async function getStreets(cityRef: string) {
@@ -68,15 +90,37 @@ export async function getStreets(cityRef: string) {
   const cached = await redis.get(cacheKey);
 
   if (cached) {
-    console.log(`[Nova Poshta] Дані з кешу: ${cacheKey}`);
     return JSON.parse(cached);
   }
 
-  console.log(`[Nova Poshta] Кеш порожній. Виконуємо запит...`);
-  const data = await fetchNovaPoshta("Address", "getStreet", {
-    CityRef: cityRef,
-  });
-  await redis.set(cacheKey, JSON.stringify(data), "EX", CACHE_TTL);
-  console.log(`[Nova Poshta] Кеш оновлено: ${cacheKey}`);
-  return data;
+  console.log(`[Nova Poshta] Кеш порожній. Починаємо пагінацію...`);
+  const limit = 500;
+  let page = 1;
+  let allStreets: any[] = [];
+
+  while (true) {
+    const pageData = await fetchNovaPoshta("Address", "getStreet", {
+      CityRef: cityRef,
+      Page: page.toString(),
+      Limit: limit.toString(),
+    });
+
+    if (!pageData || pageData.length === 0) {
+      break;
+    }
+
+    allStreets = allStreets.concat(pageData);
+    if (pageData.length < limit) {
+      break;
+    }
+
+    page++;
+  }
+
+  const transformed = transformStreets(allStreets);
+  await redis.set(cacheKey, JSON.stringify(transformed), "EX", CACHE_TTL);
+  console.log(`[Nova Poshta] Отримано всі сторінки (${page}). Кеш оновлено.`);
+
+  return transformed;
 }
+

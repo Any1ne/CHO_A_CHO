@@ -33,12 +33,14 @@ interface CheckoutState {
   deliveryInfo?: DeliveryInfo;
   paymentInfo?: PaymentInfo;
   isSubmitting: boolean;
+  isFreeDelivery: boolean;
 }
 
 const initialState: CheckoutState = {
   currentStep: "contact",
   completedSteps: [],
   isSubmitting: false,
+  isFreeDelivery: false
 };
 
 export const confirmOrder = createAsyncThunk<
@@ -69,6 +71,7 @@ export const confirmOrder = createAsyncThunk<
         contact: contactInfo,
         delivery: deliveryInfo,
         payment: paymentInfo,
+        isFreeDelivery: state.checkout.isFreeDelivery,
       },
     });
 
@@ -129,7 +132,11 @@ const checkoutSlice = createSlice({
     resetCheckout() {
       return initialState;
     },
+    updateFreeDelivery (state, action: PayloadAction<number>) {
+      state.isFreeDelivery = action.payload >= 1000;
+    }
   },
+  
   extraReducers: (builder) => {
     builder
       .addCase(confirmOrder.pending, (state) => {
@@ -151,6 +158,7 @@ export const {
   setDeliveryInfo,
   setPaymentInfo,
   resetCheckout,
+  updateFreeDelivery,
 } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;
