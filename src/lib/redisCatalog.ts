@@ -13,6 +13,7 @@ type Product = {
   price: number;
   category: string;
   flavour: string;
+  weight: number;
 };
 
 const pool = new Pool({
@@ -27,22 +28,25 @@ const pool = new Pool({
 async function fetchAllProductsFromDB() {
   const client = await pool.connect();
   try {
-    const query = `
-      SELECT 
-        p.id, p.title, p.price, 
-        c.name AS category, 
-        f.name AS flavour
-      FROM products p
-      JOIN categories c ON p.category_id = c.id
-      JOIN flavours f ON p.flavour_id = f.id
-    `;
+const query = `
+  SELECT 
+    p.id, 
+    p.title, 
+    p.price, 
+    c.name AS category, 
+    c.weight AS weight,
+    f.name AS flavour
+  FROM products p
+  JOIN categories c ON p.category_id = c.id
+  JOIN flavours f ON p.flavour_id = f.id
+`;
     const result = await client.query(query);
     const products = result.rows;
 
     // Зберегти всі продукти одним масивом у Redis з TTL
     await redis.set(REDIS_KEY_ALL, JSON.stringify(products), "EX", CACHE_TTL);
 
-    console.log("🟢 Завантажено продукти з БД та кешовано в Redis");
+    //console.log("🟢 Завантажено продукти з БД та кешовано в Redis");
     return products;
   } finally {
     client.release();
@@ -56,7 +60,7 @@ export async function getAllProducts(): Promise<Product[]>{
 
     if (cached) {
       const products = JSON.parse(cached);
-      console.log(`📦 Отримано ${products.length} продуктів з Redis`);
+      //console.log(`📦 Отримано ${products.length} продуктів з Redis`);
       return products;
     }
   } catch (err) {
@@ -93,6 +97,6 @@ export async function getFlavoursByCategory(category: string) {
     }
   }
 
-  console.log("🟢 Redis getFlavoursByCategory");
+  //console.log("🟢 Redis getFlavoursByCategory");
   return flavours;
 }

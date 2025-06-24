@@ -1,8 +1,8 @@
 import BrandedPackaging from "@/components/Main/BrandedPackaging";
 
-export default function Branded() {
+export default function BrandedPage() {
   return (
-    <main className="mt-[15vh] min-h-[85vh]">
+    <main className="mt-[6rem] md:mt-[8rem] min-h-[65vh]">
       <BrandedPackaging />
     </main>
   );

@@ -3,7 +3,7 @@
 import { useDispatch } from "react-redux";
 import { openProductModal } from "@/store/slices/productModalSlice";
 import BasketControls from "@/components/Catalogue/BasketControls";
-import { ProductType } from "@/types/products";
+import { ProductType } from "@/types/product";
 
 export default function ProductCard({
   id,
@@ -25,8 +25,8 @@ export default function ProductCard({
         border border-gray-200 md:border-none
         shadow-sm md:shadow-none
         transition-transform duration-300 transform 
-        md:hover:scale-105 md:hover:shadow-lg md:hover:z-10
-        group max-w-[300px] mx-auto h-90
+        md:hover:scale-110 md:hover:shadow-lg md:hover:z-10
+        group max-w-[300px] min-w-[50px] md:min-w-[190px] mx-auto min-mx-2 md:h-[112%]
       `}
     >
       <div
@@ -35,8 +35,7 @@ export default function ProductCard({
       >
         <img
           src={
-            preview ||
-            "https://petrovka-horeca.com.ua/images/thumbnails/240/290/detailed/16/4424930790_shokolad-belgijskij-s.jpg"
+            preview ||"/preview.jpg"
           }
           alt={title}
           className="h-full w-full object-cover transition-transform duration-300"
@@ -44,7 +43,7 @@ export default function ProductCard({
         )
       </div>
 
-      <div className="p-3 flex flex-col  flex-grow ">
+      <div className="p-0 md:p-2 flex flex-col flex-grow">
         <h3
           className="font-semibold text-base text-gray-800 line-clamp-2 cursor-pointer min-h-[3rem]"
           onClick={handleOpenModal}

@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "@/components/Catalogue/Product/ProductCard";
 import SmartPagination from "./SmartPagination";
+import { setCurrentPage } from "@/store/slices/catalogueSlice";
 import { fetchProducts } from "@/lib/api";
-import { ProductType } from "@/types/products";
+import { ProductType } from "@/types/product";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
-
-const ITEMS_PER_PAGE = 10;
 
 export default function ProductGrid() {
   const dispatch = useAppDispatch();
@@ -18,7 +17,31 @@ export default function ProductGrid() {
   );
   const sortOption = useAppSelector((state) => state.catalogue.sortOption);
   const searchTerm = useAppSelector((state) => state.catalogue.searchTerm);
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = useAppSelector((state) => state.catalogue.currentPage);
+
+  const [itemsPerPage, setItemsPerPage] = useState(24); // default
+
+  // ✅ Визначення кількості колонок по розміру екрану
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+      let columns = 1;
+
+      if (width >= 1280) columns = 6;      // xl
+      else if (width >= 1024) columns = 5; // lg
+      else if (width >= 768) columns = 4;  // md
+      else if (width >= 640) columns = 3;  // sm
+      else if (width >= 475) columns = 2;  // xs
+      else columns = 1;
+
+      const rows = 5; // можна змінити, якщо потрібно більше/менше
+      setItemsPerPage(columns * rows);
+    };
+
+    updateItemsPerPage(); // при першому рендері
+    window.addEventListener("resize", updateItemsPerPage);
+    return () => window.removeEventListener("resize", updateItemsPerPage);
+  }, []);
 
   const {
     data: allProducts = [],
@@ -39,17 +62,22 @@ export default function ProductGrid() {
       return 0;
     });
 
-  const start = (currentPage - 1) * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
   const visibleProducts = filteredProducts.slice(start, end);
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   if (isLoading) return <div>Завантаження...</div>;
   if (error) return <div>Помилка при завантаженні даних</div>;
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  lg:grid-cols-5 justify-center gap-x-3 gap-y-5 mt-4 z-2 p-4">
+      <div
+        className="
+          grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
+          justify-center gap-x-3 gap-y-5 mt-4 z-2
+        "
+      >
         {visibleProducts.map((product) => (
           <ProductCard
             key={product.id}
@@ -65,7 +93,7 @@ export default function ProductGrid() {
       <SmartPagination
         totalPages={totalPages}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        onPageChange={(page) => dispatch(setCurrentPage(page))}
       />
     </>
   );

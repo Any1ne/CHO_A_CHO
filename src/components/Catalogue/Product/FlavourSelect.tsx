@@ -41,7 +41,7 @@ export default function FlavourSelect({ currentId }: { currentId: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="bg-gray-100 p-3 rounded-lg border border-gray-200">
+      <div className="bg-primary-light p-3 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-500 uppercase mb-1">Категорія товару</p>
         <p className="text-lg font-semibold text-gray-800">
           {product.category}

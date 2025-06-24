@@ -17,36 +17,40 @@ interface City {
   Ref: string;
   Description: string;
 }
-
 interface CitySelectProps {
   cities: City[];
-  selectedCity: string;
-  onSelect: (city: string) => void;
+  selectedCity: City;
+  onSelect: (city: City) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
 export function CitySelect({
   cities,
   selectedCity,
   onSelect,
+  open,
+  setOpen,
 }: CitySelectProps) {
-  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  // 🔍 Оптимізований фільтр: мін. 2 символи та ліміт
   const filteredCities = useMemo(() => {
     if (search.length < 2) return [];
     return cities
       .filter((city) =>
         city.Description.toLowerCase().includes(search.toLowerCase())
       )
-      .slice(0, 100); // 🔢 Ліміт до 20 результатів
+      .slice(0, 100);
   }, [search, cities]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
-          {selectedCity || "Оберіть місто"}
+        <Button
+          variant="outline"
+          className="w-full justify-start overflow-hidden"
+        >
+          {selectedCity?.Description || "Оберіть місто"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
@@ -67,8 +71,8 @@ export function CitySelect({
                   key={city.Ref}
                   value={city.Description}
                   onSelect={() => {
-                    onSelect(city.Description);
-                    setOpen(false);
+                    onSelect(city);
+                    setOpen(false); // закриваємо поповер після вибору
                   }}
                 >
                   {city.Description}
@@ -81,3 +85,4 @@ export function CitySelect({
     </Popover>
   );
 }
+

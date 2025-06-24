@@ -14,7 +14,7 @@ export default function CategoryList({
     "Popular",
     "Nutty",
     "Hearts",
-    "Shugar free",
+    "Sugar free",
     "Big",
   ];
 

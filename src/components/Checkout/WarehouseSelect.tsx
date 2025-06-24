@@ -44,7 +44,7 @@ export function WarehouseSelect({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
+        <Button variant="outline" className="w-full justify-start overflow-hidden">
           {selectedWarehouse || "Оберіть відділення"}
         </Button>
       </PopoverTrigger>
@@ -56,7 +56,7 @@ export function WarehouseSelect({
             onValueChange={setSearch}
           />
           <CommandList>
-            {search.length < 2 ? (
+            {search.length < 1 ? (
               <CommandEmpty>Введіть щонайменше 1 символ.</CommandEmpty>
             ) : filteredWarehouses.length === 0 ? (
               <CommandEmpty>Відділення не знайдено.</CommandEmpty>

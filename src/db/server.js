@@ -29,5 +29,5 @@ server.use(router);
 
 // Прив’язка до 0.0.0.0 для доступу з мережі
 server.listen(3001, "0.0.0.0", () => {
-  console.log("✅ JSON Server is running on http://0.0.0.0:3001");
+  //console.log("✅ JSON Server is running on http://0.0.0.0:3001");
 });

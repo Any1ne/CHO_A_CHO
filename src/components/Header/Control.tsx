@@ -12,7 +12,7 @@ export default function Control() {
   const isStorePage = pathname === "/store";
 
   return (
-    <section className="flex row-start-2 items-center justify-self-stretch justify-end box-border">
+    <section className="flex ">
       <p className="hidden px-4">
         <User />
       </p>

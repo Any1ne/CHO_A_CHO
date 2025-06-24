@@ -6,7 +6,7 @@ import { addToBasket } from "@/store/slices/basketSlice";
 import QuantityController from "@/components/shared/QuantityController";
 import { toast } from "sonner";
 import { useState } from "react";
-import { ShoppingBagIcon } from "lucide-react";
+import { ShoppingBagIcon, XIcon } from "lucide-react";
 
 type Props = {
   id: string;
@@ -29,7 +29,20 @@ export default function BasketControls({
 
     dispatch(addToBasket({ id, title, price, quantity: quantityToAdd }));
 
-    toast.success(`Товар "${title}" додано до кошика`);
+    toast.custom((t) => (
+      <div className="relative flex items-start gap-3 rounded-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 p-4 shadow-lg w-[320px]">
+        <div className="text-sm font-medium text-gray-900 dark:text-white">
+          Товар <strong>{title}</strong> додано до кошика
+        </div>
+        <button
+          className="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white transition"
+          onClick={() => toast.dismiss(t)}
+        >
+          <XIcon/>
+        </button>
+      </div>
+    ));
+    
   };
 
   if (showQuantityController) {
@@ -42,15 +55,15 @@ export default function BasketControls({
         />
         <Button className="rounded-2xl" onClick={handleAddToBasket}>
           <ShoppingBagIcon />
-          Придбати
+          Додати в кошик
         </Button>
       </div>
     );
   } else {
     return (
       <div className="flex">
-        <Button className="grow" onClick={handleAddToBasket}>
-          Придбати
+        <Button className="grow h-6" onClick={handleAddToBasket}>
+        <span className="text-sm">Додати в кошик</span>
         </Button>
       </div>
     );

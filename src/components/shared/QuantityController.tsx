@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { removeFromBasket, setQuantity } from "@/store/slices/basketSlice";
@@ -60,18 +61,18 @@ export default function QuantityController({
   return (
     <div className="flex items-center space-x-2">
       <Button size="sm" variant="outline" onClick={handleDecrease}>
-        <Minus />
+        <Minus className="h-4 w-4" />
       </Button>
-      <input
+      <Input
         type="number"
+        min={1}
         value={inputValue}
         onChange={handleInputChange}
         onBlur={handleBlur}
-        className="w-12 text-center border rounded h-9"
-        min={1}
+        className="w-14 h-8 text-center px-1"
       />
       <Button size="sm" variant="outline" onClick={handleIncrease}>
-        <Plus />
+        <Plus className="h-4 w-4" />
       </Button>
       {showRemoveButton && (
         <Button size="sm" variant="destructive" onClick={handleRemove}>

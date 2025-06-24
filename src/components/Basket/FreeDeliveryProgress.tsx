@@ -29,9 +29,9 @@ export default function FreeDeliveryProgress() {
     <div className="bg-muted p-4 rounded-lg space-y-2 mt-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium">Free delivery</p>
+          <p className="text-sm font-medium">Безкоштовна доставка</p>
           <p className="text-xs text-muted-foreground">
-            Order more than {freeLimit}₴ to get free delivery
+            Замовляй на суму від {freeLimit}₴ аби отримати безкоштовну доставку
           </p>
         </div>
         {isFree && <CheckCircle className="text-green-500" size={20} />}

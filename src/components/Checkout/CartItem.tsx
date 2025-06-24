@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { BasketItemType } from "@/types/products";
+import { BasketItem } from "@/types";
 type Props = {
-  item: BasketItemType;
+  item: BasketItem;
 };
 
 export default function CartItem({ item }: Props) {
   return (
-    <div className="flex items-center justify-between gap-2 py-2 border-b">
+    <div className="flex items-center justify-between gap-2 py-2 border-b ">
       <div className="flex items-center gap-3">
         <Image
           src={

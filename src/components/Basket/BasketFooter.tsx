@@ -5,7 +5,11 @@ import { RootState } from "@/store";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
-export default function BasketFooter() {
+type Props = {
+  onClose: () => void;
+};
+
+export default function BasketFooter({ onClose }: Props) {
   const total = useSelector((state: RootState) =>
     state.basket.items.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -18,13 +22,14 @@ export default function BasketFooter() {
   const handleCheckout = () => {
     if (total > 0) {
       router.push("/checkout");
+      onClose();
     }
   };
 
   return (
     <div className="mt-4">
       <div className="flex justify-between font-semibold">
-        <span>Total:</span>
+        <span>Сума:</span>
         <span>₴{total.toFixed(2)}</span>
       </div>
       <Button
@@ -32,7 +37,7 @@ export default function BasketFooter() {
         onClick={handleCheckout}
         disabled={total === 0}
       >
-        Checkout
+        Оформити замовлення
       </Button>
     </div>
   );

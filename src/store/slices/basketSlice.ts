@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BasketItemType } from "@/types/products";
+import { BasketItem } from "@/types/basket";
 
 type BasketState = {
-  items: BasketItemType[];
+  items: BasketItem[];
 };
 
-const loadBasketFromStorage = (): BasketItemType[] => {
+const loadBasketFromStorage = (): BasketItem[] => {
   if (typeof window !== "undefined") {
     const data = localStorage.getItem("basket");
     return data ? JSON.parse(data) : [];
@@ -17,7 +17,7 @@ const initialState: BasketState = {
   items: loadBasketFromStorage(),
 };
 
-const saveBasketToStorage = (items: BasketItemType[]) => {
+const saveBasketToStorage = (items: BasketItem[]) => {
   if (typeof window !== "undefined") {
     localStorage.setItem("basket", JSON.stringify(items));
   }
@@ -27,7 +27,7 @@ export const basketSlice = createSlice({
   name: "basket",
   initialState,
   reducers: {
-    addToBasket: (state, action: PayloadAction<BasketItemType>) => {
+    addToBasket: (state, action: PayloadAction<BasketItem>) => {
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );

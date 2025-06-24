@@ -3,13 +3,13 @@ import links from "../../constants/Links/links";
 
 export default function Menu() {
   return (
-    <nav className="flex justify-stretch row-start-2 box-border">
-      <ul className="flex space-x-10 justify-stretch">
+    <nav className="flex justify-stretch justify-start justify-self-start box-border">
+      <ul className="flex space-x-5 justify-stretch">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-xl text-gray-800 hover:text-blue-600"
+              className="text-lg font-bold text-white hover:text-dark"
             >
               {link.label}
             </Link>

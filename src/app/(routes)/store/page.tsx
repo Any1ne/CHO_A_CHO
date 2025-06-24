@@ -1,8 +1,8 @@
 import Catalogue from "@/components/Catalogue/Catalogue";
 
-export default function Store() {
+export default function StorePage() {
   return (
-    <main className="mt-[15vh] min-h-[85vh]">
+    <main className="mt-[6rem] md:mt-[8rem] min-h-[85vh]">
       <Catalogue />
     </main>
   );

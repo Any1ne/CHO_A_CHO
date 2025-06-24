@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { ProductType } from "@/types/products";
+import { ProductType } from "@/types/product";
 import { fetchProductById, fetchFlavoursByCategory } from "@/lib/api";
 
 interface ProductModalState {
@@ -46,15 +46,15 @@ export const updateProductInModalAsync = createAsyncThunk(
   "productModal/updateProductInModalAsync",
   async (productId: string, { dispatch, rejectWithValue }) => {
     try {
-      console.log("Запит на оновлення продукту з id:", productId);
+      //console.log("Запит на оновлення продукту з id:", productId);
       const product = await fetchProductById(productId);
-      console.log("Отриманий продукт:", product);
+      //console.log("Отриманий продукт:", product);
 
       dispatch(fetchProductSuccess(product));
 
       if (product.category) {
         const flavours = await fetchFlavoursByCategory(product.category);
-        console.log("Отримані смаки:", flavours);
+        //console.log("Отримані смаки:", flavours);
         dispatch(setProductFlavours(flavours));
       }
 

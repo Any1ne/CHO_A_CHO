@@ -20,8 +20,8 @@ export default function ProductFilterPanel() {
     "Mini",
     "Popular",
     "Nutty",
-    "Hearts",
-    "Shugar Free",
+    "Heart",
+    "Sugar Free",
     "Big",
   ];
 
@@ -39,7 +39,7 @@ export default function ProductFilterPanel() {
             className={`px-3 py-1 rounded-full text-sm transition-colors duration-200
               ${
                 selectedCategory === category
-                  ? "bg-black text-white font-semibold"
+                  ? "bg-primary text-white font-semibold"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }
             `}

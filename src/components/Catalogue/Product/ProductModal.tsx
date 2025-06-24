@@ -6,8 +6,8 @@ import {
   closeProductModal,
   openProductModalAsync,
 } from "@/store/slices/productModalSlice";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import Gallery from "./Gallery";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ProductGallery from "./ProductGallery";
 import ProductDetails from "./ProductDetails";
 
 export default function ProductModal() {
@@ -28,7 +28,11 @@ export default function ProductModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-full md:w-[90vw] lg:w-[80vw] h-[80vh] max-w-none max-h-none p-6 overflow-auto">
+      <DialogContent className="w-[100vw] sm:w-[90vw] lg:w-[80vw] h-full md:h-[90vh] lg:h-[80vh] max-w-[100vw] max-h-none p-0 pt-0 overflow-auto ">
+      <DialogHeader className=" p-4 border-b md:max-h-[5rem] text-dark bg-primary rounded-b-lg">
+          <DialogTitle className="text-3xl font-bold font-sans text-white" >{product ? `Бельгійська шоколадка "${product.category}" "${product.flavour}" ${product.weight}г `: ""}</DialogTitle>
+        </DialogHeader>
+        
         {loading && (
           <div className="text-center text-gray-500 py-10">Завантаження...</div>
         )}
@@ -38,11 +42,10 @@ export default function ProductModal() {
         )}
 
         {!loading && product && (
-          <div className="flex flex-col md:flex-row gap-2 h-full py-4">
-            <Gallery
-              images={[
-                "https://petrovka-horeca.com.ua/images/detailed/16/4424930790_shokolad-belgijskij-s.jpg",
-              ]}
+        <div className="flex flex-col max-w-[100vw]">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-10 px-4">
+            <ProductGallery
+              images={product.preview ? [product.preview] : ["/preview.jpg"]}
               title={product.title}
             />
             <ProductDetails
@@ -52,6 +55,9 @@ export default function ProductModal() {
               id={product.id}
             />
           </div>
+          </div>
+
+          
         )}
       </DialogContent>
     </Dialog>

@@ -1,10 +1,28 @@
+- [] CDN
+- [] Monobank pay
+- [] Footer
+- [] Mobile layout
+
+# Problems:
+.ProductCard hight
+.BasketModal width
+.Footer pading-x on md and sm
+ProductModal
+
+Header logo
+.Accent color
+
+
+disabled cards in delivery block before city is choosen
+payment block closing after confirmation
+soner closing button
+
+add migrate page pagination logic from react hooks to redux 
+
 # Front-end (UX)
 
 ## Home
 
-- [x] Arrows control on carousel (Loop) when hover
-- [x] Footer (Contact us, Social, Pages)
-- [x] Bigger Brand advantages
 - [?] Carousel slide jump
 
 ## Product Modal:
@@ -16,21 +34,14 @@
 
 ## Main menu:
 
-- [x] Slower slides
-- [x] Test photos on cards
 
 ## Header
 
-- [x] Header min height content
 
 ## Catalogue
 
 - [?] ProductPhoto
-- [x] ProductDescription (control _choose flavour SELECT_)
 - [?] Card aspect-ratio (need to be wider and higher)
-- [?] Photo carousel (with preview)
-- [x] Categorise and filtration in one component
-- [x] Select and search must have same height
 - [?] Mobile layout x-padding must be zero
 
 ## Branded
@@ -49,10 +60,10 @@
 
 ## Checkout
 
-- [?] Accordion
-- [ ] Vendor API (Google Maps)
-- [ ] Checkout Soner
-- [ ] Checkout achieved page
+- [x] Accordion
+- [x] Vendor API (Google Maps)
+- [x] Checkout Soner
+- [x] Checkout achieved page
 - [x] Margin top
 
 ## Mobile Layout₴

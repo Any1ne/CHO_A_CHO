@@ -9,26 +9,37 @@ export default function BrandedPackaging() {
   const [isRequestOpen, setIsRequestOpen] = useState(false);
 
   return (
-    <section className="relative w-full h-[calc(100vh-10vh)] flex flex-col md:flex-row items-center justify-between p-6 md:p-12 bg-gray-100 overflow-hidden">
-      <div className="max-w-xl z-10">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Брендоване пакування для вашого бізнесу
-        </h1>
-        <p className="text-lg mb-6 text-gray-700">
-          Зробіть ваш бренд впізнаваним з першого погляду. Замовте індивідуальне
-          пакування з вашим дизайном.
-        </p>
-        <Button onClick={() => setIsRequestOpen(true)}>Залишити запит</Button>
-      </div>
+    <section className="min-h-[65vh] w-full flex flex-col md:flex-row align-center px-4 py-10 md:px-16 lg:px-24 bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-7xl mx-auto">
+        {/* Текстова частина */}
+        <div className="space-y-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+            Брендоване пакування для вашого бізнесу
+          </h1>
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            Зробіть ваш бренд впізнаваним з першого погляду. Замовте
+            індивідуальне пакування з вашим дизайном.
+          </p>
+          <Button onClick={() => setIsRequestOpen(true)}>Залишити запит</Button>
+        </div>
 
-      <div className="absolute md:relative right-0 bottom-0 md:w-1/2 w-full h-64 md:h-full z-0">
-        <Image
-          src="/images/branded-packaging.jpg"
-          alt="Брендоване пакування"
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg shadow-lg"
-        />
+        {/* Зображення або плашка */}
+        <div className="w-full h-64 sm:h-80 md:h-full rounded-xl overflow-hidden relative">
+          <div className="flex items-center justify-center h-full bg-primary rounded-lg cursor-pointer">
+            <span className="text-2xl md:text-3xl text-white font-bold text-center">
+              Брендоване пакування
+            </span>
+          </div>
+
+          {/*
+          <Image
+            src="/images/branded-packaging.jpg"
+            alt="Брендоване пакування"
+            fill
+            className="object-cover rounded-xl"
+          />
+          */}
+        </div>
       </div>
 
       {isRequestOpen && (

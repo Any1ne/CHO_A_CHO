@@ -42,7 +42,7 @@ export default function SmartPagination({
   const isLastPage = currentPage === totalPages;
 
   return (
-    <Pagination className="mt-6 justify-center">
+    <Pagination className="mt-8 justify-center">
       <PaginationContent>
         {/* First */}
         {currentPage > 1 && (

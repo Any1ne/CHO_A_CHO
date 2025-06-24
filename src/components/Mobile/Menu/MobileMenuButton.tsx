@@ -9,13 +9,13 @@ export default function MobileMenuButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="row-start-2">
+    <div >
       <Button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="p-2"
+        className="p-2 bg-background text-black"
         aria-label="Toggle menu"
       >
-        {isOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
+        {isOpen ? <XIcon size={24} /> : <MenuIcon size={80} />}
       </Button>
 
       {isOpen && <MobileMenuModal onClose={() => setIsOpen(false)} />}

@@ -1,7 +1,7 @@
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/store", label: "Store" },
-  { href: "/branded", label: "Branded" },
+  { href: "/", label: "Головна" },
+  { href: "/store", label: "Каталог" },
+  { href: "/branded", label: "Пакування" },
   // { href: "/contact", label: "Contact us" },
 ];
 

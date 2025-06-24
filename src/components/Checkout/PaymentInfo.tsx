@@ -8,10 +8,13 @@ import {
 } from "@/store/slices/checkoutSlice";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import clsx from "clsx";
+import { CircleAlertIcon } from "lucide-react";
+
 
 export default function PaymentInfo({ isActive }: { isActive: boolean }) {
   const dispatch = useAppDispatch();
-  const defaultValues = useAppSelector((s) => s.checkout.paymentInfo);
+  const defaultValues = useAppSelector((s) => s.checkout.checkoutSummary?.paymentInfo);
   const isCompleted = !!defaultValues?.paymentMethod;
 
   type PaymentFormData = {
@@ -30,10 +33,10 @@ export default function PaymentInfo({ isActive }: { isActive: boolean }) {
     if (!valid) return;
     dispatch(setPaymentInfo(data));
     dispatch(completeStep("payment"));
-    // Show success / send API call later
+    dispatch(setStep("checkout"));
   };
 
-  console.log(`Payment Info ${isActive}`);
+  //console.log(`Payment Info ${isActive}`);
   if (!isActive && isCompleted) {
     return (
       <div className="border p-4 rounded-xl bg-muted">
@@ -61,7 +64,12 @@ export default function PaymentInfo({ isActive }: { isActive: boolean }) {
     return (
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 border p-4 rounded-xl"
+        className={clsx(
+          "space-y-4 p-4 rounded-xl transition-shadow duration-300",
+          isActive
+            ? "border border-primary shadow-primary"
+            : "border"
+        )}
       >
         <h3 className="font-semibold">3. Оплата</h3>
         <RadioGroup
@@ -100,17 +108,25 @@ export default function PaymentInfo({ isActive }: { isActive: boolean }) {
                 required: "Оберіть метод оплати",
               })}
             />
-            {errors.paymentMethod && (
-              <p className="text-red-500">{errors.paymentMethod.message}</p>
-            )}
+            
             <div>
               <p className="font-semibold">Monobank</p>
               <p className="text-sm text-muted-foreground">
                 Оплата онлайн через Monobank
               </p>
             </div>
+            
           </label>
+          
         </RadioGroup>
+        
+        {Object.keys(errors).length > 0 && (
+  <div className="flex items-center gap-2 text-red-600 text-sm font-medium mt-1 select-none bg-red-50 rounded-md p-2">
+    <CircleAlertIcon className="w-5 h-5" />
+    <span>Оберіть метод оплати</span>
+  </div>
+)}
+
         <Button type="submit">Підтвердити</Button>
       </form>
     );

@@ -33,12 +33,12 @@ export default function ProductDetails({
     state.basket.items.find((item) => item.id === id)
   );
 
+if (!description){
+  description = `Шоколад CHO A CHO - мініатюрна плитка бельгійського шоколаду, яка стане ідеальним вибором для любителів солодких смакових поєднань.`
+}
+
   return (
-    <div className="flex flex-col shrink w-full md:w-1/2 border rounded overflow-hidden">
-      {/* Заголовок */}
-      <div className="p-4 border-b">
-        <h2 className="text-3xl font-bold">{title}</h2>
-      </div>
+    <div className="flex flex-col shrink w-full md:w-1/2 rounded overflow-hidden">
 
       {/* Вибір смаку */}
       <div className="p-4 border-b">
@@ -46,8 +46,8 @@ export default function ProductDetails({
       </div>
 
       {/* Ціна + кнопка */}
-      <div className="p-4 border-b grid grid-cols-[auto_1fr] items-center gap-4">
-        <p className="text-xl font-semibold">${price.toFixed(2)}</p>
+      <div className="p-4 border-b grid grid-cols-[auto_1fr] items-center gap-4 overflow-x-scroll">
+        <p className="text-xl font-semibold">₴{price.toFixed(2)}</p>
         <BasketControls id={id} title={title} price={price} />
       </div>
 
@@ -59,41 +59,41 @@ export default function ProductDetails({
       {/* Додаткова інформація */}
       <div className="p-4 border-t">
         <Accordion type="multiple" className="w-full">
-          <AccordionItem value="delivery">
-            <AccordionTrigger className="flex items-center gap-2">
-              <Truck className="w-4 h-4" />
-              Доставка
-            </AccordionTrigger>
-            <AccordionContent>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-                <li>Замовлення приймається в роботу після 100% оплати</li>
-                <li>
-                  Оформлені та оплачені до 14:00 замовлення відправляються того
-                  ж дня
-                </li>
-                <li>
-                  Оформлені та оплачені після 14:00 замовлення відправляються
-                  наступного робочого дня
-                </li>
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
+  <AccordionItem value="delivery">
+  <AccordionTrigger className="flex items-center justify-between gap-2">
+    <div className="flex items-center gap-2">
+      <Truck className="w-4 h-4" />
+      Доставка
+    </div>
+  </AccordionTrigger>
+  <AccordionContent>
+    <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+      <li>Доставка протягом 1–3 робочих днів</li>
+      <li>Доставка кур'єром по Києву</li>
+    </ul>
+  </AccordionContent>
+</AccordionItem>
 
-          <AccordionItem value="payment">
-            <AccordionTrigger className="flex items-center gap-2">
-              <CreditCard className="w-4 h-4" />
-              Спосіб оплати
-            </AccordionTrigger>
-            <AccordionContent>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-                <li>Платіжний термінал</li>
-                <li>Картами Visa та MasterCard</li>
-                <li>Оплата Monobank Pay</li>
-                <li>Оплата готівкою або переказом</li>
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+
+  <AccordionItem value="payment">
+  <AccordionTrigger className="flex items-center justify-between gap-2">
+    <div className="flex items-center gap-2">
+      <CreditCard className="w-4 h-4" />
+      Спосіб оплати
+    </div>
+  </AccordionTrigger>
+  <AccordionContent>
+    <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+      <li>Оплата Monobank Pay</li>
+      <li>Оплата Google Pay</li>
+      <li>Оплата Apple Pay</li>
+      <li>Оплата готівкою або переказом</li>
+    </ul>
+  </AccordionContent>
+</AccordionItem>
+
+</Accordion>
+
       </div>
     </div>
   );

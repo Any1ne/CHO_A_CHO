@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Oswald } from "next/font/google";
+import { Geist, Geist_Mono, Oswald, Playpen_Sans, Zain} from "next/font/google";
 import "@/styles/globals.css";
 import Providers from "./providers";
 import Header from "@/components/Header/Header";
@@ -21,9 +21,15 @@ const oswald = Oswald({
   subsets: ["latin"],
 });
 
+
+const playpenSans = Playpen_Sans({
+  variable: "--font-playpen-sans",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "My App",
-  description: "Shop app with Redux",
+  title: "CHO A CHO Store",
+  description: "Online store of CHO A CHO brand of chocolate",
 };
 
 export default function RootLayout({
@@ -36,9 +42,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body
-        className={` ${geistMono.variable} ${oswald.variable}  antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${playpenSans.variable} antialiased`}>
         <Providers>
           <Header />
           {children}
