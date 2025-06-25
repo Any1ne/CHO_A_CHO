@@ -9,7 +9,7 @@ import { placeOrder } from "@/store/slices/checkoutSlice";
 
 export default function OrderSummary() {
   const completedSteps = useSelector((state: RootState) => state.checkout.completedSteps);
-  const paymentMethod = useSelector((state: RootState) => state.checkout.checkoutSummary?.paymentInfo?.paymentMethod);
+  // const paymentMethod = useSelector((state: RootState) => state.checkout.checkoutSummary?.paymentInfo?.paymentMethod);
   const isFreeDelivery = useSelector((state: RootState) => state.checkout.checkoutSummary.isFreeDelivery);
   const items = useSelector((state: RootState) => state.basket.items);
   const total = useSelector((state: RootState) =>

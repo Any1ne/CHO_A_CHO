@@ -4,8 +4,7 @@ import { clearBasket } from "./basketSlice";
 import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { createInvoiceOnServer } from "@/vendor/monobank";
-import axios from "axios";
-import { BasketItem, Step, ContactInfo, DeliveryInfo, PaymentInfo, CheckoutSummary, OrderSummary } from "@/types";
+import { Step, ContactInfo, DeliveryInfo, PaymentInfo, CheckoutSummary, OrderSummary } from "@/types";
 import { submitOrder, fetchOrderStatus, fetchRedisOrder, saveRedisOrderToServer, checkInvoiceStatus} from "@/lib/api";
 import { nanoid } from 'nanoid';
 
@@ -132,7 +131,7 @@ export const confirmOrder = createAsyncThunk<
       return;
     }
 
-    const { checkoutSummary, items, total, status} = redisOrderData;
+    const { checkoutSummary, items, total} = redisOrderData;
 
     // Якщо оплата через Monobank
     if (checkoutSummary?.paymentInfo?.paymentMethod === "monobank") {

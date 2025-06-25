@@ -34,7 +34,9 @@ export async function POST(request: Request) {
 
     const data = JSON.parse(text);
     return NextResponse.json({ paymentUrl: data.pageUrl, invoiceId: data.invoiceId });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  } catch (error: unknown) {
+  const message = error instanceof Error ? error.message : "Невідома помилка";
+  return NextResponse.json({ error: message }, { status: 500 });
+}
+
 }

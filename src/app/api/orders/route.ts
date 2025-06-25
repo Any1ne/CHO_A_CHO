@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
   const client = await pool.connect();
 
   try {
-    let baseQuery = `
+    const baseQuery = `
       SELECT 
         o.id AS order_id,
         o.number AS order_number,

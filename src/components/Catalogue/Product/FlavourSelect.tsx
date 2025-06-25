@@ -14,11 +14,7 @@ import { updateProductInModalAsync } from "@/store/slices/productModalSlice";
 import { Star } from "lucide-react";
 import flavourIcons from "@/components/Catalogue/Product/flavourIcons";
 
-type Props = {
-  currentId: string;
-};
-
-export default function FlavourSelect({ currentId }: { currentId: string }) {
+export default function FlavourSelect() {
   const dispatch = useDispatch<AppDispatch>();
   const { product, flavours } = useSelector((state: RootState) => state.productModal);
   

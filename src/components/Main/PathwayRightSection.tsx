@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import { fetchProductById } from "@/lib/api";
 import { ProductType } from "@/types";
+import Image from "next/image";
 
 const featuredProductIds = ["1-005", "3-004", "6-002", "2-001"];
 
@@ -78,11 +79,14 @@ export default function PathwayRightSection() {
                   className="flex items-center justify-center"
                 >
                   <div className="flex flex-col items-center justify-center border gap-4 w-70 p-4 rounded-2xl bg-gray-50">
-                    <img
-                      src={product.preview || "/preview.jpg"}
-                      alt={product.title}
-                      className="h-60 w-60 object-cover rounded-xl shadow-md bg-gray-200"
-                    />
+                   
+<Image
+  src={product.preview || "/preview.jpg"}
+  alt={product.title}
+  width={240}
+  height={240}
+  className="h-60 w-60 object-cover rounded-xl shadow-md bg-gray-200"
+/>
                     <h3 className="text-lg font-semibold text-center">{product.title}</h3>
                     {product.description && (
                       <p className="text-sm text-muted-foreground text-center px-2">

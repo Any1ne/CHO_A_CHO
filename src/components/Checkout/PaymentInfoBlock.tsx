@@ -7,28 +7,27 @@ import {
   setStep,
 } from "@/store/slices/checkoutSlice";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup} from "@/components/ui/radio-group";
 import clsx from "clsx";
 import { CircleAlertIcon } from "lucide-react";
+import { PaymentInfo } from "@/types";
 
 
-export default function PaymentInfo({ isActive }: { isActive: boolean }) {
+export default function PaymentInfoBlock({ isActive }: { isActive: boolean }) {
   const dispatch = useAppDispatch();
   const defaultValues = useAppSelector((s) => s.checkout.checkoutSummary?.paymentInfo);
   const isCompleted = !!defaultValues?.paymentMethod;
 
-  type PaymentFormData = {
-    paymentMethod: "cod" | "monobank";
-  };
+
 
   const {
     register,
     handleSubmit,
     trigger,
     formState: { errors },
-  } = useForm<PaymentFormData>({ defaultValues });
+  } = useForm<PaymentInfo>({ defaultValues });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: PaymentInfo) => {
     const valid = await trigger();
     if (!valid) return;
     dispatch(setPaymentInfo(data));

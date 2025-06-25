@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Oswald, Playpen_Sans, Zain} from "next/font/google";
+import { Geist, Geist_Mono, Oswald, Playpen_Sans} from "next/font/google";
 import "@/styles/globals.css";
 import Providers from "./providers";
 import Header from "@/components/Header/Header";

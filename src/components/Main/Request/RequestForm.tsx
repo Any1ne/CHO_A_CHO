@@ -31,9 +31,14 @@ export default function RequestForm() {
       setTimeout(() => {
         router.push("/");
       }, 2000);
-    } catch (error: any) {
-      toast.error(error.message || "Помилка надсилання запиту");
-    }
+     } catch (error: unknown) {
+  if (error instanceof Error) {
+    toast.error(error.message);
+  } else {
+    toast.error("Помилка надсилання запиту");
+  }
+}
+
   };
 
   return (

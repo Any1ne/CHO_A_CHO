@@ -20,11 +20,17 @@ export async function POST(req: Request) {
     `;
 
     const response = await resend.emails.send({
-      from: `CHO A CHO Shop <${process.env.SEND_EMAIL }>`,
-      to: [`${process.env.ADMIN_EMAIL}`],
-      subject: "Новий запит з контактної форми",
-      html,
-    });
+  from: `CHO A CHO Shop <${process.env.SEND_EMAIL}>`,
+  to: [`${process.env.ADMIN_EMAIL}`],
+  subject: "Новий запит з контактної форми",
+  html,
+});
+
+if (response.error) {
+  console.error("Email error:", response.error);
+  return NextResponse.json({ error: "Не вдалося надіслати email" }, { status: 500 });
+}
+
 
     return NextResponse.json({ success: true});
   } catch (error) {

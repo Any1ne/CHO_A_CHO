@@ -2,26 +2,45 @@ import { redis } from "@/db/redis/client";
 
 const CACHE_TTL = 60 * 60;
 
-const transformCities = (data: any[]) =>
+type NovaPoshtaCity = {
+  Description: string;
+  SettlementTypeDescription: string;
+  Ref: string;
+};
+
+type NovaPoshtaWarehouse = {
+  Description: string;
+  CityRef: string;
+  Ref: string;
+};
+
+type NovaPoshtaStreet = {
+  Description: string;
+  StreetsType: string;
+  Ref: string;
+};
+
+const transformCities = (data: NovaPoshtaCity[]): NovaPoshtaCity[] =>
   data.map((city) => ({
     Description: city.Description,
     SettlementTypeDescription: city.SettlementTypeDescription,
     Ref: city.Ref,
   }));
 
-const transformWarehouses = (data: any[]) =>
+const transformWarehouses = (data: NovaPoshtaWarehouse[]): NovaPoshtaWarehouse[] =>
   data.map((wh) => ({
     Description: wh.Description,
     CityRef: wh.CityRef,
     Ref: wh.Ref,
   }));
 
-const transformStreets = (data: any[]) =>
+const transformStreets = (data: NovaPoshtaStreet[]): NovaPoshtaStreet[] =>
   data.map((street) => ({
     Description: street.Description,
     StreetsType: street.StreetsType,
     Ref: street.Ref,
   }));
+
 
 const fetchNovaPoshta = async (
   modelName: string,
@@ -94,7 +113,8 @@ export async function getStreets(cityRef: string) {
   //console.log(`[Nova Poshta] Кеш порожній. Починаємо пагінацію...`);
   const limit = 500;
   let page = 1;
-  let allStreets: any[] = [];
+  let allStreets: NovaPoshtaStreet[] = [];
+
 
   while (true) {
     const pageData = await fetchNovaPoshta("Address", "getStreet", {

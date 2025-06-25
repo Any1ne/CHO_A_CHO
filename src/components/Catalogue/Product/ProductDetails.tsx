@@ -9,10 +9,6 @@ import {
 import { Truck, CreditCard } from "lucide-react";
 
 import BasketControls from "@/components/Catalogue/BasketControls";
-import { RootState } from "@/store";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import FlavourSelect from "./FlavourSelect";
 
@@ -29,20 +25,20 @@ export default function ProductDetails({
   price,
   id,
 }: Props) {
-  const itemInBasket = useSelector((state: RootState) =>
-    state.basket.items.find((item) => item.id === id)
-  );
+  // const itemInBasket = useSelector((state: RootState) =>
+  //   state.basket.items.find((item) => item.id === id)
+  // );
 
-if (!description){
-  description = `Шоколад CHO A CHO - мініатюрна плитка бельгійського шоколаду, яка стане ідеальним вибором для любителів солодких смакових поєднань.`
-}
+
+const finalDescription = description || `Шоколад CHO A CHO - мініатюрна плитка бельгійського шоколаду, яка стане ідеальним вибором для любителів солодких смакових поєднань.`;
+
 
   return (
     <div className="flex flex-col shrink w-full md:w-1/2 rounded overflow-hidden">
 
       {/* Вибір смаку */}
       <div className="p-4 border-b">
-        <FlavourSelect currentId={id} />
+        <FlavourSelect />
       </div>
 
       {/* Ціна + кнопка */}
@@ -53,7 +49,7 @@ if (!description){
 
       {/* Опис */}
       <div className="p-4">
-        <p className="text-gray-700">{description}</p>
+        <p className="text-gray-700">{finalDescription}</p>
       </div>
 
       {/* Додаткова інформація */}
@@ -69,7 +65,7 @@ if (!description){
   <AccordionContent>
     <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
       <li>Доставка протягом 1–3 робочих днів</li>
-      <li>Доставка кур'єром по Києву</li>
+      <li>Доставка кур&rsquo;єром по Києву</li>
     </ul>
   </AccordionContent>
 </AccordionItem>

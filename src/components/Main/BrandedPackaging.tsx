@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { useState } from "react";
 import RequestModal from "@/components/Main/Request/RequestModal";
-import Image from "next/image";
+// import Image from "next/image";
 
 export default function BrandedPackaging() {
   const [isRequestOpen, setIsRequestOpen] = useState(false);

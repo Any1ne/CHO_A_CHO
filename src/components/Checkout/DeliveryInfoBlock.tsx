@@ -16,22 +16,10 @@ import { StreetSelect } from "./StreetSelect";
 import { fetchCities, fetchWarehouses, fetchStreets } from "@/lib/api";
 import clsx from "clsx";
 import { CircleAlertIcon, HomeIcon, StoreIcon } from "lucide-react";
+import {City, Warehouse, Street} from "@/types"
+import { DeliveryInfo } from "@/types";
 
-
-type DeliveryFormData = {
-  city: {
-    Ref: string;
-    Description: string;
-  };
-  deliveryMethod: "branch" | "address";
-  branchNumber?: string;
-  street?: string;
-  house?: string;
-  apartment?: string;
-  address?: string;
-};
-
-export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
+export default function DeliveryInfoBlock({ isActive }: { isActive: boolean }) {
   const dispatch = useAppDispatch();
   const defaultValues = useAppSelector(
     (s) => s.checkout.checkoutSummary?.deliveryInfo
@@ -45,7 +33,7 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
   setError,
   clearErrors,
   formState: { errors },
-} = useForm<DeliveryFormData>({
+} = useForm<DeliveryInfo>({
   defaultValues,
   mode: "onTouched",
 });
@@ -58,9 +46,11 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
   const isCourierAvailable = selectedCity?.Description === "Київ";
 
   const [openPopover, setOpenPopover] = useState(false);
-  const [cities, setCities] = useState<any[]>([]);
-  const [warehouses, setWarehouses] = useState<any[]>([]);
-  const [streets, setStreets] = useState<any[]>([]);
+
+const [cities, setCities] = useState<City[]>([]);
+const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+const [streets, setStreets] = useState<Street[]>([]);
+
 
   useEffect(() => {
     fetchCities()
@@ -95,7 +85,7 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
     }
   }, [selectedCity, setValue]);
 
-  const onSubmit = (data: DeliveryFormData) => {
+  const onSubmit = (data: DeliveryInfo) => {
   let hasError = false;
   
   if (data.deliveryMethod === "branch") {
@@ -133,7 +123,7 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
     }`;
   }
 
-  const finalData: DeliveryFormData = {
+  const finalData: DeliveryInfo = {
     ...data,
     address: fullAddress,
   };
@@ -288,14 +278,14 @@ export default function DeliveryInfo({ isActive }: { isActive: boolean }) {
           <div className="flex flex-col">
   <div className="flex items-center gap-2">
     <HomeIcon className="w-5 h-5 text-primary" />
-    <p className="font-semibold">Кур'єром</p>
+    <p className="font-semibold">Кур&rsquo;єром</p>
   </div>
   <p className="text-sm text-muted-foreground">
-    Доставка кур'єром на адресу оператором Нової пошти
+    Доставка кур&rsquo;єром на адресу оператором Нової пошти
   </p>
   {!isCourierAvailable && selectedCity && (
     <p className="text-xs text-muted-foreground mt-1">
-      Доставка кур'єром доступна лише в місті Київ
+      Доставка кур&rsquo;єром доступна лише в місті Київ
     </p>
   )}
 </div>

@@ -1,6 +1,6 @@
 import WebBanner from "@/components/Main/WebBanner";
 import Gateway from "@/components/Main/Pathway";
-import BirthdayModal from "@/components/Birthday/BirthdayModal";
+// import BirthdayModal from "@/components/Birthday/BirthdayModal";
 
 export default function Home() {
   return (

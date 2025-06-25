@@ -11,17 +11,9 @@ import {
 } from "@/store/slices/checkoutSlice";
 import clsx from "clsx";
 import { CircleAlertIcon } from "lucide-react";
+import { ContactInfo } from "@/types";
 
-
-type ContactFormData = {
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  phone: string;
-  email: string;
-};
-
-export default function ContactInfo({ isActive }: { isActive: boolean }) {
+export default function ContactInfoBlock({ isActive }: { isActive: boolean }) {
   const dispatch = useAppDispatch();
   const defaultValues = useAppSelector(
     (s) => s.checkout.checkoutSummary?.contactInfo
@@ -32,7 +24,7 @@ export default function ContactInfo({ isActive }: { isActive: boolean }) {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ContactFormData>({
+  } = useForm<ContactInfo>({
     defaultValues,
   });
 
@@ -41,13 +33,13 @@ export default function ContactInfo({ isActive }: { isActive: boolean }) {
   useEffect(() => {
     const saved = sessionStorage.getItem("orderData");
     if (saved) {
-      const parsed: ContactFormData = JSON.parse(saved);
+      const parsed: ContactInfo = JSON.parse(saved);
       reset(parsed);
       dispatch(setContactInfo(parsed));
     }
   }, [dispatch, reset]);
 
-  const onSubmit = (data: ContactFormData) => {
+  const onSubmit = (data: ContactInfo) => {
     dispatch(setContactInfo(data));
     dispatch(completeStep("contact"));
     dispatch(setStep("delivery"));

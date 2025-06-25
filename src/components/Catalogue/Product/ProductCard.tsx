@@ -4,13 +4,15 @@ import { useDispatch } from "react-redux";
 import { openProductModal } from "@/store/slices/productModalSlice";
 import BasketControls from "@/components/Catalogue/BasketControls";
 import { ProductType } from "@/types/product";
+import Image from "next/image";
+
 
 export default function ProductCard({
   id,
   title,
   price,
   preview,
-  description,
+  // description,
 }: ProductType) {
   const dispatch = useDispatch();
 
@@ -33,13 +35,15 @@ export default function ProductCard({
         className="bg-gray-100 aspect-[4/3] overflow-hidden rounded-xl cursor-pointer"
         onClick={handleOpenModal}
       >
-        <img
-          src={
-            preview ||"/preview.jpg"
-          }
-          alt={title}
-          className="h-full w-full object-cover transition-transform duration-300"
-        />
+        <Image
+  src={preview || "/preview.jpg"}
+  alt={title}
+  width={400}
+  height={300}
+  className="h-full w-full object-cover transition-transform duration-300"
+  sizes="(max-width: 768px) 100vw, 300px"
+/>
+
         )
       </div>
 

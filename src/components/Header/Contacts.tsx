@@ -20,7 +20,7 @@ export default function Contacts() {
           className="hover:bg-dark hover:text-white md:bg-accent md:text-black h-[1.5rem] w-fit"
           onClick={() => setIsOpen(true)}
         >
-          Зв'язатися з нами
+          Зв&rsquo;язатися з нами
         </Button>
         <span className="text-xs text-gray-700 md:text-gray-200">Пн-нд 08:00 - 19:00</span>
       </div>

@@ -35,9 +35,11 @@ export const openProductModalAsync = createAsyncThunk(
       }
 
       return product;
-    } catch (error: any) {
-      dispatch(fetchProductFailure(error.message));
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Невідома помилка";
+      dispatch(fetchProductFailure(errorMessage));
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -59,9 +61,11 @@ export const updateProductInModalAsync = createAsyncThunk(
       }
 
       return product;
-    } catch (error: any) {
-      console.error("Помилка під час оновлення продукту:", error.message);
-      return rejectWithValue(error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Невідома помилка";
+      console.error("Помилка під час оновлення продукту:", errorMessage);
+      return rejectWithValue(errorMessage);
     }
   }
 );

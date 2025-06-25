@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   try {
     const streets = await getStreets(cityRef);
     return NextResponse.json({ streets });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch streets" },
       { status: 500 }

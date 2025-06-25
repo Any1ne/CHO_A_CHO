@@ -1,8 +1,8 @@
 "use client";
 
-import ContactInfo from "./ContactInfo";
-import DeliveryInfo from "./DeliveryInfo";
-import PaymentInfo from "./PaymentInfo";
+import ContactInfoBlock from "./ContactInfoBlock";
+import DeliveryInfoBlock from "./DeliveryInfoBlock";
+import PaymentInfoBlock from "./PaymentInfoBlock";
 import { useAppSelector } from "@/lib/hooks/hooks";
 
 export default function CheckoutForm() {
@@ -10,9 +10,9 @@ export default function CheckoutForm() {
 
   return (
     <div className="space-y-6">
-      <ContactInfo isActive={currentStep === "contact"} />
-      <DeliveryInfo isActive={currentStep === "delivery"} />
-      <PaymentInfo isActive={currentStep === "payment"} />
+      <ContactInfoBlock isActive={currentStep === "contact"} />
+      <DeliveryInfoBlock isActive={currentStep === "delivery"} />
+      <PaymentInfoBlock isActive={currentStep === "payment"} />
     </div>
   );
 }

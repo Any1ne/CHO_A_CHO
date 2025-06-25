@@ -18,7 +18,7 @@ export default function Advantages() {
     >
       {advantages.map(({ icon: Icon, text }, i) => {
         const isLastColMobile = i % 2 === 1;
-        const isLastRowMobile = i >= 2;
+        // const isLastRowMobile = i >= 2;
         const isLastColDesktop = i % 4 === 3;
 
         return (

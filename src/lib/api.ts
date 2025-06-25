@@ -5,6 +5,7 @@ import { AppDispatch } from "@/store";
 import { clearBasket } from "@/store/slices/basketSlice";
 import { resetCheckout } from "@/store/slices/checkoutSlice";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import axios from "axios";
 
 // Продукти
 export async function fetchProducts(category?: string): Promise<ProductType[]> {
@@ -73,11 +74,14 @@ export async function submitOrder(order: OrderSummary) {
   try {
     const res = await axiosInstance.post("/orders", order);
     return res.data;
-  } catch (error: any) {
-    console.error("🔴 submitOrder error:", error);
-    throw new Error(error?.response?.data?.error || "Помилка оформлення замовлення");
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || "Помилка оформлення замовлення");
+    }
+    throw new Error("Невідома помилка оформлення замовлення");
   }
 }
+
 
 // Nova Poshta
 export async function fetchCities() {
@@ -119,10 +123,13 @@ export async function sendContactRequest(data: { name: string; email: string; me
   try {
     const res = await axiosInstance.post("/contact", data);
     return res.data;
-  } catch (error: any) {
-    console.error("🔴 sendContactRequest error:", error);
-    throw new Error(error?.response?.data?.error || "Помилка надсилання запиту");
+  } catch (error: unknown) {
+  if (axios.isAxiosError(error)) {
+    throw new Error(error.response?.data?.error || "Помилка ...");
   }
+  throw new Error("Невідома помилка ...");
+}
+
 }
 
 // Redis — збереження замовлення
@@ -159,7 +166,7 @@ export const checkInvoiceStatus = async (invoiceId: string) => {
     `https://api.monobank.ua/api/merchant/invoice/status?invoiceId=${invoiceId}`,
     {
       headers: {
-        "X-Token": "uzxtnzrBVRx0e0xAn2THvgJuvxvoNLniDiMhBd9xnj8c",
+        "X-Token": apiToken!,
       },
     }
   );
@@ -177,12 +184,13 @@ export const confirmOrderOnServer = async (orderId: string) => {
   try {
     const response = await axiosInstance.post(`/orders/confirm?orderId=${orderId}`);
     return response.data;
-  } catch (error: any) {
-    console.error("Error confirming order on server:", error);
-    return {
-      error: error?.response?.data?.error || "Серверна помилка підтвердження",
-    };
+  } catch (error: unknown) {
+  if (axios.isAxiosError(error)) {
+    throw new Error(error.response?.data?.error || "Помилка ...");
   }
+  throw new Error("Невідома помилка ...");
+}
+
 };
 
 export const handleOrderConfirmation = async (

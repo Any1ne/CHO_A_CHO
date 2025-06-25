@@ -38,7 +38,7 @@ export default function PathwayLeftSection() {
         </div>
         <div className="flex items-center gap-3">
           <TruckIcon className="w-6 h-6 text-primary" />
-          <p className="text-sm text-left">Доставка кур'єром по Києву</p>
+          <p className="text-sm text-left">Доставка кур&rsquo;єром по Києву</p>
         </div>
       </div>
     </div>

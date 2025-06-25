@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   try {
     const warehouses = await getWarehouses(cityRef);
     return NextResponse.json({ warehouses });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch warehouses" },
       { status: 500 }

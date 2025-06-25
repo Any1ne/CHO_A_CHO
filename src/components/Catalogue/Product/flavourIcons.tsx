@@ -10,7 +10,7 @@ import {
   Milk,
   Shield,
   Grape,
-  Star,
+  // Star,
 } from "lucide-react";
 import { ReactNode } from "react";
 

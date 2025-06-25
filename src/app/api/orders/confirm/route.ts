@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       items,
       total,
       status:
-        checkoutSummary.paymentInfo.paymentMethod === "monobank"
+        checkoutSummary.paymentInfo?.paymentMethod === "monobank"
           ? "confirmed"
           : "нове", // або "не оплачено"
     };

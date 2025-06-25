@@ -6,6 +6,18 @@ export type ContactInfo = {
   email: string;
 };
 
+
+
+export type Warehouse = {
+  Ref: string;
+  Description: string;
+}
+
+export type Street = {
+  Ref: string;
+  Description: string;
+}
+
 export type City = {
   Ref: string;
   Description: string;
@@ -15,6 +27,9 @@ export type DeliveryInfo = {
   city: City;
   deliveryMethod: "branch" | "address";
   branchNumber?: string;
+  street?: string;
+  house?: string;
+  apartment?: string;
   address?: string;
 };
 
