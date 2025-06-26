@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendOrderConfirmation } from "@/lib/email";
+import { createClient } from "@/db/supabase/server";
 import dotenv from "dotenv";
 import { OrderSummary } from "@/types";
-import pool from "@/db/postgres/client";
 
 dotenv.config();
 
@@ -17,79 +17,56 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const client = await pool.connect();
+  const supabase = await createClient();
 
   try {
-    const baseQuery = `
-      SELECT 
-        o.id AS order_id,
-        o.number AS order_number,
-        o.payment_method,
-        o.delivery_method,
-        o.status AS order_status,
-        o.is_free_delivery,
-        o.total AS total,
-        c.name AS customer_name,
-        c.phone AS customer_phone,
-        c.email AS customer_email,
-        d.branch_number,
-        d.full_address,
-        d.city AS city,
-        oi.product_id,
-        oi.quantity
-      FROM Orders o
-      JOIN Customers c ON o.customer_id = c.id
-      LEFT JOIN Order_Delivery_Details d ON d.order_number = o.number
-      LEFT JOIN OrderItems oi ON oi.order_number = o.number
-      WHERE `;
+    const identifier = orderId || orderNumber;
 
-    const value = orderId || orderNumber;
-    const whereClause = orderId ? `o.id = $1` : `o.number = $1`;
+    const { data, error } = await supabase.rpc("get_order_summary", {
+      identifier,
+    });
 
-    const result = await client.query(baseQuery + whereClause, [value]);
-
-    if (result.rows.length === 0) {
-      return NextResponse.json(
-        { success: false, order: null },
-        { status: 200 }
-      );
+    if (error) {
+      console.error("🔴 RPC помилка:", error.message);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
-    const firstRow = result.rows[0];
+    if (!data || data.length === 0) {
+      return NextResponse.json({ success: false, order: null }, { status: 200 });
+    }
+
+    const row = data[0];
 
     const order: OrderSummary = {
-      orderId: firstRow.order_id,
-      orderNumber:
-        firstRow.order_number.toString().padStart(6, "0") ?? undefined,
+      orderId: row.order_id,
+      orderNumber: row.order_number?.toString().padStart(6, "0") ?? undefined,
       checkoutSummary: {
-        isFreeDelivery: firstRow.is_free_delivery,
+        isFreeDelivery: row.is_free_delivery,
         contactInfo: {
-          firstName: firstRow.customer_name,
-          lastName: "",
+          firstName: row.customer_name,
+          lastName: "", // Не повертається з RPC, заповнюється вручну
           middleName: "",
-          phone: firstRow.customer_phone,
-          email: firstRow.customer_email,
+          phone: row.customer_phone,
+          email: row.customer_email,
         },
         deliveryInfo: {
-          deliveryMethod:
-            firstRow.delivery_method === "address" ? "address" : "branch",
-          branchNumber: firstRow.branch_number ?? undefined,
-          address: firstRow.full_address ?? undefined,
-          city: firstRow.city ?? "",
+          deliveryMethod: row.delivery_method === "address" ? "address" : "branch",
+          branchNumber: row.branch_number ?? undefined,
+          address: row.full_address ?? undefined,
+          city: row.city ?? "",
         },
         paymentInfo: {
-          paymentMethod:
-            firstRow.payment_method === "monobank" ? "monobank" : "cod",
+          paymentMethod: row.payment_method === "monobank" ? "monobank" : "cod",
         },
       },
-      status: firstRow.order_status,
-      total: firstRow.total ?? 0,
-      items: [], // TODO: Map from rows
+      status: row.order_status,
+      total: row.total ?? 0,
+      items: [], // можеш додати окремий запит на items, якщо потрібно
     };
 
     return NextResponse.json({ success: true, order }, { status: 200 });
   } catch (error) {
-    console.error("🔴 Помилка отримання замовлення:", error);
+    console.error("🔴 Помилка обробки GET-запиту:", error);
     return NextResponse.json(
       {
         success: false,
@@ -97,8 +74,6 @@ export async function GET(req: NextRequest) {
       },
       { status: 500 }
     );
-  } finally {
-    client.release();
   }
 }
 
@@ -107,8 +82,6 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as OrderSummary;
     const { orderId, checkoutSummary, items, total } = body;
 
-    //console.log("--API ORDER POST --", orderId);
-
     const {
       contactInfo: contact,
       deliveryInfo: delivery,
@@ -116,76 +89,37 @@ export async function POST(req: NextRequest) {
       isFreeDelivery,
     } = checkoutSummary;
 
-    if (!contact || !delivery || !payment) {
+    // Мінімальна валідація перед викликом RPC
+    if (!contact || !delivery || !payment || !items || !orderId) {
       return NextResponse.json(
         { success: false, error: "Некоректна структура замовлення." },
         { status: 400 }
       );
     }
 
-    const fullName = `${contact.lastName} ${contact.firstName}${
-      contact.middleName ? " " + contact.middleName : ""
-    }`;
-    const deliveryType =
-      delivery.deliveryMethod === "branch" ? "Branch" : "Address";
+    const supabase = await createClient();
 
-    const client = await pool.connect();
-    await client.query("BEGIN");
+    const { data, error } = await supabase.rpc("create_order", {
+  order_data: body,
+});
 
-    // 1. Вставити або оновити покупця
-    const customerResult = await client.query(
-      `INSERT INTO Customers (name, phone, email)
-       VALUES ($1, $2, $3)
-       ON CONFLICT (email) DO UPDATE
-       SET name = EXCLUDED.name, phone = EXCLUDED.phone
-       RETURNING id`,
-      [fullName, contact.phone || null, contact.email || null]
-    );
-    const customerId = customerResult.rows[0].id;
+const orderNumber = data?.[0]?.order_number;
 
-    // 2. Створити замовлення
-    const orderResult = await client.query(
-      `INSERT INTO Orders (id, customer_id, payment_method, delivery_method, is_free_delivery, total, invoice_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING number`,
-      [
-        orderId,
-        customerId,
-        payment.paymentMethod,
-        delivery.deliveryMethod,
-        isFreeDelivery,
-        total,
-        payment.invoiceId,
-      ]
-    );
-    const orderNumber = orderResult.rows[0].number;
-
-    // 3. Додати деталі доставки
-    await client.query(
-      `INSERT INTO Order_Delivery_Details
-        (order_number, delivery_service, delivery_type, branch_number, full_address, city)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [
-        orderNumber,
-        "Nova Poshta",
-        deliveryType,
-        deliveryType === "Branch" ? delivery.branchNumber : null,
-        deliveryType === "Address" ? delivery.address : null,
-        delivery.city.Description,
-      ]
-    );
-
-    // 4. Додати позиції замовлення
-    for (const item of items) {
-      await client.query(
-        `INSERT INTO OrderItems (order_number, product_id, quantity)
-         VALUES ($1, $2, $3)`,
-        [orderNumber, item.id, item.quantity]
+    if (error) {
+      console.error("🔴 RPC помилка створення:", error.message);
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 500 }
       );
     }
 
-    await client.query("COMMIT");
-    client.release();
+    // Додатковий HTML для email-повідомлення
+    const fullName = `${contact.lastName} ${contact.firstName}${
+      contact.middleName ? " " + contact.middleName : ""
+    }`;
+
+    const deliveryType =
+      delivery.deliveryMethod === "branch" ? "Branch" : "Address";
 
     const orderInfoHtml = `
       <h2>Дякуємо за замовлення, ${contact.firstName}!</h2>

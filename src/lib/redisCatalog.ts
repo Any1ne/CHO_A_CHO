@@ -1,6 +1,6 @@
 import { redis } from "@/db/redis/client";
 import dotenv from "dotenv";
-import pool from "@/db/postgres/client";
+import { createClient } from "@/db/supabase/server";
 
 dotenv.config();
 
@@ -8,7 +8,7 @@ const REDIS_KEY_ALL = "products:all";
 const CACHE_TTL = 60 * 60; // 1 година
 
 type Product = {
-  id: number | string;
+  id: string;
   title: string;
   price: number;
   category: string;
@@ -16,33 +16,23 @@ type Product = {
   weight: number;
 };
 
+
 // 🔁 Отримати всі продукти з PostgreSQL
-async function fetchAllProductsFromDB() {
-  const client = await pool.connect();
-  try {
-    const query = `
-  SELECT 
-    p.id, 
-    p.title, 
-    p.price, 
-    c.name AS category, 
-    c.weight AS weight,
-    f.name AS flavour
-  FROM products p
-  JOIN categories c ON p.category_id = c.id
-  JOIN flavours f ON p.flavour_id = f.id
-`;
-    const result = await client.query(query);
-    const products = result.rows;
+async function fetchAllProductsFromDB(): Promise<Product[]> {
+  const supabase = await createClient();
 
-    // Зберегти всі продукти одним масивом у Redis з TTL
-    await redis.set(REDIS_KEY_ALL, JSON.stringify(products), "EX", CACHE_TTL);
+  const { data, error } = await supabase.rpc("get_all_products");
 
-    //console.log("🟢 Завантажено продукти з БД та кешовано в Redis");
-    return products;
-  } finally {
-    client.release();
+  if (error || !data) {
+    console.error("🔴 RPC помилка при отриманні продуктів:", error?.message);
+    return [];
   }
+
+  // Кешування в Redis
+  await redis.set(REDIS_KEY_ALL, JSON.stringify(data), "EX", CACHE_TTL);
+
+  //console.log("🟢 Отримано продукти через Supabase RPC та кешовано в Redis");
+  return data;
 }
 
 // 🧠 Отримати всі продукти з Redis або БД (якщо Redis порожній)

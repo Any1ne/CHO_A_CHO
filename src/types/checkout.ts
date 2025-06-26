@@ -6,8 +6,6 @@ export type ContactInfo = {
   email: string;
 };
 
-
-
 export type Warehouse = {
   Ref: string;
   Description: string;
