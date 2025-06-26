@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
       contactInfo: contact,
       deliveryInfo: delivery,
       paymentInfo: payment,
-      isFreeDelivery,
+      // isFreeDelivery,
     } = checkoutSummary;
 
     // Мінімальна валідація перед викликом RPC
