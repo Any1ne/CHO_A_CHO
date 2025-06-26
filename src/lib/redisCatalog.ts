@@ -1,6 +1,6 @@
 import { redis } from "@/db/redis/client";
-import { Pool } from "pg";
 import dotenv from "dotenv";
+import pool from "@/db/postgres/client";
 
 dotenv.config();
 
@@ -16,19 +16,11 @@ type Product = {
   weight: number;
 };
 
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: Number(process.env.POSTGRES_PORT),
-});
-
 // 🔁 Отримати всі продукти з PostgreSQL
 async function fetchAllProductsFromDB() {
   const client = await pool.connect();
   try {
-const query = `
+    const query = `
   SELECT 
     p.id, 
     p.title, 
@@ -54,7 +46,7 @@ const query = `
 }
 
 // 🧠 Отримати всі продукти з Redis або БД (якщо Redis порожній)
-export async function getAllProducts(): Promise<Product[]>{
+export async function getAllProducts(): Promise<Product[]> {
   try {
     const cached = await redis.get(REDIS_KEY_ALL);
 
@@ -76,12 +68,13 @@ export async function getProductById(id: string): Promise<Product | null> {
   return products.find((p) => p.id.toString() === id) || null;
 }
 
-export async function getProductsByCategory(category: string): Promise<Product[]> {
+export async function getProductsByCategory(
+  category: string
+): Promise<Product[]> {
   const products = await getAllProducts();
   const filtered = products.filter((p) => p.category === category);
   return filtered;
 }
-
 
 // 🧠 Отримати смаки за категорією
 export async function getFlavoursByCategory(category: string) {

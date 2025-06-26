@@ -66,7 +66,7 @@ CREATE TABLE order_delivery_details(
 
 CREATE TABLE orderitems(
     id SERIAL NOT NULL,
-    order_id integer,
+    order_id varchar,
     product_id varchar,
     quantity integer NOT NULL,
     PRIMARY KEY(id),

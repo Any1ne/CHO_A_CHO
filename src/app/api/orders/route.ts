@@ -1,18 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendOrderConfirmation } from "@/lib/email";
-import { Pool } from "pg";
 import dotenv from "dotenv";
 import { OrderSummary } from "@/types";
+import pool from "@/db/postgres/client";
 
 dotenv.config();
-
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
-  port: Number(process.env.POSTGRES_PORT),
-});
 
 export async function GET(req: NextRequest) {
   const orderId = req.nextUrl.searchParams.get("orderId");
@@ -57,14 +49,18 @@ export async function GET(req: NextRequest) {
     const result = await client.query(baseQuery + whereClause, [value]);
 
     if (result.rows.length === 0) {
-      return NextResponse.json({ success: false, order: null }, { status: 200 });
+      return NextResponse.json(
+        { success: false, order: null },
+        { status: 200 }
+      );
     }
 
     const firstRow = result.rows[0];
 
     const order: OrderSummary = {
       orderId: firstRow.order_id,
-      orderNumber: firstRow.order_number.toString().padStart(6, "0") ?? undefined,
+      orderNumber:
+        firstRow.order_number.toString().padStart(6, "0") ?? undefined,
       checkoutSummary: {
         isFreeDelivery: firstRow.is_free_delivery,
         contactInfo: {
@@ -75,13 +71,15 @@ export async function GET(req: NextRequest) {
           email: firstRow.customer_email,
         },
         deliveryInfo: {
-          deliveryMethod: firstRow.delivery_method === "address" ? "address" : "branch",
+          deliveryMethod:
+            firstRow.delivery_method === "address" ? "address" : "branch",
           branchNumber: firstRow.branch_number ?? undefined,
           address: firstRow.full_address ?? undefined,
           city: firstRow.city ?? "",
         },
         paymentInfo: {
-          paymentMethod: firstRow.payment_method === "monobank" ? "monobank" : "cod",
+          paymentMethod:
+            firstRow.payment_method === "monobank" ? "monobank" : "cod",
         },
       },
       status: firstRow.order_status,
@@ -107,7 +105,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as OrderSummary;
-    const {orderId, checkoutSummary, items, total } = body;
+    const { orderId, checkoutSummary, items, total } = body;
 
     //console.log("--API ORDER POST --", orderId);
 
@@ -150,7 +148,15 @@ export async function POST(req: NextRequest) {
       `INSERT INTO Orders (id, customer_id, payment_method, delivery_method, is_free_delivery, total, invoice_id)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING number`,
-      [orderId, customerId, payment.paymentMethod, delivery.deliveryMethod, isFreeDelivery, total, payment.invoiceId]
+      [
+        orderId,
+        customerId,
+        payment.paymentMethod,
+        delivery.deliveryMethod,
+        isFreeDelivery,
+        total,
+        payment.invoiceId,
+      ]
     );
     const orderNumber = orderResult.rows[0].number;
 
@@ -165,7 +171,7 @@ export async function POST(req: NextRequest) {
         deliveryType,
         deliveryType === "Branch" ? delivery.branchNumber : null,
         deliveryType === "Address" ? delivery.address : null,
-        delivery.city.Description
+        delivery.city.Description,
       ]
     );
 
@@ -224,5 +230,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-
