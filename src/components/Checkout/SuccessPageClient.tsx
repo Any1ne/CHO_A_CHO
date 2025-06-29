@@ -25,11 +25,9 @@ export default function SuccessPageClient() {
     }
 
     const fetchOrder = async () => {
-      //console.log("--SUCCESS PAGE Init");
       const resultAction = await dispatch(checkOrderStatus(orderId));
 
       if (checkOrderStatus.fulfilled.match(resultAction) && resultAction.payload.orderData) {
-        //console.log("--SUCCESS PAGE ORDER IS");
         setOrder(resultAction.payload.orderData);
       }
 

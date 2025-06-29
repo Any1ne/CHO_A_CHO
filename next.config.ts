@@ -13,7 +13,12 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "petrovka-horeca.com.ua",
-        pathname: "**", // allow all paths
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com", // <== додай сюди
+        pathname: "/image-preview/**", // або "**" якщо хочеш повністю
       },
     ],
   },

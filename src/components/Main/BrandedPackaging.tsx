@@ -3,13 +3,19 @@
 import { Button } from "../ui/button";
 import { useState } from "react";
 import RequestModal from "@/components/Main/Request/RequestModal";
-// import Image from "next/image";
+import FadeCarousel from "@/components/Main/FadeCarousel"; // імпорт нового слайдера
 
 export default function BrandedPackaging() {
   const [isRequestOpen, setIsRequestOpen] = useState(false);
 
+  const slides = [
+    { src: "/branded/1.jpg", href: "#" },
+    { src: "/branded/2.jpg", href: "#" },
+    { src: "/branded/3.jpg", href: "#" },
+  ];
+
   return (
-    <section className="min-h-[65vh] w-full flex flex-col md:flex-row align-center px-4 py-10 md:px-16 lg:px-24 bg-white">
+    <section className="min-h-[82vh] w-full flex flex-col md:flex-row align-center px-4 py-10 md:px-16 lg:px-24 bg-white">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-7xl mx-auto">
         {/* Текстова частина */}
         <div className="space-y-6">
@@ -23,22 +29,9 @@ export default function BrandedPackaging() {
           <Button onClick={() => setIsRequestOpen(true)}>Залишити запит</Button>
         </div>
 
-        {/* Зображення або плашка */}
+        {/* Слайдер зображень */}
         <div className="w-full h-64 sm:h-80 md:h-full rounded-xl overflow-hidden relative">
-          <div className="flex items-center justify-center h-full bg-primary rounded-lg cursor-pointer">
-            <span className="text-2xl md:text-3xl text-white font-bold text-center">
-              Брендоване пакування
-            </span>
-          </div>
-
-          {/*
-          <Image
-            src="/images/branded-packaging.jpg"
-            alt="Брендоване пакування"
-            fill
-            className="object-cover rounded-xl"
-          />
-          */}
+          <FadeCarousel slides={slides} />
         </div>
       </div>
 

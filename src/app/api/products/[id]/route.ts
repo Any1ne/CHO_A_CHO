@@ -18,8 +18,6 @@ export async function GET(req: Request) {
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
-
-    //console.log("🟢 GET /api/products/[id]:", product);
     return NextResponse.json(product);
   } catch (error) {
     console.error("🔴 Error fetching product by ID:", error);

@@ -23,7 +23,6 @@ export default function ConfirmPageClient() {
     if (hasRun.current) return;
     hasRun.current = true;
 
-    console.log("--CONFIRM PAGE HIT--");
     handleOrderConfirmation(orderId, dispatch, router);
   }, [orderId, dispatch, router]);
 

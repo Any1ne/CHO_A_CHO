@@ -50,9 +50,10 @@ export default function ProductModal() {
             />
             <ProductDetails
               title={product.title}
-              description={product.description}
+              description={product.description!}
               price={product.price}
               id={product.id}
+              preview={product.preview!}
             />
           </div>
           </div>

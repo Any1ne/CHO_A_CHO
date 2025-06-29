@@ -3,5 +3,5 @@ export type BasketItem = {
     title: string;
     price: number;
     quantity: number;
-    preview?: string;
+    preview: string;
 };

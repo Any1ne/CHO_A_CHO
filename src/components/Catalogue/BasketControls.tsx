@@ -12,6 +12,7 @@ type Props = {
   id: string;
   title: string;
   price: number;
+  preview: string;
   showQuantityController?: boolean;
 };
 
@@ -19,6 +20,7 @@ export default function BasketControls({
   id,
   title,
   price,
+  preview,
   showQuantityController = true,
 }: Props) {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ export default function BasketControls({
   const handleAddToBasket = () => {
     const quantityToAdd = showQuantityController ? localQty : 1;
 
-    dispatch(addToBasket({ id, title, price, quantity: quantityToAdd }));
+    dispatch(addToBasket({ id, title, price, preview, quantity: quantityToAdd }));
 
     toast.custom((t) => (
       <div className="relative flex items-start gap-3 rounded-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 p-4 shadow-lg w-[320px]">

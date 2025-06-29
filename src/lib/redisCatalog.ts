@@ -1,24 +1,17 @@
 import { redis } from "@/db/redis/client";
 import dotenv from "dotenv";
 import { createClient } from "@/db/supabase/server";
+import { ProductType } from "@/types";
 
 dotenv.config();
 
 const REDIS_KEY_ALL = "products:all";
 const CACHE_TTL = 60 * 60; // 1 година
 
-type Product = {
-  id: string;
-  title: string;
-  price: number;
-  category: string;
-  flavour: string;
-  weight: number;
-};
 
 
 // 🔁 Отримати всі продукти з PostgreSQL
-async function fetchAllProductsFromDB(): Promise<Product[]> {
+async function fetchAllProductsFromDB(): Promise<ProductType[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase.rpc("get_all_products");
@@ -30,19 +23,16 @@ async function fetchAllProductsFromDB(): Promise<Product[]> {
 
   // Кешування в Redis
   await redis.set(REDIS_KEY_ALL, JSON.stringify(data), "EX", CACHE_TTL);
-
-  //console.log("🟢 Отримано продукти через Supabase RPC та кешовано в Redis");
   return data;
 }
 
 // 🧠 Отримати всі продукти з Redis або БД (якщо Redis порожній)
-export async function getAllProducts(): Promise<Product[]> {
+export async function getAllProducts(): Promise<ProductType[]> {
   try {
     const cached = await redis.get(REDIS_KEY_ALL);
 
     if (cached) {
       const products = JSON.parse(cached);
-      //console.log(`📦 Отримано ${products.length} продуктів з Redis`);
       return products;
     }
   } catch (err) {
@@ -53,14 +43,14 @@ export async function getAllProducts(): Promise<Product[]> {
   return await fetchAllProductsFromDB();
 }
 
-export async function getProductById(id: string): Promise<Product | null> {
+export async function getProductById(id: string): Promise<ProductType  | null> {
   const products = await getAllProducts();
   return products.find((p) => p.id.toString() === id) || null;
 }
 
 export async function getProductsByCategory(
   category: string
-): Promise<Product[]> {
+): Promise<ProductType[]> {
   const products = await getAllProducts();
   const filtered = products.filter((p) => p.category === category);
   return filtered;
@@ -79,7 +69,5 @@ export async function getFlavoursByCategory(category: string) {
       flavours.push({ id: product.id.toString(), flavour });
     }
   }
-
-  //console.log("🟢 Redis getFlavoursByCategory");
   return flavours;
 }

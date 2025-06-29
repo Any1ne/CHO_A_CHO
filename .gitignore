@@ -40,3 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /src/app/(routes)/_test_page
+/public/scripts

@@ -7,9 +7,6 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category");
 
     let products = await getAllProducts();
-
-    //console.log(`Category ${category}`);
-
     if (category && category !== "All") {
       products = products.filter((p) => p.category === category);
     }

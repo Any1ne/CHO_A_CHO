@@ -4,7 +4,6 @@ import { fetchOrderStatus, submitOrder, checkInvoiceStatus } from "@/lib/api";
 import { OrderSummary } from "@/types";
 
 export async function POST(req: NextRequest) {
-  console.log("--API ROUTE CONFIRM HIT--");
   try {
     const orderId = req.nextUrl.searchParams.get("orderId");
 
@@ -14,8 +13,6 @@ export async function POST(req: NextRequest) {
 
     // 1. Перевірка: чи існує замовлення в базі
     const dbResult = await fetchOrderStatus(orderId);
-    console.log("--API ROUTE CONFIRM--", dbResult);
-
 
     if (dbResult?.orderData) {
       return NextResponse.json({ alreadyExists: true, orderId }, { status: 200 });

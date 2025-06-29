@@ -21,8 +21,6 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: NextRequest) {
-  //console.log("--Server GET ORDER REQUEST--");
-
   try {
     const orderId = request.nextUrl.searchParams.get("orderId");
 

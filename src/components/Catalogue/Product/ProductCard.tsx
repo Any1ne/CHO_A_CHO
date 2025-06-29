@@ -5,6 +5,8 @@ import { openProductModal } from "@/store/slices/productModalSlice";
 import BasketControls from "@/components/Catalogue/BasketControls";
 import { ProductType } from "@/types/product";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 
 export default function ProductCard({
@@ -12,9 +14,9 @@ export default function ProductCard({
   title,
   price,
   preview,
-  // description,
 }: ProductType) {
   const dispatch = useDispatch();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleOpenModal = () => {
     dispatch(openProductModal(id));
@@ -32,19 +34,25 @@ export default function ProductCard({
       `}
     >
       <div
-        className="bg-gray-100 aspect-[4/3] overflow-hidden rounded-xl cursor-pointer"
+        className="bg-gray-100 aspect-[4/3] overflow-hidden rounded-xl cursor-pointer relative"
         onClick={handleOpenModal}
       >
-        <Image
-  src={preview || "/preview.jpg"}
-  alt={title}
-  width={400}
-  height={300}
-  className="h-full w-full object-cover transition-transform duration-300"
-  sizes="(max-width: 768px) 100vw, 300px"
-/>
+        {!isImageLoaded && (
+          <Skeleton className="absolute inset-0 w-full h-full rounded-xl" />
+        )}
 
-        )
+        <Image
+          src={preview || "/preview.jpg"}
+          alt={title}
+          width={400}
+          height={300}
+          className={`
+            h-full w-full object-cover transition-opacity duration-500 
+            ${isImageLoaded ? "opacity-100" : "opacity-0"}
+          `}
+          sizes="(max-width: 768px) 100vw, 300px"
+          onLoad={() => setIsImageLoaded(true)}
+        />
       </div>
 
       <div className="p-0 md:p-2 flex flex-col flex-grow">
@@ -69,6 +77,7 @@ export default function ProductCard({
             id={id}
             title={title}
             price={price}
+            preview={preview}
             showQuantityController={false}
           />
         </div>
@@ -76,3 +85,4 @@ export default function ProductCard({
     </div>
   );
 }
+

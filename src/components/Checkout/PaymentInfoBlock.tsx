@@ -34,8 +34,6 @@ export default function PaymentInfoBlock({ isActive }: { isActive: boolean }) {
     dispatch(completeStep("payment"));
     dispatch(setStep("checkout"));
   };
-
-  //console.log(`Payment Info ${isActive}`);
   if (!isActive && isCompleted) {
     return (
       <div className="border p-4 rounded-xl bg-muted">
