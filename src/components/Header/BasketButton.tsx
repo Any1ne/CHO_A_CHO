@@ -1,5 +1,3 @@
-"use client";
-
 import { ShoppingBasket } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";

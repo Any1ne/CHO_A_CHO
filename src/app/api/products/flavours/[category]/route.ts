@@ -12,7 +12,6 @@ export async function GET(req: Request) {
 
     const flavours = await getFlavoursByCategory(category);
 
-    //console.log("🟢 GET /api/flavours/[category]:", flavours);
     return NextResponse.json(flavours);
   } catch (error) {
     console.error("🔴 Error fetching flavours by category:", error);

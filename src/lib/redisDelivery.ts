@@ -47,8 +47,6 @@ const fetchNovaPoshta = async (
   method: string,
   methodProperties: object = {}
 ) => {
-  //console.log(`[Nova Poshta] Запит: ${modelName}.${method}`);
-  //console.log(`[Nova Poshta] Параметри:`, methodProperties);
 
   const response = await fetch("https://api.novaposhta.ua/v2.0/json/", {
     method: "POST",
@@ -67,32 +65,26 @@ const fetchNovaPoshta = async (
 
 export async function getCities() {
   const cacheKey = "nova-poshta:cities";
-  //console.log(`[Nova Poshta] Перевірка кешу: ${cacheKey}`);
   const cached = await redis.get(cacheKey);
 
   if (cached) {
-    //console.log(`[Nova Poshta] Дані з кешу: ${cacheKey}`);
     return JSON.parse(cached);
   }
 
-  //console.log(`[Nova Poshta] Кеш порожній. Виконуємо запит...`);
   const fullData = await fetchNovaPoshta("Address", "getCities");
   const transformed = transformCities(fullData);
   await redis.set(cacheKey, JSON.stringify(transformed), "EX", CACHE_TTL);
-  //console.log(`[Nova Poshta] Кеш оновлено: ${cacheKey}`);
   return transformed;
 }
 
 export async function getWarehouses(cityRef: string) {
   const cacheKey = `nova-poshta:warehouses:${cityRef}`;
-  //console.log(`[Nova Poshta] Перевірка кешу: ${cacheKey}`);
   const cached = await redis.get(cacheKey);
 
   if (cached) {
     return JSON.parse(cached);
   }
 
-  //console.log(`[Nova Poshta] Кеш порожній. Виконуємо запит...`);
   const fullData = await fetchNovaPoshta("AddressGeneral", "getWarehouses", {
     CityRef: cityRef,
   });
@@ -103,14 +95,12 @@ export async function getWarehouses(cityRef: string) {
 
 export async function getStreets(cityRef: string) {
   const cacheKey = `nova-poshta:streets:${cityRef}`;
-  //console.log(`[Nova Poshta] Перевірка кешу: ${cacheKey}`);
   const cached = await redis.get(cacheKey);
 
   if (cached) {
     return JSON.parse(cached);
   }
 
-  //console.log(`[Nova Poshta] Кеш порожній. Починаємо пагінацію...`);
   const limit = 500;
   let page = 1;
   let allStreets: NovaPoshtaStreet[] = [];
@@ -137,7 +127,5 @@ export async function getStreets(cityRef: string) {
 
   const transformed = transformStreets(allStreets);
   await redis.set(cacheKey, JSON.stringify(transformed), "EX", CACHE_TTL);
-  //console.log(`[Nova Poshta] Отримано всі сторінки (${page}). Кеш оновлено.`);
-
   return transformed;
 }

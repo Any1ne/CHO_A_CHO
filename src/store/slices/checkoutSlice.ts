@@ -103,7 +103,6 @@ if (paymentMethod === "monobank") {
       case "cod": {
         toast.success("Замовлення збережено. Очікуйте підтвердження.");
         sessionStorage.setItem("redirectToPayment", "true");
-        console.log("--ROUTER PUSH--");
         router.push(`/checkout/confirm?orderId=${orderId}`);
         return;
       }

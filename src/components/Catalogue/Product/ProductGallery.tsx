@@ -10,6 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   images?: string[];
@@ -19,6 +20,7 @@ interface Props {
 export default function ProductGallery({ images, title }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [loadedImages, setLoadedImages] = React.useState<Record<string, boolean>>({});
 
   React.useEffect(() => {
     if (!emblaApi) return;
@@ -37,6 +39,7 @@ export default function ProductGallery({ images, title }: Props) {
 
   return (
     <div className="md:h-full w-full md:w-1/2 flex flex-col gap-4">
+      {/* Слайдер */}
       <Carousel opts={{ loop: true }}>
         <CarouselContent ref={emblaRef}>
           {images.map((src, index) => (
@@ -44,13 +47,23 @@ export default function ProductGallery({ images, title }: Props) {
               key={index}
               className="flex justify-center max-h-[70vh] md:max-h-[55vh]"
             >
-              <Image
-                src={src}
-                alt={`${title} - ${index + 1}`}
-                width={300}
-                height={200}
-                className="rounded object-cover w-full h-auto"
-              />
+              <div className="relative w-full h-auto max-h-[55vh]">
+                {!loadedImages[index] && (
+                  <Skeleton className="absolute inset-0 w-full h-full rounded" />
+                )}
+                <Image
+                  src={src}
+                  alt={`${title} - ${index + 1}`}
+                  width={800}
+                  height={600}
+                  className={`rounded object-contain w-full h-full transition-opacity duration-500 ${
+                    loadedImages[index] ? "opacity-100" : "opacity-0"
+                  }`}
+                  onLoad={() =>
+                    setLoadedImages((prev) => ({ ...prev, [index]: true }))
+                  }
+                />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -58,6 +71,7 @@ export default function ProductGallery({ images, title }: Props) {
         <CarouselNext className="hidden right-2" />
       </Carousel>
 
+      {/* Прев’ю */}
       <div className="flex box gap-2 justify-center">
         {images.map((src, index) => (
           <button
@@ -67,13 +81,23 @@ export default function ProductGallery({ images, title }: Props) {
               selectedIndex === index ? "ring-gray-800" : ""
             }`}
           >
-            <Image
-              src={src}
-              alt={`Preview ${index + 1}`}
-              width={64}
-              height={64}
-              className="object-cover w-full h-full"
-            />
+            <div className="relative w-full h-full">
+              {!loadedImages[`thumb-${index}`] && (
+                <Skeleton className="absolute inset-0 w-full h-full rounded" />
+              )}
+              <Image
+                src={src}
+                alt={`Preview ${index + 1}`}
+                width={64}
+                height={64}
+                className={`object-cover w-full h-full transition-opacity duration-300 ${
+                  loadedImages[`thumb-${index}`] ? "opacity-100" : "opacity-0"
+                }`}
+                onLoad={() =>
+                  setLoadedImages((prev) => ({ ...prev, [`thumb-${index}`]: true }))
+                }
+              />
+            </div>
           </button>
         ))}
       </div>

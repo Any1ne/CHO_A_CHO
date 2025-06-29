@@ -6,7 +6,6 @@ const MONOBANK_SECRET = process.env.MONOBANK_WEBHOOK_SECRET || "";
 
 export async function POST(req: NextRequest) {
   try {
-    //console.log("## MONOBANK WEBHOOK HIT ##")
     const rawBody = await req.text();
     const signature = req.headers.get("x-sign");
 

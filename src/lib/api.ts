@@ -180,7 +180,6 @@ export const checkInvoiceStatus = async (invoiceId: string) => {
 };
 
 export const confirmOrderOnServer = async (orderId: string) => {
-    console.log("--API LIB CONFIRM HIT--");
   try {
     const response = await axiosInstance.post(`/orders/confirm?orderId=${orderId}`);
     return response.data;

@@ -7,14 +7,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSwipeable } from "react-swipeable";
 import { useRouter } from "next/navigation";
 
-const slides = [
-  { src: "/webbanner/4.jpg", href: "/" },
-  { src: "/webbanner/1.jpg", href: "/" },
-  { src: "/webbanner/2.jpg", href: "/" },
-  { src: "/webbanner/3.jpg", href: "/" },
-];
+type Slide = {
+  src: string;
+  href: string;
+};
 
-export default function FadeCarousel() {
+type Props = {
+  slides: Slide[];
+};
+
+export default function FadeCarousel({ slides }: Props) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
@@ -22,12 +24,14 @@ export default function FadeCarousel() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
-  const paginate = useCallback((newDirection: number) => {
-    setDirection(newDirection);
-    setIndex((prev) => (prev + newDirection + slides.length) % slides.length);
-  }, []);
+  const paginate = useCallback(
+    (newDirection: number) => {
+      setDirection(newDirection);
+      setIndex((prev) => (prev + newDirection + slides.length) % slides.length);
+    },
+    [slides.length]
+  );
 
-  // Autoplay
   useEffect(() => {
     if (isPaused) return;
     timeoutRef.current = setTimeout(() => paginate(1), 5000);
@@ -36,7 +40,6 @@ export default function FadeCarousel() {
     };
   }, [index, paginate, isPaused]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") paginate(-1);
@@ -47,7 +50,6 @@ export default function FadeCarousel() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [paginate]);
 
-  // Swipe handling
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
       paginate(1);
@@ -68,8 +70,8 @@ export default function FadeCarousel() {
         setIsHovered(false);
         setIsPaused(false);
       }}
-      className="relative w-full aspect-[16/9] max-h-[calc(100vh-15rem)] md:min-h-[17rem] overflow-hidden group cursor-pointer"
-      onClick={() => router.push(slides[index].href)} // перехід на посилання слайду
+      className="relative w-full h-full overflow-hidden group cursor-pointer"
+      onClick={() => router.push(slides[index]?.href || "/")}
     >
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
@@ -82,7 +84,7 @@ export default function FadeCarousel() {
           className="absolute inset-0 w-full h-full"
         >
           <Image
-            src={slides[index].src}
+            src={slides[index]?.src || ""}
             alt={`Слайд ${index + 1}`}
             fill
             className="object-cover"

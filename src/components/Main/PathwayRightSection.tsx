@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Autoplay from "embla-carousel-autoplay";
 import {
@@ -15,6 +14,11 @@ import {
 import { fetchProductById } from "@/lib/api";
 import { ProductType } from "@/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/lib/hooks/hooks";
+import { openProductModalAsync } from "@/store/slices/productModalSlice";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 const featuredProductIds = ["1-005", "3-004", "6-002", "2-001"];
 
@@ -41,6 +45,16 @@ export default function PathwayRightSection() {
     loadFeaturedProducts();
   }, []);
 
+  const router = useRouter();
+const dispatch = useAppDispatch();
+
+const handleViewClick = async (productId: string) => {
+  router.push("/store");
+  setTimeout(() => {
+    dispatch(openProductModalAsync(productId));
+  }, 300);
+};
+
   const handleDotClick = (index: number) => {
     if (api) api.scrollTo(index);
   };
@@ -48,10 +62,12 @@ export default function PathwayRightSection() {
   return (
     <div className="p-10 px-0 md:px-10 group flex flex-col items-center justify-center md:w-1/2 w-full">
       {isLoading ? (
-        <div className="text-center py-20 text-gray-500">
-          Завантаження продуктів...
-        </div>
-      ) : (
+      <div className="flex flex-col items-center gap-4 p-4 border rounded-2xl bg-gray-50 w-70">
+        <Skeleton className="w-60 h-60 rounded-xl" />
+        <Skeleton className="h-5 w-40" />
+        <Skeleton className="h-10 w-32" />
+      </div>
+) : (
         <>
           <Carousel
             plugins={[
@@ -88,14 +104,10 @@ export default function PathwayRightSection() {
   className="h-60 w-60 object-cover rounded-xl shadow-md bg-gray-200"
 />
                     <h3 className="text-lg font-semibold text-center">{product.title}</h3>
-                    {product.description && (
-                      <p className="text-sm text-muted-foreground text-center px-2">
-                        {product.description}
-                      </p>
-                    )}
-                    <Link href={`/store?id=${product.id}`}>
-                      <Button className="px-4 py-2">Переглянути</Button>
-                    </Link>
+                    <Button className="px-4 py-2" onClick={() => handleViewClick(product.id)}>
+  Переглянути
+</Button>
+
                   </div>
                 </CarouselItem>
               ))}
