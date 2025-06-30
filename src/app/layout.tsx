@@ -49,6 +49,19 @@ export default function RootLayout({
         <meta name="application-name" content="CHO A CHO" />
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:title" content="CHO A CHO Store" />
+        <meta
+          property="og:description"
+          content="Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO collections."
+        />
+        <meta
+          property="og:image"
+          content="https://www.choacho.com.ua/og-image.jpg"
+        />
+        <meta property="og:url" content="https://www.choacho.com.ua/" />
+        <meta property="og:site_name" content="CHO A CHO" />
+        <meta property="og:type" content="website" />
 
         <meta property="og:title" content="CHO A CHO Store" />
         <meta

@@ -6,7 +6,11 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { sendContactRequest } from "@/lib/api";
 
-export default function RequestForm() {
+type Props = {
+  onClose: () => void;
+};
+
+export default function RequestForm({ onClose }: Props) {
   const router = useRouter();
   const [form, setForm] = useState({
     name: "",
@@ -28,17 +32,20 @@ export default function RequestForm() {
       toast.success("Запит надіслано! Ми зв'яжемося з вами найближчим часом.");
       setForm({ name: "", email: "", message: "" });
 
+      // Закриття форми
+      onClose();
+
+      // Необовʼязково: редирект через 2 сек.
       setTimeout(() => {
         router.push("/");
       }, 2000);
-     } catch (error: unknown) {
-  if (error instanceof Error) {
-    toast.error(error.message);
-  } else {
-    toast.error("Помилка надсилання запиту");
-  }
-}
-
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Помилка надсилання запиту");
+      }
+    }
   };
 
   return (
