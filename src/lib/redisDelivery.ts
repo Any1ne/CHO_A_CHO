@@ -10,7 +10,7 @@ type NovaPoshtaCity = {
 
 type NovaPoshtaWarehouse = {
   Description: string;
-  CityRef: string;
+  // CityRef: string;
   Ref: string;
 };
 
@@ -30,7 +30,6 @@ const transformCities = (data: NovaPoshtaCity[]): NovaPoshtaCity[] =>
 const transformWarehouses = (data: NovaPoshtaWarehouse[]): NovaPoshtaWarehouse[] =>
   data.map((wh) => ({
     Description: wh.Description,
-    CityRef: wh.CityRef,
     Ref: wh.Ref,
   }));
 
