@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Monobank API token missing" }, { status: 500 });
   }
 
-  const { orderId, redirectUrl, } = await request.json(); //amount,
+  const { orderId, amount, redirectUrl } = await request.json();
 
   try {
 
