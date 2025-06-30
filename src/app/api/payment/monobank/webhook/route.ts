@@ -2,23 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { updateRedisOrderStatus } from "@/lib/redisOrder";
 
-const MONOBANK_SECRET = process.env.MONOBANK_WEBHOOK_SECRET || "";
+const MONOBANK_PUBLIC_KEY_BASE64 = process.env.MONOBANK_PUBLIC_KEY || "";
 
 export async function POST(req: NextRequest) {
   try {
     const rawBody = await req.text();
-    const signature = req.headers.get("x-sign");
+    const signatureBase64 = req.headers.get("x-sign");
 
-    if (!signature || !rawBody) {
-      return NextResponse.json({ error: "Missing signature or body" }, { status: 400 });
+    if (!signatureBase64 || !rawBody) {
+      return NextResponse.json(
+        { error: "Missing signature or body" },
+        { status: 400 }
+      );
     }
 
-    const expectedSign = crypto
-      .createHmac("sha256", MONOBANK_SECRET)
-      .update(rawBody)
-      .digest("base64");
+    const publicKeyBuffer = Buffer.from(MONOBANK_PUBLIC_KEY_BASE64, "base64");
+    const signatureBuffer = Buffer.from(signatureBase64, "base64");
 
-    if (signature !== expectedSign) {
+    const verify = crypto.createVerify("SHA256");
+    verify.update(rawBody);
+    verify.end();
+
+    const isValid = verify.verify(publicKeyBuffer, signatureBuffer);
+
+    if (!isValid) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -32,6 +39,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Monobank Webhook Error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

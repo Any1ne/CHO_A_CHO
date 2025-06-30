@@ -1,30 +1,38 @@
 import { NextResponse } from "next/server";
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export async function POST(request: Request) {
   const apiToken = process.env.MONOBANK_API_TOKEN;
 
   if (!apiToken) {
-    return NextResponse.json({ error: "Monobank API token missing" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Monobank API token missing" },
+      { status: 500 }
+    );
   }
 
-  const { orderId, redirectUrl, } = await request.json(); //amount,
+  const { orderId, redirectUrl } = await request.json(); //amount
 
   try {
-
-    console.log("--MONOBANK INVOICE", apiToken)
-    const res = await fetch("https://api.monobank.ua/api/merchant/invoice/create", {
-      method: "POST",
-      headers: {
-        "X-Token": apiToken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        amount: 200, //Math.round(amount * 100), // копійки
-        ccy: 980, // UAH
-        redirectUrl,
-        reference: orderId,
-      }),
-    });
+    console.log("--MONOBANK INVOICE", apiToken);
+    const res = await fetch(
+      "https://api.monobank.ua/api/merchant/invoice/create",
+      {
+        method: "POST",
+        headers: {
+          "X-Token": apiToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: 200, //Math.round(amount * 100), // копійки
+          ccy: 980, // UAH
+          redirectUrl,
+          reference: orderId,
+          webHookUrl: `${baseUrl}/api/monobank/webhook`,
+        }),
+      }
+    );
 
     const text = await res.text();
 
@@ -33,10 +41,12 @@ export async function POST(request: Request) {
     }
 
     const data = JSON.parse(text);
-    return NextResponse.json({ paymentUrl: data.pageUrl, invoiceId: data.invoiceId });
+    return NextResponse.json({
+      paymentUrl: data.pageUrl,
+      invoiceId: data.invoiceId,
+    });
   } catch (error: unknown) {
-  const message = error instanceof Error ? error.message : "Невідома помилка";
-  return NextResponse.json({ error: message }, { status: 500 });
-}
-
+    const message = error instanceof Error ? error.message : "Невідома помилка";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
