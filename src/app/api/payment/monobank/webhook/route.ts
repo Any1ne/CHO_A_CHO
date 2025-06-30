@@ -1,37 +1,61 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { confirmOrderOnServer } from "@/lib/api";
 import { updateRedisOrderStatus } from "@/lib/redisOrder";
 
-const MONOBANK_SECRET = process.env.MONOBANK_WEBHOOK_SECRET || "";
+const MONOBANK_PUBLIC_KEY_BASE64 = process.env.MONOBANK_PUBLIC_KEY || "";
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("--WEBHOOK HIT--");
     const rawBody = await req.text();
-    const signature = req.headers.get("x-sign");
+    const signatureBase64 = req.headers.get("x-sign");
 
-    if (!signature || !rawBody) {
-      return NextResponse.json({ error: "Missing signature or body" }, { status: 400 });
+    // ⛔️ Валідація
+    if (!signatureBase64 || !rawBody) {
+      return NextResponse.json(
+        { error: "Missing signature or body" },
+        { status: 400 }
+      );
     }
 
-    const expectedSign = crypto
-      .createHmac("sha256", MONOBANK_SECRET)
-      .update(rawBody)
-      .digest("base64");
+    // ✅ Витяг orderId з query параметру
+    const orderId = req.nextUrl.searchParams.get("orderId");
+    if (!orderId) {
+      return NextResponse.json(
+        { error: "Missing orderId in query" },
+        { status: 400 }
+      );
+    }
 
-    if (signature !== expectedSign) {
+    // ✅ Перевірка підпису через ECDSA
+    const publicKeyBuffer = Buffer.from(MONOBANK_PUBLIC_KEY_BASE64, "base64");
+    const signatureBuffer = Buffer.from(signatureBase64, "base64");
+
+    const verify = crypto.createVerify("SHA256");
+    verify.update(rawBody);
+    verify.end();
+
+    const isValid = verify.verify(publicKeyBuffer, signatureBuffer);
+    if (!isValid) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
+    // ✅ Парсимо тіло запиту
     const body = JSON.parse(rawBody);
-    const { invoiceId, status } = body;
+    const { status } = body; // invoiceId,
 
     if (status === "success") {
-      await updateRedisOrderStatus(invoiceId, "paid");
+      await updateRedisOrderStatus(orderId, "paid");
+      await confirmOrderOnServer(orderId);
     }
 
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Monobank Webhook Error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
