@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendOrderConfirmation } from "@/lib/email";
+import { sendOrderConfirmation } from "@/lib/email/email";
 import { createClient } from "@/db/supabase/server";
 import dotenv from "dotenv";
 import { OrderSummary } from "@/types";
+import { generateOrderEmailHtml } from "@/lib/email/generateOrderEmailHtml";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ export async function GET(req: NextRequest) {
 
     const row = data[0];
 
+    console.log("--ORDER SUMMARY CITY", row.city)
     const order: OrderSummary = {
       orderId: row.order_id,
       orderNumber: row.order_number?.toString().padStart(6, "0") ?? undefined,
@@ -53,7 +55,7 @@ export async function GET(req: NextRequest) {
           deliveryMethod: row.delivery_method === "address" ? "address" : "branch",
           branchNumber: row.branch_number ?? undefined,
           address: row.full_address ?? undefined,
-          city: row.city ?? "",
+          city: { Description: row.city ?? "", Ref: ""},
         },
         paymentInfo: {
           paymentMethod: row.payment_method === "monobank" ? "monobank" : "cod",
@@ -103,7 +105,7 @@ export async function POST(req: NextRequest) {
   order_data: body,
 });
 
-const orderNumber = data?.[0]?.order_number;
+const orderNumber = data?.[0]?.order_number?.toString().padStart(6, "0");
 
     if (error) {
       console.error("🔴 RPC помилка створення:", error.message);
@@ -113,44 +115,27 @@ const orderNumber = data?.[0]?.order_number;
       );
     }
 
-    // Додатковий HTML для email-повідомлення
-    const fullName = `${contact.lastName} ${contact.firstName}${
-      contact.middleName ? " " + contact.middleName : ""
-    }`;
+const userEmailHtml = generateOrderEmailHtml(
+  {...body,orderNumber},
+  true // для користувача
+);
 
-    const deliveryType =
-      delivery.deliveryMethod === "branch" ? "Branch" : "Address";
+const adminEmailHtml = generateOrderEmailHtml(
+  {...body, orderNumber},
+  false // для адміністратора
+);
 
-    const orderInfoHtml = `
-      <h2>Дякуємо за замовлення, ${contact.firstName}!</h2>
-      <p>Ваше замовлення №${orderNumber} було прийнято.</p>
-      <p>Сума: <strong>${total} грн</strong></p>
-      <ul>
-        ${items
-          .map(
-            (item) =>
-              `<li>${item.title} – ${item.quantity} x ${item.price} грн</li>`
-          )
-          .join("")}
-      </ul>
-      <p>Доставка: ${
-        deliveryType === "Branch"
-          ? `відділення №${delivery.branchNumber}`
-          : delivery.address
-      }</p>
-      <p>Оплата: ${payment.paymentMethod === "cod" ? "Готівка" : "Monobank"}</p>
-    `;
+await sendOrderConfirmation({
+  to: process.env.ADMIN_EMAIL!,
+  subject: `Нове замовлення №${orderNumber}`,
+  html: adminEmailHtml,
+});
 
-    await sendOrderConfirmation({
-      to: `${process.env.ADMIN_EMAIL}`,
-      subject: `Нове замовлення №${orderNumber}`,
-      html: `
-        <h2>Нове замовлення від ${fullName}</h2>
-        <p>Email: ${contact.email}</p>
-        <p>Телефон: ${contact.phone}</p>
-        ${orderInfoHtml}
-      `,
-    });
+// await sendOrderConfirmation({
+//   to: contact.email,
+//   subject: `Підтвердження замовлення №${orderNumber}`,
+//   html: userEmailHtml,
+// });
 
     return NextResponse.json({ success: true, OrderNumber: orderNumber });
   } catch (error) {

@@ -51,6 +51,7 @@ export default function SuccessPageClient() {
 
   if (!order) return null;
 
+  console.log("--ORDER SUMMARY CITY", order.checkoutSummary.deliveryInfo?.city)
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-4 mt-[6rem] md:mt-[8rem]">
       <h1 className="text-3xl font-bold mb-4">Дякуємо за замовлення!</h1>
