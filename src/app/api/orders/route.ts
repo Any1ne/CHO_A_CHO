@@ -3,7 +3,7 @@ import { sendOrderConfirmation } from "@/lib/email/email";
 import { createClient } from "@/db/supabase/server";
 import dotenv from "dotenv";
 import { OrderSummary } from "@/types";
-import { generateOrderEmailHtml } from "@/lib/email/generateOrderEmailHtml";
+import { generateOrderEmailHtml } from "@/lib/email/generateEmailHtml";
 
 dotenv.config();
 

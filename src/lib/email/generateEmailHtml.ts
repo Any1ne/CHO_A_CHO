@@ -67,3 +67,34 @@ export function generateOrderEmailHtml(order: OrderSummary, isUser: boolean = tr
     </div>
   `;
 }
+
+export function generateContactEmailHtml(name: string, email: string, message: string): string {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <!-- Header -->
+      <div style="background-color: #3f3f3f; padding: 20px; color: white;">
+        <h2 style="margin: 0;">📬 Новий запит зворотного звʼязку</h2>
+        <p style="margin: 4px 0 0; font-size: 15px;">Користувач надіслав повідомлення через контактну форму.</p>
+      </div>
+
+      <!-- Content -->
+      <div style="background-color: #f9f9f9; color: #333; padding: 20px;">
+        <p style="margin: 0 0 10px;"><strong>Імʼя:</strong> ${name}</p>
+        <p style="margin: 0 0 10px;"><strong>Email:</strong> ${email}</p>
+        <p style="margin: 0 0 4px;"><strong>Повідомлення:</strong></p>
+        <div style="padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 4px; white-space: pre-wrap; line-height: 1.5;">
+          ${message.replace(/\n/g, "<br>")}
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="background-color: #1f1f1f; color: white; padding: 20px; font-size: 14px;">
+        <p style="margin: 0 0 8px;">Цей лист сформовано автоматично. Не відповідайте на нього.</p>
+        <p style="margin: 0;">
+          Контактна форма на сайті <a href="https://choacho.com.ua" style="color: #ffd230;">choacho.com.ua</a>
+        </p>
+      </div>
+    </div>
+  `;
+}
+
