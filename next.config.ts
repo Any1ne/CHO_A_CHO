@@ -18,7 +18,6 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com", // <== додай сюди
-
         pathname: "/**", // або "**" якщо хочеш повністю
       },
     ],
