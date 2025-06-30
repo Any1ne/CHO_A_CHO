@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     // ✅ Парсимо тіло запиту
     const body = JSON.parse(rawBody);
-    const { invoiceId, status } = body;
+    const { status } = body; // invoiceId,
 
     if (status === "success") {
       await updateRedisOrderStatus(orderId, "paid");
