@@ -33,13 +33,30 @@ export function WarehouseSelect({
   const [search, setSearch] = useState("");
 
   const filteredWarehouses = useMemo(() => {
-    if (search.length < 1) return [];
-    return warehouses
-      .filter((w) =>
-        w.Description.toLowerCase().includes(search.toLowerCase())
-      )
-      .slice(0, 100);
-  }, [search, warehouses]);
+  if (search.length < 1) return [];
+
+  const loweredSearch = search.toLowerCase();
+
+  return warehouses
+    .filter((w) =>
+      w.Description.toLowerCase().includes(loweredSearch)
+    )
+    .sort((a, b) => {
+      const aDesc = a.Description.toLowerCase();
+      const bDesc = b.Description.toLowerCase();
+
+      const aStartsWith = aDesc.startsWith(loweredSearch) ? 0 : 1;
+      const bStartsWith = bDesc.startsWith(loweredSearch) ? 0 : 1;
+
+      if (aStartsWith !== bStartsWith) return aStartsWith - bStartsWith;
+
+      // Додаткове сортування — за позицією входження
+      const aIndex = aDesc.indexOf(loweredSearch);
+      const bIndex = bDesc.indexOf(loweredSearch);
+      return aIndex - bIndex;
+    })
+    .slice(0, 100);
+}, [search, warehouses]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
