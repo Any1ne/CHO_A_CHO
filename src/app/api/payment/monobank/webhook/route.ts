@@ -9,13 +9,18 @@ export async function POST(req: NextRequest) {
     const rawBody = await req.text();
     const signatureBase64 = req.headers.get("x-sign");
 
+    // ⛔️ Валідація
     if (!signatureBase64 || !rawBody) {
-      return NextResponse.json(
-        { error: "Missing signature or body" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing signature or body" }, { status: 400 });
     }
 
+    // ✅ Витяг orderId з query параметру
+    const orderId = req.nextUrl.searchParams.get("orderId");
+    if (!orderId) {
+      return NextResponse.json({ error: "Missing orderId in query" }, { status: 400 });
+    }
+
+    // ✅ Перевірка підпису через ECDSA
     const publicKeyBuffer = Buffer.from(MONOBANK_PUBLIC_KEY_BASE64, "base64");
     const signatureBuffer = Buffer.from(signatureBase64, "base64");
 
@@ -24,24 +29,21 @@ export async function POST(req: NextRequest) {
     verify.end();
 
     const isValid = verify.verify(publicKeyBuffer, signatureBuffer);
-
     if (!isValid) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
+    // ✅ Парсимо тіло запиту
     const body = JSON.parse(rawBody);
     const { invoiceId, status } = body;
 
     if (status === "success") {
-      await updateRedisOrderStatus(invoiceId, "paid");
+      await updateRedisOrderStatus(orderId, "paid");
     }
 
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Monobank Webhook Error:", err);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
