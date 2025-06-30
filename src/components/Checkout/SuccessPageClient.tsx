@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton"; // 🧩 додано
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -37,7 +38,18 @@ export default function SuccessPageClient() {
     fetchOrder();
   }, [orderId, dispatch, router]);
 
-  if (loading || !order) return null;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[80vh] p-4 mt-[6rem] md:mt-[8rem] space-y-6 w-full max-w-md mx-auto">
+        <Skeleton className="h-8 w-3/4" />
+        <Skeleton className="h-5 w-full" />
+        <Skeleton className="h-48 w-full rounded-md" />
+        <Skeleton className="h-10 w-40" />
+      </div>
+    );
+  }
+
+  if (!order) return null;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center p-4 mt-[6rem] md:mt-[8rem]">
