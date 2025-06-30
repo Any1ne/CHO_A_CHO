@@ -2,10 +2,22 @@ import FadeCarousel from "@/components/Main/FadeCarousel";
 import Advantages from "@/components/Main/Advantages";
 
 const slides = [
-  { src: "/webbanner/4.jpg", href: "/" },
-  { src: "/webbanner/1.jpg", href: "/branded" },
-  { src: "/webbanner/2.jpg", href: "/" },
-  { src: "/webbanner/3.jpg", href: "/" },
+  {
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/0.jpg",
+    href: "/",
+  },
+  {
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/1.jpg",
+    href: "/branded",
+  },
+  {
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/2.jpg",
+    href: "/",
+  },
+  {
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/3.jpg",
+    href: "/",
+  },
 ];
 
 export default function WebBanner() {

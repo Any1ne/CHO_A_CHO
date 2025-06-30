@@ -9,9 +9,18 @@ export default function BrandedPackaging() {
   const [isRequestOpen, setIsRequestOpen] = useState(false);
 
   const slides = [
-    { src: "/branded/1.jpg", href: "#" },
-    { src: "/branded/2.jpg", href: "#" },
-    { src: "/branded/3.jpg", href: "#" },
+    {
+      src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/branded/1.jpg",
+      href: "#",
+    },
+    {
+      src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/branded/2.jpg",
+      href: "#",
+    },
+    {
+      src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/branded/3.jpg",
+      href: "#",
+    },
   ];
 
   return (
