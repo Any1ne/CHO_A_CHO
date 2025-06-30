@@ -82,7 +82,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as OrderSummary;
-    const { orderId, checkoutSummary, items, total } = body;
+    const { orderId, checkoutSummary, items, } = body; //total 
 
     const {
       contactInfo: contact,
@@ -115,11 +115,6 @@ const orderNumber = data?.[0]?.order_number?.toString().padStart(6, "0");
       );
     }
 
-const userEmailHtml = generateOrderEmailHtml(
-  {...body,orderNumber},
-  true // для користувача
-);
-
 const adminEmailHtml = generateOrderEmailHtml(
   {...body, orderNumber},
   false // для адміністратора
@@ -131,6 +126,12 @@ await sendOrderConfirmation({
   html: adminEmailHtml,
 });
 
+
+// const userEmailHtml = generateOrderEmailHtml(
+//   {...body,orderNumber},
+//   true // для користувача
+// );
+// 
 // await sendOrderConfirmation({
 //   to: contact.email,
 //   subject: `Підтвердження замовлення №${orderNumber}`,
