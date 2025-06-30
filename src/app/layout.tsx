@@ -63,16 +63,6 @@ export default function RootLayout({
         <meta property="og:site_name" content="CHO A CHO" />
         <meta property="og:type" content="website" />
 
-        <meta property="og:title" content="CHO A CHO Store" />
-        <meta
-          property="og:description"
-          content="Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO collections."
-        />
-        <meta property="og:image" content="/og-image.jpg" />
-        <meta property="og:url" content="https://www.choacho.com.ua/" />
-        <meta property="og:site_name" content="CHO A CHO" />
-        <meta property="og:type" content="website" />
-
         <link rel="icon" href="/favicon.ico?v=2" />
         <link
           rel="icon"
