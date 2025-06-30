@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: 1, //Math.round(amount * 100), // копійки
+        amount: 200, //Math.round(amount * 100), // копійки
         ccy: 980, // UAH
         redirectUrl,
         reference: orderId,
