@@ -29,7 +29,7 @@ export async function POST(request: Request) {
           ccy: 980, // UAH
           redirectUrl,
           reference: orderId,
-          webHookUrl: `${baseUrl}/api/monobank/webhook`,
+          webHookUrl: `${baseUrl}/api/payment/monobank/webhook?orderId=${orderId}`,
         }),
       }
     );
