@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { sendContactRequestEmail } from "@/lib/email/email";
 
 export async function POST(req: Request) {
   try {
@@ -11,30 +9,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Всі поля обовʼязкові" }, { status: 400 });
     }
 
-    const html = `
-      <h2>Новий запит з форми зворотного звʼязку</h2>
-      <p><strong>Імʼя:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Повідомлення:</strong></p>
-      <p>${message.replace(/\n/g, "<br>")}</p>
-    `;
+    await sendContactRequestEmail(name, email, message);
 
-    const response = await resend.emails.send({
-  from: `CHO A CHO Shop <${process.env.SEND_EMAIL}>`,
-  to: [`${process.env.ADMIN_EMAIL}`],
-  subject: "Новий запит з контактної форми",
-  html,
-});
-
-if (response.error) {
-  console.error("Email error:", response.error);
-  return NextResponse.json({ error: "Не вдалося надіслати email" }, { status: 500 });
-}
-
-
-    return NextResponse.json({ success: true});
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("🔴 Contact form email error:", error);
-    return NextResponse.json({ error: "Не вдалося надіслати повідомлення" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Не вдалося надіслати повідомлення" },
+      { status: 500 }
+    );
   }
 }
