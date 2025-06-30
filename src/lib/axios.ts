@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
   },
 });
 
-// Додатково: Інтерцептори (опціонально)
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

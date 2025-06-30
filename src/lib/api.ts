@@ -184,12 +184,11 @@ export const confirmOrderOnServer = async (orderId: string) => {
     const response = await axiosInstance.post(`/orders/confirm?orderId=${orderId}`);
     return response.data;
   } catch (error: unknown) {
-  if (axios.isAxiosError(error)) {
-    throw new Error(error.response?.data?.error || "Помилка ...");
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || "Помилка на сервері при підтвердженні.");
+    }
+    throw new Error("Невідома помилка при підтвердженні замовлення.");
   }
-  throw new Error("Невідома помилка ...");
-}
-
 };
 
 export const handleOrderConfirmation = async (
@@ -197,15 +196,22 @@ export const handleOrderConfirmation = async (
   dispatch: AppDispatch,
   router: AppRouterInstance
 ) => {
-  const result = await confirmOrderOnServer(orderId);
+  try {
+    const result = await confirmOrderOnServer(orderId);
 
-  if (result?.success || result?.alreadyExists) {
-    dispatch(clearBasket());
-    dispatch(resetCheckout());
-    toast.success("Замовлення підтверджено!");
-    router.replace(`/checkout/success?orderId=${orderId}`);
-  } else {
-    toast.error(result?.error || "Помилка під час підтвердження.");
+    if (result?.success || result?.alreadyExists) {
+      dispatch(clearBasket());
+      dispatch(resetCheckout());
+      toast.success("Замовлення підтверджено!");
+      router.replace(`/checkout/success?orderId=${orderId}`);
+    } else {
+      toast.error(result?.error || "Помилка під час підтвердження.");
+      router.replace("/");
+    }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Невідома помилка.";
+    toast.error(`Помилка: ${message}`);
     router.replace("/");
   }
 };
+
