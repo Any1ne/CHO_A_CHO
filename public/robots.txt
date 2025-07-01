@@ -1,2 +1,9 @@
+# *
 User-agent: *
 Allow: /
+
+# Host
+Host: https://www.choacho.com.ua
+
+# Sitemaps
+Sitemap: https://www.choacho.com.ua/sitemap.xml
