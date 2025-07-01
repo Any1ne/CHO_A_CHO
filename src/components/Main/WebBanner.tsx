@@ -3,19 +3,19 @@ import Advantages from "@/components/Main/Advantages";
 
 const slides = [
   {
-    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/0.jpg",
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/0.webp",
     href: "/",
   },
   {
-    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/1.jpg",
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/1.webp",
     href: "/branded",
   },
   {
-    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/2.jpg",
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/2.webp",
     href: "/",
   },
   {
-    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/3.jpg",
+    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/3.webp",
     href: "/",
   },
 ];
