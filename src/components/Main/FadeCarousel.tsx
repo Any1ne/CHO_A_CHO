@@ -88,7 +88,7 @@ export default function FadeCarousel({ slides }: Props) {
             alt={`Слайд ${index + 1}`}
             fill
             className="object-cover"
-            priority
+            priority={index === 0}
           />
         </motion.div>
       </AnimatePresence>
