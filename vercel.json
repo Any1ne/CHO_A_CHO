@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "choacho.com.ua"
+        }
+      ],
+      "destination": "https://www.choacho.com.ua/:1",
+      "permanent": true
+    }
+  ]
+}
