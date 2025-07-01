@@ -82,11 +82,6 @@ export default function RootLayout({
           href="/apple-touch-icon.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <link
-          rel="preload"
-          as="image"
-          href="https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/0.jpg"
-        />
       </head>
 
       <body
