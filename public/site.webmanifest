@@ -1,21 +1,41 @@
 {
   "name": "CHO A CHO STORE",
   "short_name": "CHO A CHO",
+  "description": "Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO collections.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#537253",
+  "theme_color": "#537253",
   "icons": [
     {
       "src": "/my-favicon/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "/my-favicon/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
-  ],
-  "theme_color": "#537253",
-  "background_color": "#537253",
-  "display": "standalone"
+  ]
 }
