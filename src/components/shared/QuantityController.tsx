@@ -64,13 +64,13 @@ export default function QuantityController({
         <Minus className="h-4 w-4" />
       </Button>
       <Input
-        type="number"
-        min={1}
-        value={inputValue}
-        onChange={handleInputChange}
-        onBlur={handleBlur}
-        className="w-14 h-8 text-center px-1"
-      />
+  type="number"
+  min={1}
+  value={inputValue}
+  onChange={handleInputChange}
+  onBlur={handleBlur}
+  className="w-8 h-8 text-center px-1 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
+/>
       <Button size="sm" variant="outline" onClick={handleIncrease}>
         <Plus className="h-4 w-4" />
       </Button>

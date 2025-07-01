@@ -52,10 +52,13 @@ export default function ProductDetails({
       </div>
 
       {/* Ціна + кнопка */}
-      <div className="p-4 border-b grid grid-cols-[auto_1fr] items-center gap-4 overflow-x-scroll">
-        <p className="text-xl font-semibold">₴{price.toFixed(2)}</p>
-        <BasketControls id={id} title={title} price={price} preview={preview} />
-      </div>
+      <div className="p-4 border-b flex flex-wrap items-center gap-4">
+  <div className="text-xl font-semibold">₴{price.toFixed(2)}</div>
+  <div className="w-full sm:w-auto">
+    <BasketControls id={id} title={title} price={price} preview={preview} />
+  </div>
+</div>
+
 
       {/* Опис */}
       <div className="p-4">

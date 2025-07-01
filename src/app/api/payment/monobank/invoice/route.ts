@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { orderId, redirectUrl } = await request.json(); //amount
+  const { orderId, redirectUrl, amount} = await request.json(); //
 
   try {
     console.log("--MONOBANK INVOICE", apiToken);
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 200, //Math.round(amount * 100), // копійки
+          amount: Math.round(amount * 100), // копійки
           ccy: 980, // UAH
           redirectUrl,
           reference: orderId,

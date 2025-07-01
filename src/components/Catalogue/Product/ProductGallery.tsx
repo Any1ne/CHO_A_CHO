@@ -56,7 +56,7 @@ export default function ProductGallery({ images, title }: Props) {
                   alt={`${title} - ${index + 1}`}
                   width={800}
                   height={600}
-                  className={`rounded object-contain w-full h-full transition-opacity duration-500 ${
+                  className={`rounded aspect-square md:aspect-4/3 object-cover w-full h-full transition-opacity duration-500 ${
                     loadedImages[index] ? "opacity-100" : "opacity-0"
                   }`}
                   onLoad={() =>

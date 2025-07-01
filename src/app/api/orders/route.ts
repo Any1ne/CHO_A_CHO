@@ -126,17 +126,16 @@ await sendOrderConfirmation({
   html: adminEmailHtml,
 });
 
+const userEmailHtml = generateOrderEmailHtml(
+  {...body,orderNumber},
+  true // для користувача
+);
 
-// const userEmailHtml = generateOrderEmailHtml(
-//   {...body,orderNumber},
-//   true // для користувача
-// );
-// 
-// await sendOrderConfirmation({
-//   to: contact.email,
-//   subject: `Підтвердження замовлення №${orderNumber}`,
-//   html: userEmailHtml,
-// });
+await sendOrderConfirmation({
+  to: contact.email,
+  subject: `Підтвердження замовлення №${orderNumber}`,
+  html: userEmailHtml,
+});
 
     return NextResponse.json({ success: true, OrderNumber: orderNumber });
   } catch (error) {

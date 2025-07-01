@@ -34,7 +34,7 @@ export default function ProductCard({
       `}
     >
       <div
-        className="bg-gray-100 aspect-[4/3] overflow-hidden rounded-xl cursor-pointer relative"
+        className="bg-gray-100 overflow-hidden rounded-xl cursor-pointer relative"
         onClick={handleOpenModal}
       >
         {!isImageLoaded && (
@@ -47,7 +47,7 @@ export default function ProductCard({
           width={400}
           height={300}
           className={`
-            h-full w-full object-cover transition-opacity duration-500 
+            h-full w-full object-cover aspect-[5/4]  transition-opacity duration-500 
             ${isImageLoaded ? "opacity-100" : "opacity-0"}
           `}
           sizes="(max-width: 768px) 100vw, 300px"
