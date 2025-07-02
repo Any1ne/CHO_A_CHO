@@ -1,0 +1,10 @@
+Copyright (c) 2025 Arthur Dombrovskiy
+All rights reserved.
+
+This software and associated content are proprietary to the creator and the brand CHO A CHO.
+
+Permission is not granted to use, copy, modify, merge, publish, distribute, sublicense, or sell copies of this software, in whole or in part, without explicit written permission from the author.
+
+Unauthorized use of the software, its source code, or any part of the project may result in legal action.
+
+For licensing inquiries or partnership opportunities, please contact: anytguy@gmail.com

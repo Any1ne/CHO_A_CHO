@@ -1,36 +1,277 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍫 CHO A CHO STORE
 
-## Getting Started
+![CHO A CHO Logo](https://www.choacho.com.ua/og-image.jpg)
 
-First, run the development server:
+Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO collections.
+This is the official online store for the CHO A CHO chocolate brand, built for both everyday customers and businesses such as cafes, restaurants, and more.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Live Demo
+
+🌐 [www.choacho.com.ua](https://www.choacho.com.ua)
+
+---
+
+## 📸 Screenshots
+
+> ![Screenshot](https://www.choacho.com.ua/_next/image?url=https%3A%2F%2F9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com%2Fwebbanner%2F0.webp&w=1920&q=75)
+
+---
+
+## 🧰 Tech Stack
+
+### Core Technologies:
+
+- **Next.js**, **React.js**, **TypeScript**, **JavaScript**
+- **Tailwind CSS**, **ShadCN**, **Lucide**, **Embla Carousel**, **Headless UI**
+- **React Query**, **Redux**, **React Hook Form**
+- **Node.js**, **Express.js**
+- **Axios**, **Jest**
+
+### Database & Infrastructure:
+
+- **PostgreSQL**, **Supabase**, **Redis**, **Redis Cloud**, **Blob Storage**
+- **Vercel**, **Cloudflare**
+
+### APIs & Third-Party Services:
+
+- **Nova Poshta API**
+- **MonoPay API** (Google Pay, Apple Pay, Visa, Mastercard)
+- **Resend (email API)**
+
+---
+
+## 📦 Features
+
+### ✅ Implemented (v1.0.0 – MVP)
+
+- 📦 Product catalog
+- 🛒 Shopping cart
+- 📿️ Order checkout
+- 💳 Payment via MonoPay API
+- 📧 Email order confirmation
+- 📱 Responsive design for all devices
+
+### 🔜 Upcoming Features:
+
+- 🔐 User and admin authentication
+- 🛠️ Admin panel for managing products, orders, banners
+- 🌍 English version of the website
+- 📝 User reviews
+- 🔎 Site-wide search
+- 📸 Company information banners
+- 📱 Email/SMS notifications for orders
+
+> **All functionality is custom-built** — no CMS or templates were used.
+
+---
+
+## 📂 Project Structure
+
+> _(Will be added later)_
+
+---
+
+## 🛠️ Local Development
+
+> Docker/Makefile support is planned for future releases.
+
+### Requirements:
+
+- Node.js ≥ 18.x
+- PostgreSQL
+- Redis
+
+### Environment Variables (excerpt from `.env.example`):
+
+```env
+REDIS_URL=
+POSTGRES_URL=
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+NOVA_POSHTA_API_KEY=
+RESEND_API_KEY=
+MONOBANK_API_TOKEN=
+DOMAIN=
+SEND_EMAIL=
+ADMIN_EMAIL=
+BLOB_READ_WRITE_TOKEN=
+NEXT_PUBLIC_SITE_URL=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📌 Version
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Current Version:** `1.0.0`
 
-## Learn More
+### What’s included in v1.0.0:
 
-To learn more about Next.js, take a look at the following resources:
+- MVP for end users with product catalog, checkout, MonoPay integration, and email confirmation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> `CHANGELOG.md` not available yet.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 👨‍💻 Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Arthur Dombrovskiy**
+GitHub: [@Any1ne](https://github.com/Any1ne)
+LinkedIn: [Arthur Dombrovskiy](https://www.linkedin.com/in/arthur-dombrovskiy-b688ba331)
+Email: [anytguy@gmail.com](mailto:anytguy@gmail.com)
+Telegram: [@anytguy](https://t.me/anytguy)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📄 License
+
+All rights reserved.
+This project is proprietary software developed for the CHO A CHO chocolate brand.
+You may not use, copy, modify, distribute, or publish any part of this codebase without explicit permission.
+
+---
+
+## 📌 Note
+
+- There is currently no public roadmap or pull request support.
+- If you'd like to propose improvements, feel free to reach out directly.
+
+# 🍫 CHO A CHO STORE
+
+![CHO A CHO Logo](https://www.choacho.com.ua/og-image.jpg)
+
+Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO collections.
+Це онлайн-магазин бренду шоколаду CHO A CHO, створений для звичайних покупців та бізнесів — кав'ярень, ресторанів тощо.
+
+---
+
+## 🚀 Live Demo
+
+🌐 [www.choacho.com.ua](https://www.choacho.com.ua)
+
+---
+
+## 📸 Screenshots
+
+> `![Screenshot](URL_до_зображення)`
+
+---
+
+## 🧰 Tech Stack
+
+### Основні технології:
+
+- **Next.js**, **React.js**, **TypeScript**, **JavaScript**
+- **Tailwind CSS**, **ShadCN**, **Lucide**, **Embla Carousel**, **Headless UI**
+- **React Query**, **Redux**, **React Hook Form**
+- **Node.js**, **Express.js**
+- **Axios**, **Jest**
+
+### База даних і інфраструктура:
+
+- **PostgreSQL**, **Supabase**, **Redis**, **Redis Cloud**, **Blob Storage**
+- **Vercel**, **Cloudflare**
+
+### API та сторонні сервіси:
+
+- **Nova Poshta API**
+- **MonoPay API** (Google Pay, Apple Pay, Visa, Mastercard)
+- **Resend (email API)**
+
+---
+
+## 📦 Features
+
+### ✅ Реалізовано (v1.0.0 – MVP)
+
+- 📦 Каталог товарів
+- 🛒 Кошик замовлення
+- 📟️ Оформлення замовлення
+- 💳 Оплата через MonoPay API
+- 📧 Підтвердження замовлення на email
+- 📱 Адаптивна верстка для різних пристроїв
+
+### 🔜 У планах:
+
+- 🔐 Автентифікація користувачів та адміністраторів
+- 🛠️ Адмін-панель для керування товарами, замовленнями, банерами
+- 🌍 Англійська версія сайту
+- 📝 Відгуки користувачів
+- 🔎 Пошук по сайту
+- 📸 Web-банери з інформацією про компанію
+- 📱 Повідомлення на email/телефон про замовлення
+
+> **Функціонал реалізовано кастомно** — жодних CMS або шаблонів не використовувалося.
+
+---
+
+## 📂 Структура проєкту
+
+> _(Структуру буде додана пізніше)_
+
+---
+
+## 🛠️ Локальний запуск
+
+> Підтримка через Docker/Makefile буде реалізована згодом.
+
+### Вимоги:
+
+- Node.js ≥ 18.x
+- PostgreSQL
+- Redis
+
+### Змінні середовища (витяг з `.env.example`):
+
+```env
+REDIS_URL=
+POSTGRES_URL=
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+NOVA_POSHTA_API_KEY=
+RESEND_API_KEY=
+MONOBANK_API_TOKEN=
+DOMAIN=
+SEND_EMAIL=
+ADMIN_EMAIL=
+BLOB_READ_WRITE_TOKEN=
+NEXT_PUBLIC_SITE_URL=
+```
+
+---
+
+## 📌 Version
+
+**Current Version:** `1.0.0`
+
+### Що включає v1.0.0:
+
+- MVP для кінцевих користувачів з каталожною системою, оформленням замовлення, оплатою MonoPay, підтвердженням email.
+
+> `CHANGELOG.md` поки відсутній.
+
+---
+
+## 👨‍💻 Author
+
+**Артур Домбровський Юліанович**
+GitHub: [@Any1ne](https://github.com/Any1ne)
+LinkedIn: [Arthur Dombrovskiy](https://www.linkedin.com/in/arthur-dombrovskiy-b688ba331)
+Email: [anytguy@gmail.com](mailto:anytguy@gmail.com)
+Telegram: [@anytguy](https://t.me/anytguy)
+
+---
+
+## 📄 License
+
+All rights reserved.  
+This project is proprietary software developed for the CHO A CHO chocolate brand.  
+You may not use, copy, modify, distribute, or publish any part of this codebase without explicit permission.
+
+---
+
+## 📌 Note
+
+- Немає публічного roadmap або підтримки pull requests на цей момент.
+- Якщо ви хочете запропонувати покращення — звертайтесь напрямо.
