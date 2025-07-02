@@ -8,7 +8,6 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 
-
 export default function ProductCard({
   id,
   title,
@@ -85,4 +84,3 @@ export default function ProductCard({
     </div>
   );
 }
-
