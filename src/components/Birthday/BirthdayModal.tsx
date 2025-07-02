@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function BirthdayModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,10 +44,12 @@ export default function BirthdayModal() {
 
         {/* 🎁 Анімація подарунка */}
         <div className="w-32 mx-auto mb-4 relative">
-          <img
+          <Image
             src="/gift-closed.png"
             alt="Gift"
-            className="w-full gift-box"
+            width={128} // set width explicitly, e.g., 128px for 32rem container width
+            height={128} // set height explicitly (keep aspect ratio)
+            className="gift-box mx-auto mb-4 relative"
           />
         </div>
 
