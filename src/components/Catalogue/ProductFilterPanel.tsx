@@ -6,6 +6,7 @@ import {
   setSearchTerm,
   setSelectedCategory,
 } from "@/store/slices/catalogueSlice";
+import { categories } from "@/types";
 
 export default function ProductFilterPanel() {
   const dispatch = useAppDispatch();
@@ -14,16 +15,6 @@ export default function ProductFilterPanel() {
   const selectedCategory = useAppSelector(
     (state) => state.catalogue.selectedCategory
   );
-
-  const categories = [
-    "All",
-    "Mini",
-    "Popular",
-    "Nutty",
-    "Heart",
-    "Sugar Free",
-    "Big",
-  ];
 
   const handleCategoryClick = (category: string) => {
     dispatch(setSelectedCategory(category));

@@ -1,4 +1,6 @@
 "use client";
+import { categories } from "@/types";
+
 type Props = {
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
@@ -8,16 +10,6 @@ export default function CategoryList({
   selectedCategory,
   onCategoryChange,
 }: Props) {
-  const categories = [
-    "All",
-    "Mini",
-    "Popular",
-    "Nutty",
-    "Hearts",
-    "Sugar free",
-    "Big",
-  ];
-
   return (
     <div className="border-b">
       <ul className="flex gap-3 flex-wrap">
