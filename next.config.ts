@@ -2,6 +2,10 @@
 const nextConfig = {
   async rewrites() {
     return [
+      {
+        source: "/feedback/:id",
+        destination: "/api/feedback/:id",
+      },
     ];
   },
   images: {
