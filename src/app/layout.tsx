@@ -44,7 +44,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Arthur Dombrovskiy", url: "https://www.choacho.com.ua" }],
   creator: "CHO A CHO",
-  themeColor: "#537253",
   metadataBase: new URL("https://www.choacho.com.ua"),
   openGraph: {
     title: "CHO A CHO – Handmade Ukrainian Chocolate",
