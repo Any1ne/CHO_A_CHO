@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        $schema: "https://openapi.vercel.sh/vercel.json",
+        source: "/feedback/:id",
+        destination: "/api/feedback/:id",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
