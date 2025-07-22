@@ -22,7 +22,7 @@ export default function Contacts() {
         >
           Зв&rsquo;язатися з нами
         </Button>
-        <span className="text-xs text-gray-700 md:text-gray-200">Пн-нд 08:00 - 19:00</span>
+        <span className="text-xs text-gray-700 md:text-gray-200">Пн-Нд 08:00 - 19:00</span>
       </div>
 
       {isOpen && <RequestModal onClose={() => setIsOpen(false)} />}

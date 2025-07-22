@@ -84,8 +84,11 @@ export default function Footer() {
         </div>
       </div>
 
+      <div className="flex justify-end bg-dark text-xs px-4 text-dark">1.0.0</div>
+
+
       {/* Footer bottom */}
-      <div className="mt-8 text-center bg-black text-sm text-gray-500 px-2 flex flex-col md:flex-row justify-stretch items-center gap-2 border-t">
+      <div className="text-center bg-black text-sm text-gray-500 px-2 flex flex-col md:flex-row justify-stretch items-center gap-2 border-t">
         <div className="grid grid-cols-2 md:flex md:justify-evenly items-center align-center gap-10 py-4 grow">
           {paymentIcons.map((icon) => (
             <Image

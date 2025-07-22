@@ -31,8 +31,43 @@ const playpenSans = Playpen_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "CHO A CHO Store",
-  description: "Online store of CHO A CHO brand of chocolate",
+  title: "CHO A CHO Store – Handmade Ukrainian Chocolate",
+  description:
+    "Delicious handmade chocolate from Ukraine. Buy exclusive CHO A CHO treats for yourself or your business.",
+  keywords: [
+    "handmade chocolate",
+    "Ukrainian chocolate",
+    "CHO A CHO",
+    "buy chocolate online",
+    "craft sweets",
+    "chocolate gifts",
+  ],
+  authors: [{ name: "Arthur Dombrovskiy", url: "https://www.choacho.com.ua" }],
+  creator: "CHO A CHO",
+  metadataBase: new URL("https://www.choacho.com.ua"),
+  openGraph: {
+    title: "CHO A CHO – Handmade Ukrainian Chocolate",
+    description:
+      "Explore delicious artisan chocolate crafted in Ukraine. Order online, with delivery and gift options.",
+    url: "https://www.choacho.com.ua",
+    siteName: "CHO A CHO",
+    type: "website",
+    images: [
+      {
+        url: "https://www.choacho.com.ua/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "CHO A CHO Handmade Chocolate",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CHO A CHO – Handmade Ukrainian Chocolate",
+    description:
+      "Buy artisan chocolate online. Unique sweets from Ukraine – CHO A CHO.",
+    images: ["https://www.choacho.com.ua/og-image.jpg"],
+  },
 };
 
 export default function RootLayout({

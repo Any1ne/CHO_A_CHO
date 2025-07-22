@@ -1,13 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: "/api/json/:path*",
-        destination: "http://localhost:3001/:path*",
-      },
-    ];
-  },
   images: {
     remotePatterns: [
       {
@@ -17,8 +9,8 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com", // <== додай сюди
-        pathname: "/**", // або "**" якщо хочеш повністю
+        hostname: "9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com",
+        pathname: "/**",
       },
     ],
   },

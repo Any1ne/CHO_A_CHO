@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://www.choacho.com.ua/apple-icon.png</loc><lastmod>2025-07-02T11:51:46.845Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/icon0.svg</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/icon1.png</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/about</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/checkout</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/checkout/success</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/branded</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/store</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua/checkout/confirm</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.choacho.com.ua</loc><lastmod>2025-07-02T11:51:46.846Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/apple-icon.png</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/icon0.svg</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/icon1.png</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/checkout/confirm</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/about</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/branded</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/checkout</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/checkout/success</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.choacho.com.ua/store</loc><lastmod>2025-07-22T09:15:39.693Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>
