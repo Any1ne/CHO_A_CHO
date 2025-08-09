@@ -5,6 +5,7 @@ export type ProductType = {
   flavour?: string;
   category?: string;
   price: number;
+  wholesale_price: number;
   preview: string;
   weight?: number;
 };

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
+import { AppDispatch } from "@/store/types";
 import { handleOrderConfirmation } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 

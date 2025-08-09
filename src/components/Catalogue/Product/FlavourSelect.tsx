@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import type { AppDispatch, RootState } from "@/store";
+import type { AppDispatch, RootState } from "@/store/types";
 import { useEffect, useState } from "react";
 import {
   Select,

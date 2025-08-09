@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "@/store";
+import { AppDispatch, RootState } from "@/store/types";
 import { clearBasket } from "./basketSlice";
 import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
@@ -22,7 +22,7 @@ const initialState: CheckoutState = {
     contactInfo: undefined,
     deliveryInfo: undefined,
     paymentInfo: undefined,
-    isFreeDelivery: false,
+    isWholesale: false,
   },
   isSubmitting: false,
 };
@@ -38,7 +38,11 @@ export const placeOrder = createAsyncThunk<
   const { checkoutSummary } = state.checkout;
   const items = state.basket.items;
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const isWholesale = checkoutSummary?.isWholesale ?? false;
+  const total = items.reduce((sum, item) => {
+  const price = isWholesale ? item.wholesale_price : item.price;
+  return sum + price * item.quantity;
+}, 0);
 
   if (
     !checkoutSummary?.contactInfo ||
@@ -91,26 +95,35 @@ if (paymentMethod === "monobank") {
 
     sessionStorage.setItem("orderId", orderId);
 
-    switch (paymentMethod) {
-      case "monobank": {
-        sessionStorage.setItem("redirectToPayment", "true");
-        sessionStorage.setItem("invoiceId", invoiceId!);
-        toast.success("Замовлення збережено. Переходимо до оплати.");
-        window.location.href = invoiceResponse? invoiceResponse.paymentUrl : "" ;
-        return;
-      }
+switch (paymentMethod) {
+  case "monobank": {
+    sessionStorage.setItem("redirectToPayment", "true");
+    sessionStorage.setItem("invoiceId", invoiceId!);
+    toast.success("Замовлення збережено. Переходимо до оплати.");
+    
+    setTimeout(() => {
+      window.location.href = invoiceResponse ? invoiceResponse.paymentUrl : "";
+    }, 1500); // 1.5 секунди
 
-      case "cod": {
-        toast.success("Замовлення збережено. Очікуйте підтвердження.");
-        sessionStorage.setItem("redirectToPayment", "true");
-        router.push(`/checkout/confirm?orderId=${orderId}`);
-        return;
-      }
+    return;
+  }
 
-      default:
-        toast.error("Невідомий спосіб оплати.");
-        return;
-    }
+  case "cod": {
+    toast.success("Замовлення збережено. Очікуйте підтвердження.");
+    sessionStorage.setItem("redirectToPayment", "true");
+
+    setTimeout(() => {
+      router.push(`/checkout/confirm?orderId=${orderId}`);
+    }, 1500); // 1.5 секунди
+
+    return;
+  }
+
+  default:
+    toast.error("Невідомий спосіб оплати.");
+    return;
+}
+
   } catch (error) {
     console.error("Помилка при збереженні замовлення:", error);
     toast.error("Не вдалося зберегти замовлення. Спробуйте ще раз.");
@@ -215,8 +228,8 @@ const checkoutSlice = createSlice({
     resetCheckout() {
       return initialState;
     },
-    updateFreeDelivery(state, action: PayloadAction<number>) {
-      state.checkoutSummary.isFreeDelivery = action.payload >= 1000;
+    updateWholesale(state, action: PayloadAction<number>) {
+      state.checkoutSummary.isWholesale = action.payload >= 1350;
     },
   },
 
@@ -261,7 +274,7 @@ export const {
   setDeliveryInfo,
   setPaymentInfo,
   resetCheckout,
-  updateFreeDelivery,
+  updateWholesale,
 } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

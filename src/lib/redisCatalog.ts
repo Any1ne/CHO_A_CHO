@@ -8,8 +8,6 @@ dotenv.config();
 const REDIS_KEY_ALL = "products:all";
 const CACHE_TTL = 60 * 60; // 1 година
 
-
-
 // 🔁 Отримати всі продукти з PostgreSQL
 async function fetchAllProductsFromDB(): Promise<ProductType[]> {
   const supabase = await createClient();

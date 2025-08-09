@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton"; // 🧩 додано
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
+import { AppDispatch } from "@/store/types";
 import { checkOrderStatus } from "@/store/slices/checkoutSlice";
 import { OrderSummary } from "@/types";
 
@@ -69,7 +69,7 @@ export default function SuccessPageClient() {
         <p><strong>Доставка:</strong> {order.checkoutSummary.deliveryInfo?.deliveryMethod === "branch"
           ? `У відділення №${order.checkoutSummary.deliveryInfo?.branchNumber}`
           : `На адресу: ${order.checkoutSummary.deliveryInfo?.address}`}</p>
-        <p><strong>Безкоштовна доставка:</strong> {order.checkoutSummary.isFreeDelivery ? "Так" : "Ні"}</p>
+        <p><strong>Безкоштовна доставка:</strong> {order.checkoutSummary.isWholesale ? "Так" : "Ні"}</p>
         <p><strong>Оплата:</strong> {order.checkoutSummary.paymentInfo?.paymentMethod === "cod" ? "При отриманні" : "Monobank Pay"}</p>
         <p className="mt-2 font-bold text-lg">До сплати: ₴{order.total.toFixed(2)}</p>
       </div>

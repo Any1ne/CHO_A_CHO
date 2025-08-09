@@ -1,7 +1,7 @@
 import { ShoppingBasket } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store"; 
+import { RootState } from "@/store/types"; 
 
 type BasketProps = {
   onOpen: () => void;

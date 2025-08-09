@@ -12,11 +12,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-
-interface Warehouse {
-  Ref: string;
-  Description: string;
-}
+import { Warehouse } from "@/types";
 
 interface WarehouseSelectProps {
   warehouses: Warehouse[];
@@ -38,25 +34,22 @@ export function WarehouseSelect({
   const loweredSearch = search.toLowerCase();
 
   return warehouses
-    .filter((w) =>
-      w.Description.toLowerCase().includes(loweredSearch)
-    )
+    .filter((w) => w.Description.toLowerCase().includes(loweredSearch))
     .sort((a, b) => {
-      const aDesc = a.Description.toLowerCase();
-      const bDesc = b.Description.toLowerCase();
+      // Спочатку Відділення, потім Поштомати
+      const aType = a.TypeOfWarehouseRef === "841339c7-591a-42e2-8233-7a0a00f0ed6f" ? 0 : 1;
+      const bType = b.TypeOfWarehouseRef === "841339c7-591a-42e2-8233-7a0a00f0ed6f" ? 0 : 1;
 
-      const aStartsWith = aDesc.startsWith(loweredSearch) ? 0 : 1;
-      const bStartsWith = bDesc.startsWith(loweredSearch) ? 0 : 1;
+      if (aType !== bType) return aType - bType;
 
-      if (aStartsWith !== bStartsWith) return aStartsWith - bStartsWith;
-
-      // Додаткове сортування — за позицією входження
-      const aIndex = aDesc.indexOf(loweredSearch);
-      const bIndex = bDesc.indexOf(loweredSearch);
+      // Додатково — по входженню пошукового слова
+      const aIndex = a.Description.toLowerCase().indexOf(loweredSearch);
+      const bIndex = b.Description.toLowerCase().indexOf(loweredSearch);
       return aIndex - bIndex;
     })
     .slice(0, 100);
 }, [search, warehouses]);
+
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

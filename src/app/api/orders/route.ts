@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       orderId: row.order_id,
       orderNumber: row.order_number?.toString().padStart(6, "0") ?? undefined,
       checkoutSummary: {
-        isFreeDelivery: row.is_free_delivery,
+        isWholesale: row.is_free_delivery,
         contactInfo: {
           firstName: row.customer_name,
           lastName: "", // Не повертається з RPC, заповнюється вручну
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
       contactInfo: contact,
       deliveryInfo: delivery,
       paymentInfo: payment,
-      // isFreeDelivery,
+      // isWholesale,
     } = checkoutSummary;
 
     // Мінімальна валідація перед викликом RPC

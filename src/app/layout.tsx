@@ -6,6 +6,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { Toaster } from "sonner";
 import StructuredData from "@/components/StructuredData";
+import { BasketInit } from "@/components/Basket/BasketInit";
 
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -126,6 +127,7 @@ export default function RootLayout({
         <Providers>
           <StructuredData />
           <Header />
+          <BasketInit />
           {children}
           <Footer />
           <Toaster richColors position="bottom-right" />

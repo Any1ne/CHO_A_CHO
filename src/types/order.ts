@@ -8,7 +8,7 @@ export type OrderSummary ={
       contactInfo?: ContactInfo;
       deliveryInfo?: DeliveryInfo;
       paymentInfo?: PaymentInfo;
-      isFreeDelivery: boolean;
+      isWholesale: boolean;
     }
     status: string;
     items: BasketItem[];

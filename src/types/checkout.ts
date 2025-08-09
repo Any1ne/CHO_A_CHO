@@ -7,9 +7,10 @@ export type ContactInfo = {
 };
 
 export type Warehouse = {
-  Ref: string;
   Description: string;
-}
+  Ref: string;
+  TypeOfWarehouseRef: string;
+};
 
 export type Street = {
   Ref: string;
@@ -42,5 +43,5 @@ export type CheckoutSummary = {
   contactInfo?: ContactInfo;
   deliveryInfo?: DeliveryInfo;
   paymentInfo?: PaymentInfo;
-  isFreeDelivery: boolean;
+  isWholesale: boolean;
 };

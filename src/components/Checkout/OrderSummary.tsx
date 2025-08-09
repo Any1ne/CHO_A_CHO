@@ -1,7 +1,7 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store";
+import { AppDispatch, RootState } from "@/store/types";
 import CartItem from "./CartItem";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -10,10 +10,13 @@ import { placeOrder } from "@/store/slices/checkoutSlice";
 export default function OrderSummary() {
   const completedSteps = useSelector((state: RootState) => state.checkout.completedSteps);
   // const paymentMethod = useSelector((state: RootState) => state.checkout.checkoutSummary?.paymentInfo?.paymentMethod);
-  const isFreeDelivery = useSelector((state: RootState) => state.checkout.checkoutSummary.isFreeDelivery);
+  const isWholesale = useSelector((state: RootState) => state.checkout.checkoutSummary.isWholesale);
   const items = useSelector((state: RootState) => state.basket.items);
-  const total = useSelector((state: RootState) =>
-    state.basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    const total = useSelector((state: RootState) =>
+    state.basket.items.reduce((sum, item) => {
+      const price = isWholesale ? item.wholesale_price : item.price;
+      return sum + price * item.quantity;
+    }, 0)
   );
 
   const isReadyToPay = completedSteps.includes("payment");
@@ -38,8 +41,8 @@ export default function OrderSummary() {
       <div className="mt-6 border-t pt-4 space-y-2 text-sm">
         <div className="flex justify-between">
           <span>Доставка:</span>
-          <span className={`font-medium ${isFreeDelivery ? "text-green-600" : "text-red-500"}`}>
-            {isFreeDelivery ? "Безкоштовно" : "Не безкоштовно"}
+          <span className={`font-medium ${isWholesale ? "text-green-600" : "text-red-500"}`}>
+            {isWholesale ? "Безкоштовно" : "Не безкоштовно"}
           </span>
         </div>
         <div className="flex justify-between font-semibold text-base">

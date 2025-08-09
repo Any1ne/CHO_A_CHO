@@ -10,6 +10,8 @@ import {
   Milk,
   Shield,
   Grape,
+  Droplet,
+  Cherry,
   // Star,
 } from "lucide-react";
 import { ReactNode } from "react";
@@ -27,6 +29,10 @@ const flavourIcons: Record<string, ReactNode> = {
   ЧОРНА: <Shield className="w-4 h-4 mr-2 text-black" />,
   МОЛОЧНА: <Milk className="w-4 h-4 mr-2 text-neutral-400" />,
   ТОФІ: <Smile className="w-4 h-4 mr-2 text-yellow-600" />,
+  Дубайська: <Sun className="w-4 h-4 mr-2 text-amber-500" />,
+  Волохата: <Cloud className="w-4 h-4 mr-2 text-rose-300" />,
+  "Черрі Паті": <Cherry className="w-4 h-4 mr-2 text-rose-700" />,
+  "Журавлина з коньяком": <Droplet className="w-4 h-4 mr-2 text-red-950" />,
 };
 
 export default flavourIcons;

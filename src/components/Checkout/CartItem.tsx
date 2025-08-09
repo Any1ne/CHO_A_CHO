@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { BasketItem } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import {useSelector } from "react-redux";
+import { RootState } from "@/store/types";
 
 type Props = {
   item: BasketItem;
@@ -11,6 +13,10 @@ type Props = {
 
 export default function CartItem({ item }: Props) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const isWholesale = useSelector((state: RootState) => state.checkout.checkoutSummary.isWholesale);
+  const unitPrice = isWholesale ? item.wholesale_price : item.price;
+  const isDiscounted = isWholesale && item.wholesale_price !== item.price;
+  const totalPrice = item.quantity * unitPrice;
 
   return (
     <div className="flex items-center justify-between gap-2 py-2 border-b">
@@ -37,13 +43,21 @@ export default function CartItem({ item }: Props) {
         <div>
           <div className="font-medium">{item.title}</div>
           <div className="text-sm text-muted-foreground">
-            {item.quantity} x ₴{item.price}
+            {item.quantity} ×{" "}
+            {isDiscounted && (
+              <span className="line-through text-gray-400 mr-1">
+                ₴{item.price.toFixed(2)}
+              </span>
+            )}
+            <span className={isDiscounted ? "text-green-600 font-semibold" : ""}>
+              ₴{unitPrice.toFixed(2)}
+            </span>
           </div>
         </div>
       </div>
-      <div className="font-semibold">
-        ₴{(item.quantity * item.price).toFixed(2)}
-      </div>
+      <div className="font-semibold text-right">
+          ₴{totalPrice.toFixed(2)}
+        </div>
     </div>
   );
 }
