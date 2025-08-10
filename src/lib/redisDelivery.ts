@@ -10,8 +10,8 @@ type NovaPoshtaCity = {
 
 type NovaPoshtaWarehouse = {
   Description: string;
-  // CityRef: string;
   Ref: string;
+  TypeOfWarehouse: string;
 };
 
 type NovaPoshtaStreet = {
@@ -31,6 +31,7 @@ const transformWarehouses = (data: NovaPoshtaWarehouse[]): NovaPoshtaWarehouse[]
   data.map((wh) => ({
     Description: wh.Description,
     Ref: wh.Ref,
+    TypeOfWarehouse: wh.TypeOfWarehouse,
   }));
 
 const transformStreets = (data: NovaPoshtaStreet[]): NovaPoshtaStreet[] =>
@@ -84,12 +85,33 @@ export async function getWarehouses(cityRef: string) {
     return JSON.parse(cached);
   }
 
-  const fullData = await fetchNovaPoshta("AddressGeneral", "getWarehouses", {
+  // TypeOfWarehouseRef для Відділення і Поштоматів
+  const TYPE_BRANCH = "841339c7-591a-42e2-8233-7a0a00f0ed6f";   // Відділення
+  // const TYPE_POSTOMAT = "f9316480-5f2d-425d-bc2c-ac7cd29decf0"; // Поштомати
+
+  // Перший запит — Відділення
+  const branchesData = await fetchNovaPoshta("AddressGeneral", "getWarehouses", {
     CityRef: cityRef,
+    TypeOfWarehouseRef: TYPE_BRANCH,
   });
-  const transformed = transformWarehouses(fullData);
-  await redis.set(cacheKey, JSON.stringify(transformed), "EX", CACHE_TTL);
-  return transformed;
+
+  // Другий запит — Поштомати
+  // const postomatsData = await fetchNovaPoshta("AddressGeneral", "getWarehouses", {
+  //   CityRef: cityRef,
+  //   TypeOfWarehouseRef: TYPE_POSTOMAT,
+  // });
+
+  // Трансформація даних
+  const transformedBranches = transformWarehouses(branchesData);
+  // const transformedPostomats = transformWarehouses(postomatsData);
+
+  // Об'єднання даних у правильному порядку: Відділення -> Поштомати
+  const fullTransformed = [...transformedBranches, ];//...transformedPostomats
+
+  // Кешування
+  await redis.set(cacheKey, JSON.stringify(fullTransformed), "EX", CACHE_TTL);
+
+  return fullTransformed;
 }
 
 export async function getStreets(cityRef: string) {

@@ -28,6 +28,7 @@ export const basketSlice = createSlice({
   initialState,
   reducers: {
     addToBasket: (state, action: PayloadAction<BasketItem>) => {
+        console.log("Add to basket: " ,action.payload)
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );
@@ -78,6 +79,9 @@ export const basketSlice = createSlice({
       state.items = [];
       saveBasketToStorage([]);
     },
+    initBasket: () => {
+  // нічого не змінює, просто сигнал для middleware
+},
   },
 });
 
@@ -88,5 +92,6 @@ export const {
   decreaseQuantity,
   setQuantity,
   clearBasket,
+  initBasket,
 } = basketSlice.actions;
 export default basketSlice.reducer;

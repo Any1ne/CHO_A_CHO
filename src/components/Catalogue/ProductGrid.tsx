@@ -10,7 +10,6 @@ import { ProductType } from "@/types/product";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 
-
 function renderSkeletons(count: number) {
   return Array.from({ length: count }).map((_, i) => (
     <div
@@ -26,7 +25,6 @@ function renderSkeletons(count: number) {
     </div>
   ));
 }
-
 
 export default function ProductGrid() {
   const dispatch = useAppDispatch();
@@ -102,30 +100,32 @@ export default function ProductGrid() {
   if (error) return <div>Помилка при завантаженні даних</div>;
 
   return (
-    <>
-      <div
-        className="
-          grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
-          justify-center gap-x-3 gap-y-5 mt-4 z-2
-        "
-      >
-        {visibleProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            price={product.price}
-            preview={product.preview}
-            description={product.description}
-          />
-        ))}
-      </div>
+  <div className="flex flex-col items-center gap-6 mt-4 z-2">
+    <div
+      className="
+        grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
+        justify-center gap-x-3 gap-y-5
+      "
+    >
+      {visibleProducts.map((product) => (
+        <ProductCard
+          key={product.id}
+          id={product.id}
+          title={product.title}
+          price={product.price}
+          wholesale_price={product.wholesale_price}
+          preview={product.preview}
+          description={product.description}
+        />
+      ))}
+    </div>
 
-      <SmartPagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={(page) => dispatch(setCurrentPage(page))}
-      />
-    </>
-  );
+    <SmartPagination
+      totalPages={totalPages}
+      currentPage={currentPage}
+      onPageChange={(page) => dispatch(setCurrentPage(page))}
+    />
+  </div>
+);
+
 }

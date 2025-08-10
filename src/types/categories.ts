@@ -7,5 +7,5 @@ export const categories = [
   "Sugar Free",
   "Big",
   "Kiss",
-  // "Special",
+  "Special",
 ];

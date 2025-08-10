@@ -39,8 +39,9 @@ const html = generateContactEmailHtml(name, email, message);
   });
 
   if (response.error) {
-    throw new Error(`Email error: ${response.error.message}`);
-  }
+    console.error("Email sending error object:", response.error);
+throw new Error(`Email error: ${JSON.stringify(response.error)}`);
+}
 
   return response;
 }

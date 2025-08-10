@@ -1,26 +1,35 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "@/store/types";
 import CheckoutForm from "@/components/Checkout/CheckoutForm";
 import OrderSummary from "@/components/Checkout/OrderSummary";
 import Link from "next/link";
-import { useEffect } from "react";
-import { updateFreeDelivery } from "@/store/slices/checkoutSlice";
+import { useEffect, useState } from "react";
+import { updateWholesale } from "@/store/slices/checkoutSlice";
 import { Button } from "@/components/ui/button";
 
 export default function CheckoutPage() {
   const dispatch = useDispatch();
   const basketItems = useSelector((state: RootState) => state.basket.items);
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const total = basketItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    dispatch(updateFreeDelivery(total));
-  }, [basketItems, dispatch]); // 👈 Автооновлення при зміні кошика
+    dispatch(updateWholesale(total));
+  }, [basketItems, dispatch]);
 
+  if (!mounted) {
+    return null; // Поки що нічого не рендеримо
+  }
 
   if (basketItems.length === 0) {
     return (
@@ -29,7 +38,6 @@ export default function CheckoutPage() {
         <p className="text-lg text-gray-600 mb-6 text-center">
           Додайте товари до кошика, потім перейдіть до оформлення замовлення!
         </p>
-
         <Button>
           <Link href="/">Повернутися на головну</Link>
         </Button>

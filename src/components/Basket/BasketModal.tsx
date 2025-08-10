@@ -3,7 +3,7 @@ import BasketItemsList from "./BasketItemsList";
 import BasketFooter from "./BasketFooter";
 import { XIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import FreeDeliveryProgress from "./FreeDeliveryProgress";
+import WholesaleProgress from "./WholesaleProgress";
 
 type Props = {
   onClose: () => void;
@@ -23,7 +23,7 @@ export default function BasketModal({ onClose }: Props) {
         </Button>
         <BasketHeader />
         <BasketItemsList />
-        <FreeDeliveryProgress />
+        <WholesaleProgress />
         <BasketFooter 
         onClose={onClose}
         />

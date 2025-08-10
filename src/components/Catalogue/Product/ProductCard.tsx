@@ -1,6 +1,7 @@
 "use client";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/types";
 import { openProductModal } from "@/store/slices/productModalSlice";
 import BasketControls from "@/components/Catalogue/BasketControls";
 import { ProductType } from "@/types/product";
@@ -12,10 +13,15 @@ export default function ProductCard({
   id,
   title,
   price,
+  wholesale_price,
   preview,
 }: ProductType) {
   const dispatch = useDispatch();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  const isWholesale = useSelector((state: RootState) => state.checkout.checkoutSummary.isWholesale);
+  const displayPrice = isWholesale ? wholesale_price : price;
+  const isDiscounted = isWholesale && wholesale_price !== price;
 
   const handleOpenModal = () => {
     dispatch(openProductModal(id));
@@ -62,7 +68,16 @@ export default function ProductCard({
           {title}
         </h3>
 
-        <p className="text-md font-medium text-gray-700">₴{price.toFixed(2)}</p>
+        <div className="text-md font-medium text-gray-700">
+          {isDiscounted && (
+            <span className="text-sm text-gray-400 line-through mr-1">
+              ₴{price.toFixed(2)}
+            </span>
+          )}
+          <span className={`font-bold ${isDiscounted ? "text-green-600" : ""}`}>
+            ₴{displayPrice.toFixed(2)}
+          </span>
+        </div>
 
         <div
           className="
@@ -76,6 +91,7 @@ export default function ProductCard({
             id={id}
             title={title}
             price={price}
+            wholesale_price={wholesale_price}
             preview={preview}
             showQuantityController={false}
           />

@@ -1,7 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/store/types";
 import { useEffect } from "react";
-import type { AppDispatch, RootState } from "@/store";
 import {
   closeProductModal,
   openProductModalAsync,
@@ -38,7 +38,7 @@ export default function ProductModal() {
         <DialogHeader className="p-4 border-b md:max-h-[5rem] text-dark bg-primary rounded-b-lg">
           <DialogTitle className="text-3xl font-bold font-sans text-white">
             {product ? (
-              `Бельгійська шоколадка "${product.category}" "${product.flavour}" ${product.weight}г`
+              `Шоколадка "${product.category}" "${product.flavour}" ${product.weight}г`
             ) : (
               <Skeleton className="h-[3rem] w-1/2 bg-white/30 rounded-xl" />
             )}
@@ -73,6 +73,7 @@ export default function ProductModal() {
                 title={product.title}
                 description={product.description!}
                 price={product.price}
+                wholesale_price={product.wholesale_price}
                 id={product.id}
                 preview={product.preview!}
               />

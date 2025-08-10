@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "@/store/types";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
@@ -10,11 +10,15 @@ type Props = {
 };
 
 export default function BasketFooter({ onClose }: Props) {
+  const isWholesale = useSelector(
+    (state: RootState) => state.checkout.checkoutSummary.isWholesale
+  );
+
   const total = useSelector((state: RootState) =>
-    state.basket.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    )
+    state.basket.items.reduce((sum, item) => {
+      const price = isWholesale ? item.wholesale_price : item.price;
+      return sum + price * item.quantity;
+    }, 0)
   );
 
   const router = useRouter();

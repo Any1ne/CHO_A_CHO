@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/axios";
 import { ProductType, OrderSummary } from "@/types";
 import { toast } from "sonner";
-import { AppDispatch } from "@/store";
+import { AppDispatch } from "@/store/types";
 import { clearBasket } from "@/store/slices/basketSlice";
 import { resetCheckout } from "@/store/slices/checkoutSlice";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";

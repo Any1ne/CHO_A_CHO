@@ -12,11 +12,15 @@ import BasketControls from "@/components/Catalogue/BasketControls";
 import FlavourSelect from "./FlavourSelect";
 import { Skeleton } from "@/components/ui/skeleton"; // ✅ імпортуй Skeleton
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/types";
+
 
 type Props = {
   title: string;
   description: string;
   price: number;
+  wholesale_price: number;
   id: string;
   preview: string;
 };
@@ -25,10 +29,16 @@ export default function ProductDetails({
   title,
   description,
   price,
+  wholesale_price,
   id,
   preview,
 }: Props) {
   const [isLoading, setIsLoading] = useState(true); // ✅ стан для завантаження
+
+    const isWholesale = useSelector((state: RootState) => state.checkout.checkoutSummary.isWholesale);
+    const displayPrice = isWholesale ? wholesale_price : price;
+    const isDiscounted = isWholesale && wholesale_price !== price;
+  
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800); // 800ms для прикладу
@@ -37,7 +47,7 @@ export default function ProductDetails({
 
   const finalDescription =
     description ||
-    `Шоколад CHO A CHO - плитка бельгійського шоколаду, яка стане ідеальним вибором для любителів солодких смакових поєднань.`;
+    `Шоколад CHO A CHO - плитка шоколаду, яка стане ідеальним вибором для любителів солодких смакових поєднань.`;
 
   return (
     <div className="flex flex-col shrink w-full md:w-1/2 rounded overflow-hidden">
@@ -53,9 +63,18 @@ export default function ProductDetails({
 
       {/* Ціна + кнопка */}
       <div className="p-4 border-b flex flex-wrap items-center gap-4">
-  <div className="text-xl font-semibold">₴{price.toFixed(2)}</div>
+  <div className="text-xl font-medium text-gray-700">
+          {isDiscounted && (
+            <span className=" text-gray-400 line-through mr-1">
+              ₴{price.toFixed(2)}
+            </span>
+          )}
+          <span className={`font-bold ${isDiscounted ? "text-green-600" : ""}`}>
+            ₴{displayPrice.toFixed(2)}
+          </span>
+        </div>
   <div className="w-full sm:w-auto">
-    <BasketControls id={id} title={title} price={price} preview={preview} />
+    <BasketControls id={id} title={title} price={price} wholesale_price={wholesale_price} preview={preview} />
   </div>
 </div>
 

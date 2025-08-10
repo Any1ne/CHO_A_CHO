@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { RootState } from "@/store/types";
 import BasketItem from "./BasketItem";
 
 export default function BasketItemsList() {
