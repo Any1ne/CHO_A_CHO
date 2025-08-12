@@ -44,7 +44,13 @@ This is the official online store for the CHO A CHO chocolate brand, built for b
 
 ## 📦 Features
 
-### ✅ Implemented (v1.0.0 – MVP)
+### ✅ Implemented (v1.1.0 + v1.1.1)
+
+- 📦 Special category
+- 🛒 Wholesale logic
+- 📝 Minor text changes (content update)
+
+### v1.0.0 – MVP
 
 - 📦 Product catalog
 - 🛒 Shopping cart
@@ -104,7 +110,7 @@ NEXT_PUBLIC_SITE_URL=
 
 ## 📌 Version
 
-**Current Version:** `1.0.0`
+**Current Version:** `1.1.1`
 
 ### What’s included in v1.0.0:
 
@@ -183,7 +189,13 @@ Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO co
 
 ## 📦 Features
 
-### ✅ Реалізовано (v1.0.0 – MVP)
+### ✅ Реалізовано (v1.1.0 + 1.1.1)
+
+- 📦 Категорія "Special"
+- 🛒 Логіка оптових закупівель
+- 📝 Мала зміна текстів (content update)
+
+### (v1.0.0 – MVP)
 
 - 📦 Каталог товарів
 - 🛒 Кошик замовлення
