@@ -16,7 +16,7 @@ export default function Header() {
       <Topbar />
 
       {/* Header main row */}
-      <header className="bg-primary w-full py-2 px-4 md:pl-10 lg:pl-20 rounded-b-lg">
+      <header className="bg-primary w-full py-2 px-4 md:pl-10 lg:pl-20 rounded-lg">
         {/* Desktop layout */}
         <div className="hidden md:flex w-full h-full justify-between gap-20 ">
           <Logo />
