@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import Providers from "./providers";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import CookieConsent from "@/components/modal/CookieConsent";
 import { Toaster } from "sonner";
 import StructuredData from "@/components/StructuredData";
 import { BasketInit } from "@/components/Basket/BasketInit";
@@ -149,6 +150,7 @@ export default function RootLayout({
           <Header />
           <BasketInit />
           {children}
+          <CookieConsent />
           <Footer />
           <Toaster richColors position="bottom-right" />
         </Providers>

@@ -50,6 +50,11 @@ export default function Footer() {
                 Про нас
               </a>
             </li>
+            <li>
+              <a href="/policy" className="hover:underline">
+                Політика конфіденційності та Cookies
+              </a>
+            </li>
           </ul>
         </div>
 

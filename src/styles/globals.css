@@ -6,7 +6,7 @@
 @theme {  
   --color-dark: #1f1f1f;
   --color-footer:rgb(63, 63, 63);
-  --color-link: #505d88;
+  --color-link: oklch(0.5002 0.0619 146.07);
   --breakpoint-xs: 22rem;
   --color-primary-light: #DADDD0;
   --font-playpen: var(--font-playpen-sans);
