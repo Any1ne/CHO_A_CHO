@@ -49,7 +49,9 @@ This is the official online store for the CHO A CHO chocolate brand, built for b
 - 📦 Special category
 - 🛒 Wholesale logic
 - 📝 Minor text changes (content update)
-
+- 🔒 Privacy policy & cookies page (v1.2.0)
+- 🍪 Cookie banner + corresponding function to obtain cookie consent (v1.2.0)
+- 📊 Analytics middleware for dataLayer.push() events used later by GTM / GA4 and Google Ads (v1.2.1)
 ### v1.0.0 – MVP
 
 - 📦 Product catalog
@@ -189,11 +191,14 @@ Delicious handmade chocolate from Ukraine – explore our exclusive CHO A CHO co
 
 ## 📦 Features
 
-### ✅ Реалізовано (v1.1.0 + 1.1.1)
+### ✅ Реалізовано (v1.2.1)
 
 - 📦 Категорія "Special"
 - 🛒 Логіка оптових закупівель
 - 📝 Мала зміна текстів (content update)
+- 🔒 Сторінка Privacy policy & cookies (v1.2.0)
+- 🍪 Cookie banner + функція для отримання згоди на файли cookie (v1.2.0)
+- 📊 Analytics middleware для dataLayer.push() подій (v1.2.1) — використовується для GTM / GA4 та Google Ads
 
 ### (v1.0.0 – MVP)
 
