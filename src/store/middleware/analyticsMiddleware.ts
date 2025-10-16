@@ -33,6 +33,7 @@ import {
   placeOrder,
   confirmOrder,
   checkOrderStatus,
+  beginCheckout
 } from "@/store/slices/checkoutSlice";
 
 import {
@@ -65,11 +66,12 @@ function buildCartSummary(state: any) {
 }
 
 export const analyticsMiddleware: Middleware<any, RootState> = (store) => (next) => (action:any) => {
-  const result = next(action);
+  const prevState = store.getState();
 
+  const result = next(action);
   
   try {
-    const state = store.getState() as any;
+    const nextState = store.getState();
 
     // ====== BASKET EVENTS ======
     if (action.type === addToBasket.type) {
@@ -260,12 +262,24 @@ export const analyticsMiddleware: Middleware<any, RootState> = (store) => (next)
     // }
 
     // ====== CHECKOUT / ORDER EVENTS ======
-    // // User started checkout flow -> placeOrder.pending is good for begin_checkout
+    // --- begin_checkout: слухаємо новий "beginCheckout" action або перехід степа на 'contact' ---
+    // (це корисно, якщо ви використовуєте setStep для зміни етапу оформлення)
+    if (
+      action.type === beginCheckout.type ||
+      (action.type === setStep.type && action.payload === "contact")
+    ) {
+      if (!dedupeKey("begin_checkout")) {
+        pushEvent({ event: "begin_checkout" });
+      }
+    }
+
+    // --- fallback: якщо ви все ж хочете пушити при початку сабміту як запасний варіант ---
     if (action.type === placeOrder.pending.type) {
       if (!dedupeKey("begin_checkout")) {
         pushEvent({ event: "begin_checkout" });
       }
     }
+
 
     // // Track checkout steps (e.g., when user sets step in stepper)
     // if (action.type === setStep.type) {
@@ -356,12 +370,20 @@ export const analyticsMiddleware: Middleware<any, RootState> = (store) => (next)
 
     // updateWholesale maybe indicates switch to wholesale prices
     if (action.type === updateWholesale.type) {
-      const threshold = action.payload as number;
-      if (!dedupeKey(`wholesale_threshold:${threshold}`)) {
-        pushEvent({
-          event: "wholesale_toggled",
-          meta: { threshold },
-        });
+      const prevIsWholesale = !!prevState.checkout?.checkoutSummary?.isWholesale;
+      const nextIsWholesale = !!nextState.checkout?.checkoutSummary?.isWholesale;
+
+      if (prevIsWholesale !== nextIsWholesale) {
+        // threshold все ще корисно віддати в мета-даних, якщо потрібно
+        const threshold = action.payload as number | undefined;
+        const dedupeKeyName = `wholesale_threshold:${String(threshold ?? "unknown")}`;
+
+        if (!dedupeKey(dedupeKeyName)) {
+          pushEvent({
+            event: "wholesale_toggled",
+            meta: { threshold, isWholesale: nextIsWholesale },
+          });
+        }
       }
     }
   } catch (err) {

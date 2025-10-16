@@ -6,12 +6,13 @@ import CheckoutForm from "@/components/Checkout/CheckoutForm";
 import OrderSummary from "@/components/Checkout/OrderSummary";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { updateWholesale } from "@/store/slices/checkoutSlice";
+import { updateWholesale, beginCheckout } from "@/store/slices/checkoutSlice";
 import { Button } from "@/components/ui/button";
 
 export default function CheckoutPage() {
   const dispatch = useDispatch();
   const basketItems = useSelector((state: RootState) => state.basket.items);
+  const checkoutStartedAt = useSelector((state: RootState) => state.checkout.checkoutStartedAt);
 
   const [mounted, setMounted] = useState(false);
 
@@ -26,6 +27,12 @@ export default function CheckoutPage() {
     );
     dispatch(updateWholesale(total));
   }, [basketItems, dispatch]);
+
+  useEffect(() => {
+if (!checkoutStartedAt && basketItems.length > 0) {
+dispatch(beginCheckout());
+}
+}, [checkoutStartedAt, basketItems.length, dispatch]);
 
   if (!mounted) {
     return null; // Поки що нічого не рендеримо
