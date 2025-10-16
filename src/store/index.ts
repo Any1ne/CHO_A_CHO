@@ -5,6 +5,7 @@ import catalogueReducer from "./slices/catalogueSlice";
 import productModalReducer from "./slices/productModalSlice";
 import checkoutSliceReducer from "./slices/checkoutSlice";
 import { basketListenerMiddleware } from "./middleware/basketListener";
+import { analyticsMiddleware } from "./middleware/analyticsMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -15,5 +16,5 @@ export const store = configureStore({
     checkout: checkoutSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(basketListenerMiddleware),
+    getDefaultMiddleware().concat(basketListenerMiddleware).concat(analyticsMiddleware),
 });
