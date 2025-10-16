@@ -13,6 +13,7 @@ interface CheckoutState {
   completedSteps: Step[];
   checkoutSummary: CheckoutSummary;
   isSubmitting: boolean;
+  checkoutStartedAt: string | null;
 }
 
 const initialState: CheckoutState = {
@@ -25,6 +26,7 @@ const initialState: CheckoutState = {
     isWholesale: false,
   },
   isSubmitting: false,
+  checkoutStartedAt: null,
 };
 
 // ======= ASYNC THUNKS залишаються без змін, бо вони вже адаптовані ========= //
@@ -231,6 +233,9 @@ const checkoutSlice = createSlice({
     updateWholesale(state, action: PayloadAction<number>) {
       state.checkoutSummary.isWholesale = action.payload >= 1350;
     },
+    beginCheckout(state) {
+      state.checkoutStartedAt = new Date().toISOString();
+},
   },
 
   extraReducers: (builder) => {
@@ -275,6 +280,7 @@ export const {
   setPaymentInfo,
   resetCheckout,
   updateWholesale,
+  beginCheckout
 } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;
