@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRedisOrder } from "@/lib/redisOrder";
+import { getRedisOrder, updateRedisOrder} from "@/lib/redisOrder";
 import { fetchOrderStatus, submitOrder, checkInvoiceStatus } from "@/lib/api";
 import { OrderSummary } from "@/types";
 
@@ -57,10 +57,7 @@ export async function POST(req: NextRequest) {
       checkoutSummary,
       items,
       total,
-      status:
-        checkoutSummary.paymentInfo?.paymentMethod === "monobank"
-          ? "confirmed"
-          : "нове",
+      status: "confirmed",
     };
     console.log("[CONFIRM ORDER] 📝 Готове замовлення до збереження:", finalOrder);
 
@@ -71,6 +68,16 @@ export async function POST(req: NextRequest) {
     if (!dbInsertResult?.OrderNumber) {
       console.error("[CONFIRM ORDER] ❌ Помилка збереження замовлення в базу");
       return NextResponse.json({ error: "Failed to save order in DB" }, { status: 500 });
+    }
+
+    try {
+      await updateRedisOrder(orderId, {
+        status: "confirmed",
+        orderNumber: dbInsertResult.OrderNumber,
+      });
+      console.log("[CONFIRM ORDER] 🔁 Оновлено Redis: статус confirmed");
+    } catch (redisErr) {
+      console.warn("[CONFIRM ORDER] ⚠️ Не вдалось оновити Redis:", redisErr);
     }
 
     console.log(`[CONFIRM ORDER] ✅ Успішно збережено замовлення: ${orderId}`);
