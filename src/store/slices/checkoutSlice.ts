@@ -33,7 +33,6 @@ const initialState: CheckoutState = {
     paymentInfo: undefined,
     isWholesale: false,
   },
-  checkoutStartedAt: null, 
   isSubmitting: false,
   checkoutStartedAt: null,
 };
