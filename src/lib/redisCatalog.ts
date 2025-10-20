@@ -1,26 +1,41 @@
 import { redis } from "@/db/redis/client";
 import dotenv from "dotenv";
 import { createClient } from "@/db/supabase/server";
+import pool from "@/db/postgres/client";
 import { ProductType } from "@/types";
 
 dotenv.config();
 
+const LOCAL_MODE = process.env.LOCAL_MODE === "true";
 const REDIS_KEY_ALL = "products:all";
 const CACHE_TTL = 60 * 60; // 1 година
 
 // 🔁 Отримати всі продукти з PostgreSQL
 async function fetchAllProductsFromDB(): Promise<ProductType[]> {
-  const supabase = await createClient();
+  let data: ProductType[] = [];
 
-  const { data, error } = await supabase.rpc("get_all_products");
+  if (!LOCAL_MODE) {
+    console.log("🟢 Використовується Supabase RPC");
 
-  if (error || !data) {
-    console.error("🔴 RPC помилка при отриманні продуктів:", error?.message);
-    return [];
+    const supabase = await createClient();
+
+    const { data: rpcData, error} = await supabase.rpc("get_all_products");
+
+    if (error || !rpcData) {
+      console.error("🔴 RPC помилка:", error?.message);
+      return [];
+    }
+    data = rpcData;
+  }
+  else {
+    console.log("🧩 Використовуєzться локальний Postgres через Pool");
+    const result = await pool.query("SELECT * FROM public.get_all_products();");
+    data = result.rows;
   }
 
   // Кешування в Redis
   await redis.set(REDIS_KEY_ALL, JSON.stringify(data), "EX", CACHE_TTL);
+  console.log(`🧩 ${JSON.stringify(data)}`);
   return data;
 }
 
