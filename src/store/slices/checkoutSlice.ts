@@ -5,8 +5,15 @@ import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { createInvoiceOnServer } from "@/vendor/monobank";
 import { Step, ContactInfo, DeliveryInfo, PaymentInfo, CheckoutSummary, OrderSummary } from "@/types";
-import { submitOrder, fetchOrderStatus, fetchRedisOrder, saveRedisOrderToServer, checkInvoiceStatus} from "@/lib/api";
+import { submitOrder, fetchOrderStatus, fetchRedisOrder, saveRedisOrderToServer, checkInvoiceStatus } from "@/lib/api";
 import { nanoid } from 'nanoid';
+
+interface LastOrder {
+  orderId: string;
+  orderNumber?: string;
+  status?: string;
+  timestamp?: string;
+}
 
 interface CheckoutState {
   currentStep: Step;
@@ -14,6 +21,7 @@ interface CheckoutState {
   checkoutSummary: CheckoutSummary;
   isSubmitting: boolean;
   checkoutStartedAt: string | null;
+  lastOrder?: LastOrder | null;
 }
 
 const initialState: CheckoutState = {
@@ -35,16 +43,16 @@ export const placeOrder = createAsyncThunk<
   void,
   { router: AppRouterInstance },
   { dispatch: AppDispatch; state: RootState }
->("checkout/placeOrder", async ({ router }, { getState }) => {
+>("checkout/placeOrder", async ({ router }, { getState, dispatch }) => {
   const state = getState();
   const { checkoutSummary } = state.checkout;
   const items = state.basket.items;
 
   const isWholesale = checkoutSummary?.isWholesale ?? false;
   const total = items.reduce((sum, item) => {
-  const price = isWholesale ? item.wholesale_price : item.price;
-  return sum + price * item.quantity;
-}, 0);
+    const price = isWholesale ? item.wholesale_price : item.price;
+    return sum + price * item.quantity;
+  }, 0);
 
   if (
     !checkoutSummary?.contactInfo ||
@@ -59,30 +67,30 @@ export const placeOrder = createAsyncThunk<
   const { paymentMethod } = checkoutSummary.paymentInfo;
 
   let invoiceId: string | undefined;
-let invoiceResponse: { invoiceId: string; paymentUrl: string } | undefined;
+  let invoiceResponse: { invoiceId: string; paymentUrl: string } | undefined;
 
-let checkoutSummaryWithInvoice = checkoutSummary;
+  let checkoutSummaryWithInvoice = checkoutSummary;
 
-if (paymentMethod === "monobank") {
-  try {
-    const redirectUrl = `${window.location.origin}/checkout/confirm`;
-    invoiceResponse = await createInvoiceOnServer(orderId, total, redirectUrl);
-    invoiceId = invoiceResponse.invoiceId;
+  if (paymentMethod === "monobank") {
+    try {
+      const redirectUrl = `${window.location.origin}/checkout/confirm`;
+      invoiceResponse = await createInvoiceOnServer(orderId, total, redirectUrl);
+      invoiceId = invoiceResponse.invoiceId;
 
-    // Створюємо копію з invoiceId
-    checkoutSummaryWithInvoice = {
-      ...checkoutSummary,
-      paymentInfo: {
-        ...checkoutSummary.paymentInfo,
-        invoiceId,
-      },
-    };
-  } catch (error) {
-    console.error("Не вдалося створити інвойс:", error);
-    toast.error("Не вдалося створити інвойс.");
-    return;
+      // Створюємо копію з invoiceId
+      checkoutSummaryWithInvoice = {
+        ...checkoutSummary,
+        paymentInfo: {
+          ...checkoutSummary.paymentInfo,
+          invoiceId,
+        },
+      };
+    } catch (error) {
+      console.error("Не вдалося створити інвойс:", error);
+      toast.error("Не вдалося створити інвойс.");
+      return;
+    }
   }
-}
 
   const redisOrderData: OrderSummary = {
     orderId,
@@ -92,39 +100,45 @@ if (paymentMethod === "monobank") {
     total,
   };
 
+  dispatch(setOrderResult({
+    orderId,
+    status: redisOrderData.status,
+    timestamp: new Date().toISOString()
+  }));
+
   try {
     await saveRedisOrderToServer(redisOrderData);
 
     sessionStorage.setItem("orderId", orderId);
 
-switch (paymentMethod) {
-  case "monobank": {
-    sessionStorage.setItem("redirectToPayment", "true");
-    sessionStorage.setItem("invoiceId", invoiceId!);
-    toast.success("Замовлення збережено. Переходимо до оплати.");
-    
-    setTimeout(() => {
-      window.location.href = invoiceResponse ? invoiceResponse.paymentUrl : "";
-    }, 1500); // 1.5 секунди
+    switch (paymentMethod) {
+      case "monobank": {
+        sessionStorage.setItem("redirectToPayment", "true");
+        sessionStorage.setItem("invoiceId", invoiceId!);
+        toast.success("Замовлення збережено. Переходимо до оплати.");
 
-    return;
-  }
+        setTimeout(() => {
+          window.location.href = invoiceResponse ? invoiceResponse.paymentUrl : "";
+        }, 1500); // 1.5 секунди
 
-  case "cod": {
-    toast.success("Замовлення збережено. Очікуйте підтвердження.");
-    sessionStorage.setItem("redirectToPayment", "true");
+        return;
+      }
 
-    setTimeout(() => {
-      router.push(`/checkout/confirm?orderId=${orderId}`);
-    }, 1500); // 1.5 секунди
+      case "cod": {
+        toast.success("Замовлення збережено. Очікуйте підтвердження.");
+        sessionStorage.setItem("redirectToPayment", "true");
 
-    return;
-  }
+        setTimeout(() => {
+          router.push(`/checkout/confirm?orderId=${orderId}`);
+        }, 1500); // 1.5 секунди
 
-  default:
-    toast.error("Невідомий спосіб оплати.");
-    return;
-}
+        return;
+      }
+
+      default:
+        toast.error("Невідомий спосіб оплати.");
+        return;
+    }
 
   } catch (error) {
     console.error("Помилка при збереженні замовлення:", error);
@@ -145,7 +159,7 @@ export const confirmOrder = createAsyncThunk<
       return;
     }
 
-    const { checkoutSummary, items, total} = redisOrderData;
+    const { checkoutSummary, items, total } = redisOrderData;
 
     // Якщо оплата через Monobank
     if (checkoutSummary?.paymentInfo?.paymentMethod === "monobank") {
@@ -159,7 +173,7 @@ export const confirmOrder = createAsyncThunk<
       }
     }
 
-    // Якщо оплата успішна або це 'cod'
+    // Формуємо payload для збереження в БД
     const orderPayload: OrderSummary = {
       orderId,
       checkoutSummary,
@@ -176,6 +190,12 @@ export const confirmOrder = createAsyncThunk<
 
     dispatch(clearBasket());
     dispatch(resetCheckout());
+    dispatch(setOrderResult({
+      orderId,
+      orderNumber: result.OrderNumber,
+      status: "confirmed",
+      timestamp: new Date().toISOString()
+    }));
     toast.success("Замовлення успішно оформлено!");
     router.push(`/checkout/success?orderId=${orderId}`);
   } catch (error) {
@@ -184,12 +204,11 @@ export const confirmOrder = createAsyncThunk<
   }
 });
 
-
 export const checkOrderStatus = createAsyncThunk<
-  { isPaid: boolean; orderData: OrderSummary | null },
+  { orderData: OrderSummary | null },
   string,
   { dispatch: AppDispatch; state: RootState }
->("checkout/checkOrderStatus", async (orderId, { rejectWithValue }) => {
+>("checkout/checkOrderStatus", async (orderId, { dispatch, rejectWithValue }) => {
   try {
     const result = await fetchOrderStatus(orderId);
 
@@ -197,9 +216,16 @@ export const checkOrderStatus = createAsyncThunk<
       return rejectWithValue("Замовлення не знайдено.");
     }
 
-    resetCheckout();
+    const { orderData } = result;
 
-    return result;
+    dispatch(setOrderResult({
+      orderId: orderData.orderId,
+      orderNumber: orderData.orderNumber,
+      status: orderData.status,
+      timestamp: new Date().toISOString(),
+    }));
+
+    return { orderData };
   } catch (error) {
     console.error("checkOrderStatus error:", error);
     return rejectWithValue("Серверна помилка при перевірці замовлення.");
@@ -235,7 +261,14 @@ const checkoutSlice = createSlice({
     },
     beginCheckout(state) {
       state.checkoutStartedAt = new Date().toISOString();
-},
+    },
+    setOrderResult(state, action: PayloadAction<LastOrder>) {
+      state.lastOrder = action.payload;
+    },
+    // додатково: очистити інформацію про останнє замовлення (за потреби)
+    clearLastOrder(state) {
+      state.lastOrder = null;
+    }
   },
 
   extraReducers: (builder) => {
@@ -280,7 +313,9 @@ export const {
   setPaymentInfo,
   resetCheckout,
   updateWholesale,
-  beginCheckout
+  beginCheckout,
+  setOrderResult,
+  clearLastOrder
 } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

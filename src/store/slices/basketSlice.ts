@@ -28,7 +28,6 @@ export const basketSlice = createSlice({
   initialState,
   reducers: {
     addToBasket: (state, action: PayloadAction<BasketItem>) => {
-        console.log("Add to basket: " ,action.payload)
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );
