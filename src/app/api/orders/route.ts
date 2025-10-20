@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextRequest, NextResponse } from "next/server";
 import { sendOrderConfirmation } from "@/lib/email/email";
 import { createClient } from "@/db/supabase/server";

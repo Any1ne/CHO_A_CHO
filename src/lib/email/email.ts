@@ -1,4 +1,5 @@
-// src/lib/email/email.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Resend } from "resend";
 import { generateContactEmailHtml } from "@/lib/email/generateEmailHtml";
 
