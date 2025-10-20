@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "env-cmd -f .env.local next dev -H 0.0.0.0 --turbopack",
     "dev:staging": "env-cmd -f .env.staging next dev -H 0.0.0.0 --turbopack",
-    "build": "env-cmd -f .env.staging next build",
+    "build": "if [ -f .env.staging ]; then env-cmd -f .env.staging next build; else next build; fi",
     "start": "env-cmd -f .env.staging next start",
     "lint": "next lint",
     "js": "json-server --watch ./src/db/products.json --port 3001 --host 0.0.0.0",
