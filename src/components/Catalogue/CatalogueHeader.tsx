@@ -1,6 +1,6 @@
 export default function CatalogueHeader() {
   return (
-    <div className="flex flex-col gap-4 items-center mb-5 md:mb-10">
+    <div className="flex flex-col gap-4 items-center mb-5 md:mb-10 ">
       <h2 className="text-4xl font-bold text-center text-gray-800 mt-5">
         Шоколад
       </h2>
