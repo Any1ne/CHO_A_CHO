@@ -39,8 +39,8 @@ export async function GET() {
         return `
 <item>
   <g:id>${id}</g:id>
-  <title><![${title}]></title>
-  <description><![${description ?? title}]></description>
+  <title>${title}</title>
+  <description>${description ?? title}</description>
   <link>${link}</link>
   <g:image_link>${image}</g:image_link>
   <g:availability>${availability}</g:availability>
