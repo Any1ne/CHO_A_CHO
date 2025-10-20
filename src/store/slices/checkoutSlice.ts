@@ -35,6 +35,7 @@ const initialState: CheckoutState = {
   },
   checkoutStartedAt: null, 
   isSubmitting: false,
+  checkoutStartedAt: null,
 };
 
 // ======= ASYNC THUNKS залишаються без змін, бо вони вже адаптовані ========= //
