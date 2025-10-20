@@ -8,4 +8,7 @@ export type ProductType = {
   wholesale_price: number;
   preview: string;
   weight?: number;
+  gtin?: string;
+  mpn?: string; 
+  brand?: string;
 };

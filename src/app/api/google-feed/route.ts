@@ -31,16 +31,16 @@ export async function GET() {
         const description = escapeXml(p.description ?? p.title);
         // NOTE: Google requires a link; we use catalog root as fallback.
         // Strongly recommended: provide a unique product page link.
-        const link = escapeXml(`https://www.choacho.com.ua/catalog`); 
-        const image = escapeXml(p.preview ?? `https://www.choacho.com.ua/og-image.jpg`);
+        const link = escapeXml(`https://www.choacho.com.ua/store`); 
+        const image = escapeXml(p.preview);
         const price = formatPrice(p.price ?? p.wholesale_price ?? 0);
         const availability = "in_stock";
 
         return `
 <item>
   <g:id>${id}</g:id>
-  <title><![CDATA[${title}]]></title>
-  <description><![CDATA[${description ?? title}]]></description>
+  <title>${title}</title>
+  <description>${description ?? title}</description>
   <link>${link}</link>
   <g:image_link>${image}</g:image_link>
   <g:availability>${availability}</g:availability>
@@ -49,6 +49,7 @@ export async function GET() {
   <g:brand>${escapeXml("CHO A CHO")}</g:brand>
   ${p.category ? `<g:google_product_category>${escapeXml(p.category)}</g:google_product_category>` : ""}
   ${p.weight ? `<g:shipping_weight>${escapeXml(String(p.weight))} g</g:shipping_weight>` : ""}
+  ${(!p.gtin && !p.mpn) ? `<g:identifier_exists>false</g:identifier_exists>` : ""}
 </item>
         `.trim();
       })
