@@ -2,7 +2,7 @@
 
 import ProductGrid from "@/components/Catalogue/ProductGrid";
 import ProductModal from "./Product/ProductModal";
-import CatalogueHeader from "./CatalogueHeader";
+// import CatalogueHeader from "./CatalogueHeader";
 import CatalogueAnnouncement from "./CatalogueAnnouncement";
 import ProductFilterPanel from "@/components/Catalogue/ProductFilterPanel";
 
