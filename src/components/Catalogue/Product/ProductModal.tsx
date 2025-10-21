@@ -1,6 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/types";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
   closeProductModal,
@@ -18,18 +19,22 @@ import ProductDetails from "./ProductDetails";
 
 export default function ProductModal() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
   const { isOpen, productId, product, loading, error } = useSelector(
     (state: RootState) => state.productModal
   );
 
   useEffect(() => {
-    if (isOpen && productId) {
+    // Якщо модалка відкрита і product ще не підвантажений — фетчимо.
+    if (isOpen && productId && !product) {
       dispatch(openProductModalAsync(productId));
     }
-  }, [isOpen, productId, dispatch]);
+  }, [isOpen, productId, product, dispatch]);
 
   const handleClose = () => {
     dispatch(closeProductModal());
+    router.replace("/store");
   };
 
   return (

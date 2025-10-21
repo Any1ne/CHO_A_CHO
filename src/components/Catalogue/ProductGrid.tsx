@@ -9,6 +9,7 @@ import { fetchProducts } from "@/lib/api";
 import { ProductType } from "@/types/product";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 function renderSkeletons(count: number) {
   return Array.from({ length: count }).map((_, i) => (
@@ -44,11 +45,16 @@ export default function ProductGrid() {
       const width = window.innerWidth;
       let columns = 1;
 
-      if (width >= 1280) columns = 6;      // xl
-      else if (width >= 1024) columns = 5; // lg
-      else if (width >= 768) columns = 4;  // md
-      else if (width >= 640) columns = 3;  // sm
-      else if (width >= 350) columns = 2;  // xs
+      if (width >= 1280)
+        columns = 6; // xl
+      else if (width >= 1024)
+        columns = 5; // lg
+      else if (width >= 768)
+        columns = 4; // md
+      else if (width >= 640)
+        columns = 3; // sm
+      else if (width >= 350)
+        columns = 2; // xs
       else columns = 1;
 
       const rows = 5; // можна змінити, якщо потрібно більше/менше
@@ -68,7 +74,7 @@ export default function ProductGrid() {
     queryKey: ["products", selectedCategory],
     queryFn: () => fetchProducts(selectedCategory),
   });
-  
+
   const filteredProducts = allProducts
     .filter((product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -85,47 +91,47 @@ export default function ProductGrid() {
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   if (isLoading) {
-  return (
-    <div
-      className="
+    return (
+      <div
+        className="
         grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
         justify-center gap-x-3 gap-y-5 mt-4
       "
-    >
-      {renderSkeletons(itemsPerPage)}
-    </div>
-  );
-}
+      >
+        {renderSkeletons(itemsPerPage)}
+      </div>
+    );
+  }
 
   if (error) return <div>Помилка при завантаженні даних</div>;
 
   return (
-  <div className="flex flex-col items-center gap-6 mt-4 z-2">
-    <div
-      className="
+    <div className="flex flex-col items-center gap-6 mt-4 z-2">
+      <div
+        className="
         grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
         justify-center gap-x-3 gap-y-5
       "
-    >
-      {visibleProducts.map((product) => (
-        <ProductCard
-          key={product.id}
-          id={product.id}
-          title={product.title}
-          price={product.price}
-          wholesale_price={product.wholesale_price}
-          preview={product.preview}
-          description={product.description}
-        />
-      ))}
+      >
+        {visibleProducts.map((product) => (
+          <Link key={product.id} href={`/store/${product.id}`} prefetch>
+            <ProductCard
+              id={product.id}
+              title={product.title}
+              price={product.price}
+              wholesale_price={product.wholesale_price}
+              preview={product.preview}
+              description={product.description}
+            />
+          </Link>
+        ))}
+      </div>
+
+      <SmartPagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={(page) => dispatch(setCurrentPage(page))}
+      />
     </div>
-
-    <SmartPagination
-      totalPages={totalPages}
-      currentPage={currentPage}
-      onPageChange={(page) => dispatch(setCurrentPage(page))}
-    />
-  </div>
-);
-
+  );
 }

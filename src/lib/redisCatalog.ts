@@ -15,11 +15,11 @@ async function fetchAllProductsFromDB(): Promise<ProductType[]> {
   let data: ProductType[] = [];
 
   if (!LOCAL_MODE) {
-    console.log("🟢 Використовується Supabase RPC");
+    // console.log("🟢 Використовується Supabase RPC");
 
     const supabase = await createClient();
 
-    const { data: rpcData, error} = await supabase.rpc("get_all_products");
+    const { data: rpcData, error } = await supabase.rpc("get_all_products");
 
     if (error || !rpcData) {
       console.error("🔴 RPC помилка:", error?.message);
@@ -35,7 +35,7 @@ async function fetchAllProductsFromDB(): Promise<ProductType[]> {
 
   // Кешування в Redis
   await redis.set(REDIS_KEY_ALL, JSON.stringify(data), "EX", CACHE_TTL);
-  console.log(`🧩 ${JSON.stringify(data)}`);
+  // console.log(`🧩 ${JSON.stringify(data)}`);
   return data;
 }
 
@@ -56,7 +56,7 @@ export async function getAllProducts(): Promise<ProductType[]> {
   return await fetchAllProductsFromDB();
 }
 
-export async function getProductById(id: string): Promise<ProductType  | null> {
+export async function getProductById(id: string): Promise<ProductType | null> {
   const products = await getAllProducts();
   return products.find((p) => p.id.toString() === id) || null;
 }

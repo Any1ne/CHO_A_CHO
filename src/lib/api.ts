@@ -48,7 +48,7 @@ export async function fetchOrderStatus(orderId: string): Promise<{
   try {
     const res = await axiosInstance.get("/orders", { params: { orderId } });
 
-    console.log("--fetchOrderStatus --", res)
+    // console.log("--fetchOrderStatus --", res)
     if (!res.data.success || !res.data.order) {
       return {
         isPaid: false,
@@ -171,7 +171,7 @@ export const checkInvoiceStatus = async (invoiceId: string) => {
     }
   );
 
-  console.log("--STATUS--", response.json);
+  // console.log("--STATUS--", response.json);
   if (!response.ok) {
     throw new Error("Не вдалося перевірити статус платежу");
   }
