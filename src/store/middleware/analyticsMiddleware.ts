@@ -100,7 +100,7 @@ export const analyticsMiddleware: Middleware<any, RootState> =
         const item = action.payload;
         const key = `add_to_cart:${item.id}:${item.quantity}`;
         if (!dedupeKey(key)) {
-          console.log("🛒 [Analytics] add_to_cart event triggered:", item);
+          console.log("🛒 [Analytics] add_to_cart event triggered:");
           pushEvent({
             event: "add_to_cart",
             ecommerce: {
@@ -133,45 +133,45 @@ export const analyticsMiddleware: Middleware<any, RootState> =
         }
       }
 
- // --- оплата / purchase ---
-if (action.type === checkOrderStatus.fulfilled.type) {
-  const payload = action.payload as any;
-  const order = payload?.orderData;
+      // --- оплата / purchase ---
+      if (action.type === checkOrderStatus.fulfilled.type) {
+        const payload = action.payload as any;
+        const order = payload?.orderData;
 
-  // 🔁 беремо статус напряму з Redux state
-  const state = store.getState();
-  const isConfirmed = state.checkout?.lastOrder?.status === "confirmed";
+        // 🔁 беремо статус напряму з Redux state
+        const state = store.getState();
+        const isConfirmed = state.checkout?.lastOrder?.status === "confirmed";
 
-  const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
+        const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
 
-  if (isConfirmed && order && !dedupeKey(key)) {
-    const items =
-      Array.isArray(order?.items) && order.items.length
-        ? order.items.map((i: any) => ({
-            item_id: i.id ?? i.item_id ?? "",
-            item_name: i.title ?? i.name ?? "",
-            price: Number(i.price ?? 0),
-            quantity: Number(i.quantity ?? i.qty ?? 1),
-          }))
-        : [];
+        if (isConfirmed && order && !dedupeKey(key)) {
+          const items =
+            Array.isArray(order?.items) && order.items.length
+              ? order.items.map((i: any) => ({
+                item_id: i.id ?? i.item_id ?? "",
+                item_name: i.title ?? i.name ?? "",
+                price: Number(i.price ?? 0),
+                quantity: Number(i.quantity ?? i.qty ?? 1),
+              }))
+              : [];
 
-    console.log("💸 [Analytics] purchase event triggered:", {
-      orderId: order?.orderId ?? order?.orderNumber,
-      total: order?.total,
-      itemsCount: items.length,
-    });
+          console.log("💸 [Analytics] purchase event triggered:", {
+            orderId: order?.orderId ?? order?.orderNumber,
+            total: order?.total,
+            itemsCount: items.length,
+          });
 
-    pushEvent({
-      event: "purchase",
-      ecommerce: {
-        transaction_id: order?.orderId ?? order?.orderNumber ?? "",
-        currency: "UAH",
-        value: Number(order?.total ?? 0),
-        items,
-      },
-    });
-  }
-}
+          pushEvent({
+            event: "purchase",
+            ecommerce: {
+              transaction_id: order?.orderId ?? order?.orderNumber ?? "",
+              currency: "UAH",
+              value: Number(order?.total ?? 0),
+              items,
+            },
+          });
+        }
+      }
 
       // --- перемикання оптового режиму ---
       if (action.type === updateWholesale.type) {

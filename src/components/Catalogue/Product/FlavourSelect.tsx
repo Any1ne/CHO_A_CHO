@@ -1,7 +1,6 @@
 "use client";
-
-import { useSelector, useDispatch } from "react-redux";
-import type { AppDispatch, RootState } from "@/store/types";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/types";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -10,27 +9,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateProductInModalAsync } from "@/store/slices/productModalSlice";
+import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 import flavourIcons from "@/components/Catalogue/Product/flavourIcons";
 
 export default function FlavourSelect() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { product, flavours } = useSelector((state: RootState) => state.productModal);
-  
+  const router = useRouter();
+  const { product, flavours } = useSelector(
+    (state: RootState) => state.productModal
+  );
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (product) {
-      setSelectedId(product.id); // оновити, коли новий продукт приходить
+      setSelectedId(product.id);
     }
   }, [product]);
 
   const handleFlavourChange = (id: string) => {
-    setSelectedId(id); // оновлюємо локальний стан
-    if (id !== product?.id) {
-      dispatch(updateProductInModalAsync(id));
-    }
+    // Навігація на /store/{id} — ModalInitializer на новій сторінці ініціалізує Redux
+    setSelectedId(id);
+    router.push(`/store/${id}`);
   };
 
   if (!product) return <span>Завантаження товару...</span>;

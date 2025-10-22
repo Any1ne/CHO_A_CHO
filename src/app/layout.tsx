@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Script from "next/script"; 
+import Script from "next/script";
 import { Geist, Geist_Mono, Oswald, Playpen_Sans } from "next/font/google";
 import "@/styles/globals.css";
 import Providers from "./providers";
@@ -9,7 +9,7 @@ import CookieConsent from "@/components/modal/CookieConsent";
 import { Toaster } from "sonner";
 import StructuredData from "@/components/StructuredData";
 import { BasketInit } from "@/components/Basket/BasketInit";
-
+// import { store } from "@/store";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 

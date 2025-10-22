@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const paymentIcons = [
   { src: "/payments/monobank.svg", alt: "Monobank" },
@@ -36,24 +37,24 @@ export default function Footer() {
           <h3 className="text-lg font-semibold mb-2">Сторінки</h3>
           <ul className="space-y-1">
             <li>
-              <a href="/store" className="hover:underline">
+              <Link href="/store" className="hover:underline">
                 Каталог
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/branded" className="hover:underline">
+              <Link href="/branded" className="hover:underline">
                 Брендоване пакування
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/about" className="hover:underline">
+              <Link href="/about" className="hover:underline">
                 Про нас
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/policy" className="hover:underline">
+              <Link href="/policy" className="hover:underline">
                 Політика конфіденційності та Cookies
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

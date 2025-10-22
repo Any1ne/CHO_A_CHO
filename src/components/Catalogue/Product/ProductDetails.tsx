@@ -55,7 +55,10 @@ export default function ProductDetails({
       {/* Вибір смаку */}
       <div className="p-4 border-b min-h-[3.5rem]">
         {isLoading ? (
-          <Skeleton className="h-10 w-full rounded-md" />
+          <div className="flex flex-col gap-4 flex-1">
+          <Skeleton className="h-18 w-full rounded-md" />
+          <Skeleton className="h-12 w-[50%]" />
+          </div>
         ) : (
           <FlavourSelect />
         )}

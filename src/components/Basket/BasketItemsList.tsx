@@ -8,7 +8,7 @@ export default function BasketItemsList() {
   const items = useSelector((state: RootState) => state.basket.items);
 
   return (
-    <ul className="flex-grow overflow-auto">
+    <ul className="flex-grow overflow-auto pr-4">
       {items.map((item) => (
         <BasketItem key={item.id} item={item} />
       ))}
