@@ -1,6 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/types";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
   closeProductModal,
@@ -18,18 +19,23 @@ import ProductDetails from "./ProductDetails";
 
 export default function ProductModal() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
   const { isOpen, productId, product, loading, error } = useSelector(
     (state: RootState) => state.productModal
   );
 
+  console.log(`Loafing ${loading}`)
+
   useEffect(() => {
-    if (isOpen && productId) {
+    if (isOpen && productId && !product) {
       dispatch(openProductModalAsync(productId));
     }
-  }, [isOpen, productId, dispatch]);
+  }, [isOpen, productId, product, dispatch]);
 
   const handleClose = () => {
     dispatch(closeProductModal());
+    router.replace("/store");
   };
 
   return (
@@ -40,7 +46,7 @@ export default function ProductModal() {
             {product ? (
               `Шоколадка "${product.category}" "${product.flavour}" ${product.weight}г`
             ) : (
-              <Skeleton className="h-[3rem] w-1/2 bg-white/30 rounded-xl" />
+              <Skeleton className="h-[3rem] w-1/2 bg-white/30 rounded-xl bg-red" />
             )}
           </DialogTitle>
         </DialogHeader>
@@ -49,10 +55,10 @@ export default function ProductModal() {
           <div className="flex flex-col md:flex-row gap-4 px-4 py-6">
             <Skeleton className="w-full md:w-1/2 h-[300px] rounded-lg" />
             <div className="flex flex-col gap-4 flex-1">
-              <Skeleton className="h-6 w-[60%]" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-[90%]" />
-              <Skeleton className="h-4 w-[70%]" />
+              <Skeleton className="h-18 w-full" />
+              <Skeleton className="h-12 w-[50%]" />
+              <Skeleton className="h-10 w-[80%]" />
+              <Skeleton className="h-5 w-[70%]" />
               <Skeleton className="h-10 w-1/2 mt-6" />
             </div>
           </div>

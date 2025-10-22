@@ -1,8 +1,7 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/types";
-import { openProductModal } from "@/store/slices/productModalSlice";
 import BasketControls from "@/components/Catalogue/BasketControls";
 import { ProductType } from "@/types/product";
 import Image from "next/image";
@@ -16,32 +15,29 @@ export default function ProductCard({
   wholesale_price,
   preview,
 }: ProductType) {
-  const dispatch = useDispatch();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  const isWholesale = useSelector((state: RootState) => state.checkout.checkoutSummary.isWholesale);
+  const isWholesale = useSelector(
+    (state: RootState) => state.checkout.checkoutSummary.isWholesale
+  );
   const displayPrice = isWholesale ? wholesale_price : price;
   const isDiscounted = isWholesale && wholesale_price !== price;
 
-  const handleOpenModal = () => {
-    dispatch(openProductModal(id));
-  };
-
   return (
+    // Цей компонент більше не відкриває модалку самостійно — навігацію забезпечує Link у ProductGrid
     <div
       className={`
-        bg-white flex flex-col rounded-2xl overflow-hidden p-3 
-        border border-gray-200 md:border-none
-        shadow-sm md:shadow-none
-        transition-transform duration-300 transform 
-        md:hover:scale-110 md:hover:shadow-lg md:hover:z-10
-        group max-w-[300px] min-w-[50px] md:min-w-[190px] mx-auto min-mx-2 md:h-[112%]
-      `}
+    bg-white flex flex-col rounded-2xl overflow-hidden p-3 
+    border border-gray-200 md:border-none
+    shadow-sm md:shadow-none
+    transition-transform duration-300 transform 
+    md:hover:scale-110 md:hover:shadow-lg
+    group max-w-[300px] min-w-[50px] md:min-w-[190px] mx-auto min-mx-2 md:h-[112%]
+    z-0
+  `}
     >
-      <div
-        className="bg-gray-100 overflow-hidden rounded-xl cursor-pointer relative"
-        onClick={handleOpenModal}
-      >
+      {/* При кліку на картку тепер спрацьовує Link; внутрішні кнопки повинні зупиняти propagation */}
+      <div className="bg-gray-100 overflow-hidden rounded-xl cursor-pointer relative">
         {!isImageLoaded && (
           <Skeleton className="absolute inset-0 w-full h-full rounded-xl" />
         )}
@@ -61,10 +57,7 @@ export default function ProductCard({
       </div>
 
       <div className="p-0 md:p-2 flex flex-col flex-grow">
-        <h3
-          className="font-semibold text-base text-gray-800 line-clamp-2 cursor-pointer min-h-[3rem]"
-          onClick={handleOpenModal}
-        >
+        <h3 className="font-semibold text-base text-gray-800 line-clamp-2 min-h-[3rem]">
           {title}
         </h3>
 
@@ -86,13 +79,15 @@ export default function ProductCard({
             md:opacity-0 md:group-hover:opacity-100
             transition-opacity duration-300
           "
+          // зупиняємо propagation, щоб кліки по BasketControls не викликали навігацію Link
+          onClick={(e) => e.stopPropagation()}
         >
           <BasketControls
             id={id}
             title={title}
             price={price}
             wholesale_price={wholesale_price}
-            preview={preview}
+            preview={preview ?? ""}
             showQuantityController={false}
           />
         </div>
