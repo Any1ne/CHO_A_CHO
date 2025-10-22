@@ -15,7 +15,6 @@ function escapeXml(str?: string) {
 
 function formatPrice(value?: number | string) {
   const n = typeof value === "number" ? value : Number(value ?? 0);
-  // Google Merchant дозволяє формат "123.45 UAH"
   return `${n.toFixed(2)} UAH`;
 }
 
@@ -25,9 +24,13 @@ function makeAbsoluteUrl(url?: string, domain = "www.choacho.com.ua") {
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     return trimmed;
   }
-  // Ensure leading slash
   const path = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
   return `https://${domain}${path}`;
+}
+
+function wrapCdataSafe(str?: string) {
+  if (!str) return "";
+  return `<![CDATA[${str.replace(/\]\]>/g, "]]]]><![CDATA[>")}]]>`;
 }
 
 export async function GET() {
@@ -37,34 +40,37 @@ export async function GET() {
 
     const items = products.filter((p) => p.id && p.title && (p.price ?? p.wholesale_price) != null);
 
+    console.log(`[google-feed] products total=${products.length} exported=${items.length}`);
+
     const itemsXml = items
       .map((p) => {
-        const id = escapeXml(p.id);
+        const id = escapeXml(String(p.id));
         const title = escapeXml(p.title);
-        const description = escapeXml(p.description ?? p.shortDescription ?? p.title);
-        // unique product link
-        const link = escapeXml(`https://${domain}/store/${encodeURIComponent(String(p.id))}`);
+        const descriptionRaw = p.description ?? p.shortDescription ?? p.title ?? "";
+        const description = wrapCdataSafe(descriptionRaw);
+        const link = `https://${domain}/store/${encodeURIComponent(String(p.id))}`;
+        const linkEsc = escapeXml(link);
         const imageUrl = makeAbsoluteUrl(p.preview || (p.images?.[0] ?? ""), domain);
         const image = imageUrl ? escapeXml(imageUrl) : "";
         const price = formatPrice(p.price ?? p.wholesale_price ?? 0);
-        const availability = p.inStock === false ? "out_of_stock" : "in_stock";
+        const availability = p.inStock === false ? "out of stock" : "in stock";
 
         return `
-<item>
-  <g:id>${id}</g:id>
-  <title>${title}</title>
-  <description>${description}</description>
-  <link>${link}</link>
-  ${image ? `<g:image_link>${image}</g:image_link>` : ""}
-  <g:availability>${availability}</g:availability>
-  <g:price>${price}</g:price>
-  <g:condition>new</g:condition>
-  <g:brand>${escapeXml("CHO A CHO")}</g:brand>
-  ${p.category ? `<g:google_product_category>${escapeXml(p.category)}</g:google_product_category>` : ""}
-  ${p.weight ? `<g:shipping_weight>${escapeXml(String(p.weight))} g</g:shipping_weight>` : ""}
-  ${(!p.gtin && !p.mpn) ? `<g:identifier_exists>false</g:identifier_exists>` : ""}
-</item>
-        `.trim();
+  <item>
+    <g:id>${id}</g:id>
+    <g:title>${title}</g:title>
+    <g:description>${description}</g:description>
+    <link>${linkEsc}</link>
+    <g:link>${linkEsc}</g:link>
+    ${image ? `<g:image_link>${image}</g:image_link>` : ""}
+    <g:availability>${availability}</g:availability>
+    <g:price>${price}</g:price>
+    <g:condition>new</g:condition>
+    <g:brand>${escapeXml("cho a cho")}</g:brand>
+    <g:google_product_category>499972</g:google_product_category>
+    ${p.weight ? `<g:shipping_weight>${escapeXml(String(p.weight))} g</g:shipping_weight>` : ""}
+    ${(!p.gtin && !p.mpn) ? `<g:identifier_exists>false</g:identifier_exists>` : ""}
+  </item>`.trim();
       })
       .join("\n");
 
@@ -74,7 +80,7 @@ export async function GET() {
     <title>CHO A CHO — Products</title>
     <link>https://${domain}/</link>
     <description>Product feed for Google Merchant</description>
-    ${itemsXml}
+${itemsXml}
   </channel>
 </rss>`;
 
