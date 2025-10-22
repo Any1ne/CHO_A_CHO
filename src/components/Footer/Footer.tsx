@@ -91,7 +91,7 @@ export default function Footer() {
       </div>
 
       <div className="flex justify-end bg-dark text-xs px-4 text-dark">
-        v1.4.0
+        v1.4.1
       </div>
 
       {/* Footer bottom */}

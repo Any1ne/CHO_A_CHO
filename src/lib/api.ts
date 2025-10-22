@@ -20,12 +20,22 @@ export async function fetchProducts(category?: string): Promise<ProductType[]> {
   }
 }
 
-export async function fetchProductById(id: string): Promise<ProductType> {
+export async function fetchProductById(id: string): Promise<ProductType | null> {
   try {
     const res = await axiosInstance.get(`/products/${id}`);
     return res.data;
-  } catch (error) {
+  } catch (error: unknown) {
+    // якщо це axios помилка і сервер повернув 404 — повертаємо null
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return null;
+    }
+
     console.error("🔴 fetchProductById error:", error);
+
+    // для інших помилок кидаємо виняток (щоб викликувач міг обробити)
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.error || "Не вдалося отримати продукт");
+    }
     throw new Error("Не вдалося отримати продукт");
   }
 }
