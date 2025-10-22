@@ -10,7 +10,6 @@ import { ProductType } from "@/types/product";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 function renderSkeletons(count: number) {
   return Array.from({ length: count }).map((_, i) => (
@@ -29,35 +28,6 @@ function renderSkeletons(count: number) {
 }
 
 export default function ProductGrid() {
-  const router = useRouter();
-  const [transitioning, setTransitioning] = useState<{
-    id: string;
-    preview?: string | null;
-  } | null>(null);
-
-  const handleClickWithTransition = (
-    e: React.MouseEvent,
-    productId: string,
-    preview?: string | null
-  ) => {
-    // Якщо це правий клік / ctrl+click — дозволяємо дефолт (нова вкладка)
-    if (e.metaKey || e.ctrlKey || e.button === 1) {
-      return;
-    }
-
-    e.preventDefault();
-    // показати overlay (анімований скелет)
-    setTransitioning({ id: productId, preview: preview ?? null });
-
-    const ANIMATION_MS = 300; // тривалість анімації (підчепи до css duration)
-    setTimeout(async () => {
-      // навігація після анімації
-      await router.push(`/store/${productId}`);
-      // (опціонально) сховати overlay — але навігація, як правило, змість DOM
-      setTransitioning(null);
-    }, ANIMATION_MS);
-  };
-
   const dispatch = useAppDispatch();
 
   const selectedCategory = useAppSelector(

@@ -9,7 +9,7 @@ export default function Control() {
   const pathname = usePathname();
   const [isBasketOpen, setIsBasketOpen] = useState(false);
 
-  const isStorePage = pathname === "/store";
+  const isStorePage = pathname.startsWith("/store");
 
   return (
     <section className="flex ">
