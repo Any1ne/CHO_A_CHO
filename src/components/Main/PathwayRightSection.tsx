@@ -19,7 +19,6 @@ import { useAppDispatch } from "@/lib/hooks/hooks";
 import { openProductModalAsync } from "@/store/slices/productModalSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 
-
 const featuredProductIds = ["1-005", "3-004", "6-002", "2-001"];
 
 export default function PathwayRightSection() {
@@ -34,7 +33,20 @@ export default function PathwayRightSection() {
         const result = await Promise.all(
           featuredProductIds.map((id) => fetchProductById(id))
         );
-        setProducts(result);
+
+        // фільтруємо null-значення — явний type guard для TS
+        const available = result.filter(
+          (p): p is ProductType => p !== null && p !== undefined
+        );
+
+        if (available.length !== result.length) {
+          console.warn(
+            "PathwayRightSection: some featured products were not found",
+            { requested: featuredProductIds.length, found: available.length }
+          );
+        }
+
+        setProducts(available);
       } catch (error) {
         console.error("Помилка при завантаженні продуктів:", error);
       } finally {
@@ -46,14 +58,14 @@ export default function PathwayRightSection() {
   }, []);
 
   const router = useRouter();
-const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-const handleViewClick = async (productId: string) => {
-  router.push("/store");
-  setTimeout(() => {
-    dispatch(openProductModalAsync(productId));
-  }, 300);
-};
+  const handleViewClick = async (productId: string) => {
+    router.push("/store");
+    setTimeout(() => {
+      dispatch(openProductModalAsync(productId));
+    }, 300);
+  };
 
   const handleDotClick = (index: number) => {
     if (api) api.scrollTo(index);
@@ -62,12 +74,12 @@ const handleViewClick = async (productId: string) => {
   return (
     <div className="p-10 px-0 md:px-10 group flex flex-col items-center justify-center md:w-1/2 w-full">
       {isLoading ? (
-      <div className="flex flex-col items-center gap-4 p-4 border rounded-2xl bg-gray-50 w-70">
-        <Skeleton className="w-60 h-60 rounded-xl" />
-        <Skeleton className="h-5 w-40" />
-        <Skeleton className="h-10 w-32" />
-      </div>
-) : (
+        <div className="flex flex-col items-center gap-4 p-4 border rounded-2xl bg-gray-50 w-70">
+          <Skeleton className="w-60 h-60 rounded-xl" />
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+      ) : (
         <>
           <Carousel
             plugins={[
@@ -95,19 +107,22 @@ const handleViewClick = async (productId: string) => {
                   className="flex items-center justify-center"
                 >
                   <div className="flex flex-col items-center justify-center border gap-4 w-70 p-4 rounded-2xl bg-gray-50">
-                   
-<Image
-  src={product.preview || "/preview.jpg"}
-  alt={product.title}
-  width={240}
-  height={240}
-  className="h-60 w-60 object-cover rounded-xl shadow-md bg-gray-200"
-/>
-                    <h3 className="text-lg font-semibold text-center">{product.title}</h3>
-                    <Button className="px-4 py-2" onClick={() => handleViewClick(product.id)}>
-  Переглянути
-</Button>
-
+                    <Image
+                      src={product.preview || "/preview.jpg"}
+                      alt={product.title}
+                      width={240}
+                      height={240}
+                      className="h-60 w-60 object-cover rounded-xl shadow-md bg-gray-200"
+                    />
+                    <h3 className="text-lg font-semibold text-center">
+                      {product.title}
+                    </h3>
+                    <Button
+                      className="px-4 py-2"
+                      onClick={() => handleViewClick(product.id)}
+                    >
+                      Переглянути
+                    </Button>
                   </div>
                 </CarouselItem>
               ))}
