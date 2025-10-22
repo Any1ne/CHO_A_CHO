@@ -28,7 +28,6 @@ export async function generateMetadata({
 export default async function ProductPage({
   params,
 }: {
-  // Keep params typed as Promise<PageParams> to match Next's expectation
   params: Promise<PageParams>;
 }) {
   const { productId } = await params;
