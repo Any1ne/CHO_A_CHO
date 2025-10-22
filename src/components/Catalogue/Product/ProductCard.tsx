@@ -27,13 +27,14 @@ export default function ProductCard({
     // Цей компонент більше не відкриває модалку самостійно — навігацію забезпечує Link у ProductGrid
     <div
       className={`
-        bg-white flex flex-col rounded-2xl overflow-hidden p-3 
-        border border-gray-200 md:border-none
-        shadow-sm md:shadow-none
-        transition-transform duration-300 transform 
-        md:hover:scale-110 md:hover:shadow-lg md:hover:z-10
-        group max-w-[300px] min-w-[50px] md:min-w-[190px] mx-auto min-mx-2 md:h-[112%]
-      `}
+    bg-white flex flex-col rounded-2xl overflow-hidden p-3 
+    border border-gray-200 md:border-none
+    shadow-sm md:shadow-none
+    transition-transform duration-300 transform 
+    md:hover:scale-110 md:hover:shadow-lg
+    group max-w-[300px] min-w-[50px] md:min-w-[190px] mx-auto min-mx-2 md:h-[112%]
+    z-0
+  `}
     >
       {/* При кліку на картку тепер спрацьовує Link; внутрішні кнопки повинні зупиняти propagation */}
       <div className="bg-gray-100 overflow-hidden rounded-xl cursor-pointer relative">

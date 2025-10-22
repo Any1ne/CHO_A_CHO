@@ -14,17 +14,21 @@ ENV_STAGING = .env.staging
 .PHONY: help
 help:
 	@echo "Makefile targets:"
-	@echo "  make up-local       - up (build) with .env.local"
-	@echo "  make up-staging     - up (build) with .env.staging"
-	@echo "  make silent-local   - up -d with .env.local"
-	@echo "  make silent-staging - up -d with .env.staging"
-	@echo "  make down           - docker compose down -v"
-	@echo "  make restart-local  - restart with .env.local"
-	@echo "  make build          - docker compose build"
-	@echo "  make rm             - docker compose rm -fs"
-	@echo "  make ps             - docker compose ps"
-	@echo "  make logs           - docker compose logs -f"
-	@echo "  make dev-local      - run next dev locally (requires env-cmd)"
+	@echo "  make up-local              - up (build) with .env.local"
+	@echo "  make up-staging            - up (build) with .env.staging"
+	@echo "  make silent-local          - up -d (build) with .env.local"
+	@echo "  make silent-staging        - up -d (build) with .env.staging"
+	@echo "  make no-build-local        - up (no build) with .env.local"
+	@echo "  make no-build-staging      - up (no build) with .env.staging"
+	@echo "  make silent-no-build-local - up -d (no build) with .env.local"
+	@echo "  make silent-no-build-staging - up -d (no build) with .env.staging"
+	@echo "  make down                  - docker compose down -v"
+	@echo "  make restart-local         - restart with .env.local"
+	@echo "  make build                 - docker compose build"
+	@echo "  make rm                    - docker compose rm -fs"
+	@echo "  make ps                    - docker compose ps"
+	@echo "  make logs                  - docker compose logs -f"
+	@echo "  make dev-local             - run next dev locally (requires env-cmd)"
 
 .PHONY: up-local up-staging silent-local silent-staging down restart-local build rm ps logs dev-local
 
@@ -39,6 +43,18 @@ silent-local:
 
 silent-staging:
 	$(COMPOSE) --env-file $(ENV_STAGING) up -d --build
+
+no-build-local:
+	$(COMPOSE) --env-file $(ENV_LOCAL) up
+
+no-build-staging:
+	$(COMPOSE) --env-file $(ENV_STAGING) up
+
+silent-no-build-local:
+	$(COMPOSE) --env-file $(ENV_LOCAL) up -d
+
+silent-no-build-staging:
+	$(COMPOSE) --env-file $(ENV_STAGING) up -d
 
 down:
 	$(COMPOSE) down -v
