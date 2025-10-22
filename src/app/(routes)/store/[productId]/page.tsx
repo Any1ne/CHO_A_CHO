@@ -3,11 +3,8 @@ import ModalInitializer from "@/components/Catalogue/ModalInitializer";
 import { fetchProductById } from "@/lib/api";
 import { notFound } from "next/navigation";
 import type { ProductType } from "@/types/product";
-import dotenv from "dotenv";
 import { getProductMetadata } from "@/lib/product-metadata";
 import type { Metadata } from "next";
-
-dotenv.config();
 
 type PageParams = { productId: string };
 
@@ -17,12 +14,21 @@ export async function generateMetadata({
   params: Promise<PageParams>;
 }): Promise<Metadata> {
   const { productId } = await params;
-  return await getProductMetadata(productId);
+
+  try {
+    return await getProductMetadata(productId);
+  } catch {
+    return {
+      title: "Товар не знайдено",
+      description: "Цей товар не існує або був видалений",
+    };
+  }
 }
 
 export default async function ProductPage({
   params,
 }: {
+  // Keep params typed as Promise<PageParams> to match Next's expectation
   params: Promise<PageParams>;
 }) {
   const { productId } = await params;
@@ -34,8 +40,8 @@ export default async function ProductPage({
   const images = product.images?.length
     ? product.images
     : product.preview
-      ? [product.preview]
-      : [];
+    ? [product.preview]
+    : [];
 
   return (
     <>
@@ -43,10 +49,10 @@ export default async function ProductPage({
         <Catalogue />
       </main>
 
-      {/* Client component which initializes Redux modal with server-provided product */}
+      {/* Client component that initializes Redux modal with product data */}
       <ModalInitializer productId={productId} product={product} />
 
-      {/* JSON-LD для структурованих даних */}
+      {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -58,9 +64,7 @@ export default async function ProductPage({
             image: images,
             description: product.shortDescription || product.description,
             sku: product.sku || undefined,
-            brand: product.brand
-              ? { "@type": "Brand", name: product.brand }
-              : undefined,
+            brand: product.brand ? { "@type": "Brand", name: product.brand } : undefined,
             offers: {
               "@type": "Offer",
               priceCurrency: product.currency || "UAH",

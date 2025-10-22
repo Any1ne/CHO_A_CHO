@@ -3,7 +3,7 @@ import { fetchProductById } from "./api";
 import type { Metadata } from "next";
 
 export async function getProductMetadata(productId: string): Promise<Metadata> {
-    const product: ProductType = await fetchProductById(productId);
+    const product: ProductType | null = await fetchProductById(productId);
 
     if (!product) {
         return {

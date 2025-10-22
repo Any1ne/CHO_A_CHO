@@ -27,6 +27,13 @@ export const openProductModalAsync = createAsyncThunk(
 
     try {
       const product = await fetchProductById(productId);
+
+      if (!product) {
+        const errorMessage = "Продукт не знайдено";
+        dispatch(fetchProductFailure(errorMessage));
+        return rejectWithValue(errorMessage);
+      }
+
       dispatch(fetchProductSuccess(product));
 
       if (product.category) {
@@ -49,6 +56,12 @@ export const updateProductInModalAsync = createAsyncThunk(
   async (productId: string, { dispatch, rejectWithValue }) => {
     try {
       const product = await fetchProductById(productId);
+
+      if (!product) {
+        const errorMessage = "Продукт не знайдено";
+        dispatch(fetchProductFailure(errorMessage));
+        return rejectWithValue(errorMessage);
+      }
 
       dispatch(fetchProductSuccess(product));
 
