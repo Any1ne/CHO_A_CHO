@@ -15,12 +15,25 @@ function escapeXml(str?: string) {
 
 function formatPrice(value?: number | string) {
   const n = typeof value === "number" ? value : Number(value ?? 0);
-  return `${n.toFixed(2)} UAH`; // 2 decimals + currency
+  // Google Merchant дозволяє формат "123.45 UAH"
+  return `${n.toFixed(2)} UAH`;
+}
+
+function makeAbsoluteUrl(url?: string, domain = "www.choacho.com.ua") {
+  if (!url) return "";
+  const trimmed = url.trim();
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+  // Ensure leading slash
+  const path = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return `https://${domain}${path}`;
 }
 
 export async function GET() {
   try {
     const products: ProductType[] = (await getAllProducts()) || [];
+    const domain = process.env.DOMAIN || "www.choacho.com.ua";
 
     const items = products.filter((p) => p.id && p.title && (p.price ?? p.wholesale_price) != null);
 
@@ -28,21 +41,21 @@ export async function GET() {
       .map((p) => {
         const id = escapeXml(p.id);
         const title = escapeXml(p.title);
-        const description = escapeXml(p.description ?? p.title);
-        // NOTE: Google requires a link; we use catalog root as fallback.
-        // Strongly recommended: provide a unique product page link.
-        const link = escapeXml(`https://www.choacho.com.ua/store`); 
-        const image = escapeXml(p.preview);
+        const description = escapeXml(p.description ?? p.shortDescription ?? p.title);
+        // unique product link
+        const link = escapeXml(`https://${domain}/store/${encodeURIComponent(String(p.id))}`);
+        const imageUrl = makeAbsoluteUrl(p.preview || (p.images?.[0] ?? ""), domain);
+        const image = imageUrl ? escapeXml(imageUrl) : "";
         const price = formatPrice(p.price ?? p.wholesale_price ?? 0);
-        const availability = "in_stock";
+        const availability = p.inStock === false ? "out_of_stock" : "in_stock";
 
         return `
 <item>
   <g:id>${id}</g:id>
   <title>${title}</title>
-  <description>${description ?? title}</description>
+  <description>${description}</description>
   <link>${link}</link>
-  <g:image_link>${image}</g:image_link>
+  ${image ? `<g:image_link>${image}</g:image_link>` : ""}
   <g:availability>${availability}</g:availability>
   <g:price>${price}</g:price>
   <g:condition>new</g:condition>
@@ -59,7 +72,7 @@ export async function GET() {
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
   <channel>
     <title>CHO A CHO — Products</title>
-    <link>https://www.choacho.com.ua/</link>
+    <link>https://${domain}/</link>
     <description>Product feed for Google Merchant</description>
     ${itemsXml}
   </channel>
@@ -69,7 +82,6 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        // cache so Google won't hit server too often; adjust as needed
         "Cache-Control": "public, max-age=900, s-maxage=900",
       },
     });
