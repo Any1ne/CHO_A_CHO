@@ -60,7 +60,6 @@ export async function GET() {
     <g:id>${id}</g:id>
     <g:title>${title}</g:title>
     <g:description>${description}</g:description>
-    <link>${linkEsc}</link>
     <g:link>${linkEsc}</g:link>
     ${image ? `<g:image_link>${image}</g:image_link>` : ""}
     <g:availability>${availability}</g:availability>
@@ -69,7 +68,8 @@ export async function GET() {
     <g:brand>${escapeXml("cho a cho")}</g:brand>
     <g:google_product_category>499972</g:google_product_category>
     ${p.weight ? `<g:shipping_weight>${escapeXml(String(p.weight))} g</g:shipping_weight>` : ""}
-    ${(!p.gtin && !p.mpn) ? `<g:identifier_exists>false</g:identifier_exists>` : ""}
+    <g:mpn>${id}</g:mpn>
+    <g:identifier_exists>false</g:identifier_exists>
   </item>`.trim();
       })
       .join("\n");
