@@ -44,27 +44,29 @@ export async function GET() {
         const description = escapeXml(p.description ?? p.shortDescription ?? p.title);
         // unique product link
         const link = escapeXml(`https://${domain}/store/${encodeURIComponent(String(p.id))}`);
+        const linkEsc = escapeXml(link);
+
         const imageUrl = makeAbsoluteUrl(p.preview || (p.images?.[0] ?? ""), domain);
         const image = imageUrl ? escapeXml(imageUrl) : "";
         const price = formatPrice(p.price ?? p.wholesale_price ?? 0);
         const availability = p.inStock === false ? "out_of_stock" : "in_stock";
 
         return `
-<item>
-  <g:id>${id}</g:id>
-  <title>${title}</title>
-  <description>${description}</description>
-  <link>${link}</link>
-  ${image ? `<g:image_link>${image}</g:image_link>` : ""}
-  <g:availability>${availability}</g:availability>
-  <g:price>${price}</g:price>
-  <g:condition>new</g:condition>
-  <g:brand>${escapeXml("CHO A CHO")}</g:brand>
-  ${p.category ? `<g:google_product_category>${escapeXml(p.category)}</g:google_product_category>` : ""}
-  ${p.weight ? `<g:shipping_weight>${escapeXml(String(p.weight))} g</g:shipping_weight>` : ""}
-  ${(!p.gtin && !p.mpn) ? `<g:identifier_exists>false</g:identifier_exists>` : ""}
-</item>
-        `.trim();
+  <item>
+    <g:id>${id}</g:id>
+    <g:title>${title}</g:title>
+    <g:description>${description}</g:description>
+    <g:link>${linkEsc}</g:link>
+    ${image ? `<g:image_link>${image}</g:image_link>` : ""}
+    <g:availability>${availability}</g:availability>
+    <g:price>${price}</g:price>
+    <g:condition>new</g:condition>
+    <g:brand>${escapeXml("cho a cho")}</g:brand>
+    <g:google_product_category>499972</g:google_product_category>
+    ${p.weight ? `<g:shipping_weight>${escapeXml(String(p.weight))} g</g:shipping_weight>` : ""}
+    <g:mpn>${id}</g:mpn>
+    <g:identifier_exists>false</g:identifier_exists>
+  </item>`.trim();
       })
       .join("\n");
 
