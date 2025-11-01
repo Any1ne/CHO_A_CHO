@@ -25,8 +25,6 @@ export default function ProductModal() {
     (state: RootState) => state.productModal
   );
 
-  console.log(`Loafing ${loading}`)
-
   useEffect(() => {
     if (isOpen && productId && !product) {
       dispatch(openProductModalAsync(productId));
