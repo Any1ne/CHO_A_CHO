@@ -9,7 +9,6 @@ import { fetchProducts } from "@/lib/api";
 import { ProductType } from "@/types/product";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 
 function renderSkeletons(count: number) {
   return Array.from({ length: count }).map((_, i) => (
