@@ -36,6 +36,8 @@ import {
   // initBasket,
 } from "@/store/slices/basketSlice";
 
+import {getRedisOrder} from "@/lib/redisOrder"
+
 // import {
 //   setSelectedCategory,
 //   setSortOption,
@@ -56,6 +58,8 @@ import {
   checkOrderStatus,
   beginCheckout,
 } from "@/store/slices/checkoutSlice";
+
+import {OrderSummary } from "@/types"
 
 // import {
 //   openProductModal,
@@ -136,11 +140,10 @@ export const analyticsMiddleware: Middleware<any, RootState> =
 // --- оплата / purchase ---
 if (action.type === checkOrderStatus.fulfilled.type) {
   const payload = action.payload as any;
-  const order = payload?.orderData;
+  const order = payload?.orderData as OrderSummary | undefined;
   
-  // 🔁 беремо статус напряму з Redux state
-  const state = store.getState();
-  const isConfirmed = state.checkout?.lastOrder?.status === "confirmed";
+  // 🔥 Беремо статус безпосередньо з orderData (Redis)
+  const isConfirmed = order?.status === "confirmed";
   const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
   const isDuplicate = dedupeKey(key);
 
@@ -151,15 +154,13 @@ if (action.type === checkOrderStatus.fulfilled.type) {
     hasOrder: !!order,
     orderId: order?.orderId,
     orderNumber: order?.orderNumber,
-    orderStatus: order?.status,
-    lastOrderStatus: state.checkout?.lastOrder?.status,
-    lastOrderId: state.checkout?.lastOrder?.orderId,
+    orderStatus: order?.status, // 👈 статус з Redis
     isConfirmed,
     isDuplicate,
     dedupeKey: key,
     willTriggerEvent: isConfirmed && !!order && !isDuplicate,
-    fullOrder: order,
-    fullLastOrder: state.checkout?.lastOrder,
+    itemsCount: order?.items?.length,
+    total: order?.total,
   });
 
   if (isConfirmed && order && !isDuplicate) {
@@ -199,8 +200,9 @@ if (action.type === checkOrderStatus.fulfilled.type) {
       isConfirmed,
       hasOrder: !!order,
       isDuplicate,
+      orderStatus: order?.status,
       reason: !isConfirmed
-        ? "Order not confirmed"
+        ? `Order status is "${order?.status}" (expected "confirmed")`
         : !order
         ? "No order data"
         : isDuplicate
