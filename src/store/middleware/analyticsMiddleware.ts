@@ -142,7 +142,7 @@ if (action.type === checkOrderStatus.fulfilled.type) {
   const payload = action.payload as any;
   const order = payload?.orderData as OrderSummary | undefined;
   
-  // 🔥 Беремо статус безпосередньо з orderData (Redis)
+  // 🔥 Статус беремо з payload (це свіжі дані з API), а не з Redux state
   const isConfirmed = order?.status === "confirmed";
   const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
   const isDuplicate = dedupeKey(key);
@@ -154,7 +154,7 @@ if (action.type === checkOrderStatus.fulfilled.type) {
     hasOrder: !!order,
     orderId: order?.orderId,
     orderNumber: order?.orderNumber,
-    orderStatus: order?.status, // 👈 статус з Redis
+    orderStatusFromPayload: order?.status, // 👈 з payload, не з Redux
     isConfirmed,
     isDuplicate,
     dedupeKey: key,
@@ -192,7 +192,7 @@ if (action.type === checkOrderStatus.fulfilled.type) {
           items,
         },
       },
-      true
+      true // force=true для критичної події
     );
   } else {
     // 🔍 ЛОГ ЯКЩО ПОДІЯ НЕ СПРАЦЮВАЛА
