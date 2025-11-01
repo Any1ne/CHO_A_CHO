@@ -14,10 +14,11 @@ export function generateOrderEmailHtml(order: OrderSummary, isUser: boolean = tr
     )
     .join("");
 
-  const deliveryText =
+    const deliveryText =
     deliveryType === "Branch"
-      ? `У відділення №${delivery?.branchNumber}`
-      : `На адресу: ${delivery?.address}`;
+      ? `Місто: ${delivery?.city?.Description || "-"}<br/>У відділення №${delivery?.branchNumber}`
+      : `Місто: ${delivery?.city?.Description || "-"}<br/>На адресу: ${delivery?.address || `${delivery?.street || ""} ${delivery?.house || ""}${delivery?.apartment ? ", кв. " + delivery?.apartment : ""}`}`;
+
 
   const paymentText =
     payment?.paymentMethod === "cod"

@@ -22,7 +22,7 @@
  */
 
 import { Middleware } from "@reduxjs/toolkit";
-import { pushEvent } from "@/lib/analytics";
+import { pushEvent, hasAnalyticsConsent} from "@/lib/analytics";
 import type { RootState } from "../types";
 
 // ==== slices / thunks ====
@@ -144,33 +144,37 @@ export const analyticsMiddleware: Middleware<any, RootState> =
 
         const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
 
-        if (isConfirmed && order && !dedupeKey(key)) {
-          const items =
-            Array.isArray(order?.items) && order.items.length
-              ? order.items.map((i: any) => ({
-                item_id: i.id ?? i.item_id ?? "",
-                item_name: i.title ?? i.name ?? "",
-                price: Number(i.price ?? 0),
-                quantity: Number(i.quantity ?? i.qty ?? 1),
-              }))
-              : [];
 
-          console.log("💸 [Analytics] purchase event triggered:", {
-            orderId: order?.orderId ?? order?.orderNumber,
-            total: order?.total,
-            itemsCount: items.length,
-          });
+if (isConfirmed && order && !dedupeKey(key)) {
+  const items =
+    Array.isArray(order?.items) && order.items.length
+      ? order.items.map((i: any) => ({
+          item_id: i.id ?? i.item_id ?? "",
+          item_name: i.title ?? i.name ?? "",
+          price: Number(i.price ?? 0),
+          quantity: Number(i.quantity ?? i.qty ?? 1),
+        }))
+      : [];
 
-          pushEvent({
-            event: "purchase",
-            ecommerce: {
-              transaction_id: order?.orderId ?? order?.orderNumber ?? "",
-              currency: "UAH",
-              value: Number(order?.total ?? 0),
-              items,
-            },
-          });
-        }
+  console.log("💸 [Analytics] purchase event triggered:", {
+    orderId: order?.orderId ?? order?.orderNumber,
+    total: order?.total,
+    itemsCount: items.length,
+    hasConsent: hasAnalyticsConsent(), // 🔍 додайте цей лог
+    dataLayerExists: typeof window !== "undefined" && !!window.dataLayer, // 🔍
+  });
+
+  // 🔥 FORCE=TRUE для purchase
+  pushEvent({
+    event: "purchase",
+    ecommerce: {
+      transaction_id: order?.orderId ?? order?.orderNumber ?? "",
+      currency: "UAH",
+      value: Number(order?.total ?? 0),
+      items,
+    },
+  }, true); // 👈 додайте force=true
+}
       }
 
       // --- перемикання оптового режиму ---
