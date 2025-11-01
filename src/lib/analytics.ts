@@ -36,12 +36,24 @@ export function hasAnalyticsConsent(): boolean {
  */
 export function pushEvent(payload: AnalyticsEvent, force = false) {
   if (typeof window === "undefined") return;
-  if (!force && !hasAnalyticsConsent()) return;
-  // ensure dataLayer exists and has the expected type
-  (window.dataLayer ??= []) as Record<string, unknown>[];
+  if (!force && !hasAnalyticsConsent()) {
+    console.log("❌ [Analytics] No consent for event:", payload.event);
+    return;
+  }
+
+  if (!window.dataLayer) {
+    console.warn("⚠️ [Analytics] dataLayer not found, initializing...");
+    window.dataLayer = [];
+  }
+
   try {
+    if (payload.ecommerce) {
+      window.dataLayer.push({ ecommerce: null });
+    }
+    
     window.dataLayer.push(payload as Record<string, unknown>);
-  } catch {
-    // fail silently — analytics must not break UX
+    console.log("✅ [Analytics] Event pushed:", payload.event, payload);
+  } catch (error) {
+    console.error("❌ [Analytics] Failed to push event:", error);
   }
 }

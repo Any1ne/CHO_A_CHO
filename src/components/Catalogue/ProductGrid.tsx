@@ -9,7 +9,6 @@ import { fetchProducts } from "@/lib/api";
 import { ProductType } from "@/types/product";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 
 function renderSkeletons(count: number) {
   return Array.from({ length: count }).map((_, i) => (
@@ -114,22 +113,16 @@ export default function ProductGrid() {
       "
       >
         {visibleProducts.map((product) => (
-          <Link
-            key={product.id}
-            href={`/store/${product.id}`}
-            prefetch
-            className="relative z-0 md:hover:z-10 md:transition-transform md:duration-300 md:hover:scale-110 md:hover:shadow-lg"
-          >
-            <ProductCard
-              id={product.id}
-              title={product.title}
-              price={product.price}
-              wholesale_price={product.wholesale_price}
-              preview={product.preview}
-              description={product.description}
-            />
-          </Link>
-        ))}
+    <ProductCard
+      key={product.id}
+      id={product.id}
+      title={product.title}
+      price={product.price}
+      wholesale_price={product.wholesale_price}
+      preview={product.preview}
+      description={product.description}
+    />
+  ))}
       </div>
 
       <SmartPagination

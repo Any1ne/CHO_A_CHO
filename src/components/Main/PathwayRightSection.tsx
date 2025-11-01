@@ -15,8 +15,6 @@ import { fetchProductById } from "@/lib/api";
 import { ProductType } from "@/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/lib/hooks/hooks";
-import { openProductModalAsync } from "@/store/slices/productModalSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const featuredProductIds = ["1-005", "3-004", "6-002", "2-001"];
@@ -58,14 +56,10 @@ export default function PathwayRightSection() {
   }, []);
 
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
-  const handleViewClick = async (productId: string) => {
-    router.push("/store");
-    setTimeout(() => {
-      dispatch(openProductModalAsync(productId));
-    }, 300);
-  };
+  const handleViewClick = (productId: string) => {
+  router.push(`/store/${productId}`);
+};
 
   const handleDotClick = (index: number) => {
     if (api) api.scrollTo(index);
