@@ -216,8 +216,8 @@ export const handleOrderConfirmation = async (
       dispatch(clearBasket());
       dispatch(resetCheckout());
       
-      // 🔥 Викликаємо checkOrderStatus для отримання повних даних
-      const orderStatusResult = await dispatch(checkOrderStatus(orderId));
+      // // 🔥 Викликаємо checkOrderStatus для отримання повних даних
+      // const orderStatusResult = await dispatch(checkOrderStatus(orderId));
       
       console.log("✅ [handleOrderConfirmation] Order confirmed, checkOrderStatus dispatched");
       

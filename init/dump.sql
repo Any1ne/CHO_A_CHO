@@ -69,7 +69,7 @@ CREATE TABLE public.orders (
   customer_id integer NULL,
   date timestamp without time zone NULL DEFAULT CURRENT_TIMESTAMP,
   delivery_method text NULL,
-  status text NULL DEFAULT 'нове'::text,
+  status text NULL DEFAULT 'confirmed'::text,
   total integer NULL,
   payment_method text NULL,
   is_wholesale boolean NULL DEFAULT false,
