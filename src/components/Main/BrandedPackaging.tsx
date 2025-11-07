@@ -29,7 +29,7 @@ export default function BrandedPackaging() {
         {/* Текстова частина */}
         <div className="space-y-6">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
-            Брендовані для вашого бізнесу
+            Брендоване пакування для вашого бізнесу
           </h1>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
             Зробіть ваш бренд впізнаваним з першого погляду. Замовте
