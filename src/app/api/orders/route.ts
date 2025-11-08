@@ -274,7 +274,7 @@ export async function POST(req: NextRequest) {
             !!checkoutSummary.isWholesale,
             total ? Number(total) : 0,
             checkoutSummary.paymentInfo?.invoiceId ?? null,
-            body.status ?? "нове",
+            body.status ?? "confirmed",
           ]
         );
 

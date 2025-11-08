@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton"; // 🧩 додано
+import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";

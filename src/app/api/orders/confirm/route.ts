@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRedisOrder, updateRedisOrder} from "@/lib/redisOrder";
+import { getRedisOrder, updateRedisOrder } from "@/lib/redisOrder";
 import { fetchOrderStatus, submitOrder, checkInvoiceStatus } from "@/lib/api";
 import { OrderSummary } from "@/types";
 
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
     // 3. Обробка Monobank-оплати
     if (checkoutSummary?.paymentInfo?.paymentMethod === "monobank") {
       const invoiceId = checkoutSummary.paymentInfo.invoiceId;
+
       if (!invoiceId) {
         console.warn("[CONFIRM ORDER] ❌ Відсутній invoiceId для Monobank");
         return NextResponse.json({ error: "Missing invoiceId for Monobank" }, { status: 400 });
@@ -59,9 +60,20 @@ export async function POST(req: NextRequest) {
       total,
       status: "confirmed",
     };
+
     console.log("[CONFIRM ORDER] 📝 Готове замовлення до збереження:", finalOrder);
 
-    // 5. Збереження замовлення в базі даних 
+    // 🔥 5. СПОЧАТКУ оновлюємо Redis на "confirmed"
+    try {
+      await updateRedisOrder(orderId, {
+        status: "confirmed",
+      });
+      console.log("[CONFIRM ORDER] 🔁 Оновлено Redis: статус confirmed (before DB save)");
+    } catch (redisErr) {
+      console.warn("[CONFIRM ORDER] ⚠️ Не вдалось оновити Redis:", redisErr);
+    }
+
+    // 6. Збереження замовлення в базі даних
     const dbInsertResult = await submitOrder(finalOrder);
     console.log("[CONFIRM ORDER] 💾 Результат збереження в базу:", dbInsertResult);
 
@@ -70,19 +82,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to save order in DB" }, { status: 500 });
     }
 
+    // 7. Оновлюємо Redis з orderNumber
     try {
       await updateRedisOrder(orderId, {
         status: "confirmed",
         orderNumber: dbInsertResult.OrderNumber,
       });
-      console.log("[CONFIRM ORDER] 🔁 Оновлено Redis: статус confirmed");
+      console.log("[CONFIRM ORDER] 🔁 Оновлено Redis: orderNumber додано");
     } catch (redisErr) {
-      console.warn("[CONFIRM ORDER] ⚠️ Не вдалось оновити Redis:", redisErr);
+      console.warn("[CONFIRM ORDER] ⚠️ Не вдалось оновити Redis з orderNumber:", redisErr);
     }
 
     console.log(`[CONFIRM ORDER] ✅ Успішно збережено замовлення: ${orderId}`);
     return NextResponse.json({ success: true, orderId }, { status: 200 });
-
   } catch (err) {
     console.error("[CONFIRM ORDER] ❗ Внутрішня помилка сервера:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

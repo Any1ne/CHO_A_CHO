@@ -36,6 +36,8 @@ import {
   // initBasket,
 } from "@/store/slices/basketSlice";
 
+import {getRedisOrder} from "@/lib/redisOrder"
+
 // import {
 //   setSelectedCategory,
 //   setSortOption,
@@ -56,6 +58,8 @@ import {
   checkOrderStatus,
   beginCheckout,
 } from "@/store/slices/checkoutSlice";
+
+import {OrderSummary } from "@/types"
 
 // import {
 //   openProductModal,
@@ -133,49 +137,80 @@ export const analyticsMiddleware: Middleware<any, RootState> =
         }
       }
 
-      // --- оплата / purchase ---
-      if (action.type === checkOrderStatus.fulfilled.type) {
-        const payload = action.payload as any;
-        const order = payload?.orderData;
+// --- оплата / purchase ---
+if (action.type === checkOrderStatus.fulfilled.type) {
+  const payload = action.payload as any;
+  const order = payload?.orderData as OrderSummary | undefined;
+  
+  // 🔥 Статус беремо з payload (це свіжі дані з API), а не з Redux state
+  const isConfirmed = order?.status === "confirmed";
+  const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
+  const isDuplicate = dedupeKey(key);
 
-        // 🔁 беремо статус напряму з Redux state
-        const state = store.getState();
-        const isConfirmed = state.checkout?.lastOrder?.status === "confirmed";
-
-        const key = `purchase:${order?.orderId ?? order?.orderNumber ?? ""}`;
-
-
-if (isConfirmed && order && !dedupeKey(key)) {
-  const items =
-    Array.isArray(order?.items) && order.items.length
-      ? order.items.map((i: any) => ({
-          item_id: i.id ?? i.item_id ?? "",
-          item_name: i.title ?? i.name ?? "",
-          price: Number(i.price ?? 0),
-          quantity: Number(i.quantity ?? i.qty ?? 1),
-        }))
-      : [];
-
-  console.log("💸 [Analytics] purchase event triggered:", {
-    orderId: order?.orderId ?? order?.orderNumber,
+  // 🔍 ДЕТАЛЬНИЙ ЛОГ ПЕРЕД УМОВОЮ
+  console.log("🔍 [Purchase Debug] Checking conditions:", {
+    actionType: action.type,
+    hasPayload: !!payload,
+    hasOrder: !!order,
+    orderId: order?.orderId,
+    orderNumber: order?.orderNumber,
+    orderStatusFromPayload: order?.status, // 👈 з payload, не з Redux
+    isConfirmed,
+    isDuplicate,
+    dedupeKey: key,
+    willTriggerEvent: isConfirmed && !!order && !isDuplicate,
+    itemsCount: order?.items?.length,
     total: order?.total,
-    itemsCount: items.length,
-    hasConsent: hasAnalyticsConsent(), // 🔍 додайте цей лог
-    dataLayerExists: typeof window !== "undefined" && !!window.dataLayer, // 🔍
   });
 
-  // 🔥 FORCE=TRUE для purchase
-  pushEvent({
-    event: "purchase",
-    ecommerce: {
-      transaction_id: order?.orderId ?? order?.orderNumber ?? "",
-      currency: "UAH",
-      value: Number(order?.total ?? 0),
-      items,
-    },
-  }, true); // 👈 додайте force=true
+  if (isConfirmed && order && !isDuplicate) {
+    const items =
+      Array.isArray(order?.items) && order.items.length
+        ? order.items.map((i: any) => ({
+            item_id: i.id ?? i.item_id ?? "",
+            item_name: i.title ?? i.name ?? "",
+            price: Number(i.price ?? 0),
+            quantity: Number(i.quantity ?? i.qty ?? 1),
+          }))
+        : [];
+
+    console.log("💸 [Analytics] purchase event triggered:", {
+      orderId: order?.orderId ?? order?.orderNumber,
+      total: order?.total,
+      itemsCount: items.length,
+      hasConsent: hasAnalyticsConsent(),
+      dataLayerExists: typeof window !== "undefined" && !!window.dataLayer,
+    });
+
+    pushEvent(
+      {
+        event: "purchase",
+        ecommerce: {
+          transaction_id: order?.orderId ?? order?.orderNumber ?? "",
+          currency: "UAH",
+          value: Number(order?.total ?? 0),
+          items,
+        },
+      },
+      true // force=true для критичної події
+    );
+  } else {
+    // 🔍 ЛОГ ЯКЩО ПОДІЯ НЕ СПРАЦЮВАЛА
+    console.warn("⚠️ [Purchase Blocked] Event not triggered because:", {
+      isConfirmed,
+      hasOrder: !!order,
+      isDuplicate,
+      orderStatus: order?.status,
+      reason: !isConfirmed
+        ? `Order status is "${order?.status}" (expected "confirmed")`
+        : !order
+        ? "No order data"
+        : isDuplicate
+        ? "Duplicate event"
+        : "Unknown",
+    });
+  }
 }
-      }
 
       // --- перемикання оптового режиму ---
       if (action.type === updateWholesale.type) {

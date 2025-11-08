@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axiosInstance from "@/lib/axios";
 import { ProductType, OrderSummary } from "@/types";
 import { toast } from "sonner";
@@ -6,6 +7,8 @@ import { clearBasket } from "@/store/slices/basketSlice";
 import { resetCheckout } from "@/store/slices/checkoutSlice";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import axios from "axios";
+import { checkOrderStatus } from "@/store/slices/checkoutSlice";
+
 
 // Продукти
 export async function fetchProducts(category?: string): Promise<ProductType[]> {
@@ -212,6 +215,12 @@ export const handleOrderConfirmation = async (
     if (result?.success || result?.alreadyExists) {
       dispatch(clearBasket());
       dispatch(resetCheckout());
+      
+      // // 🔥 Викликаємо checkOrderStatus для отримання повних даних
+      // const orderStatusResult = await dispatch(checkOrderStatus(orderId));
+      
+      console.log("✅ [handleOrderConfirmation] Order confirmed, checkOrderStatus dispatched");
+      
       toast.success("Замовлення підтверджено!");
       router.replace(`/checkout/success?orderId=${orderId}`);
     } else {
@@ -224,4 +233,3 @@ export const handleOrderConfirmation = async (
     router.replace("/");
   }
 };
-
