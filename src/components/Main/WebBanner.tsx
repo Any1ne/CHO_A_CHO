@@ -2,10 +2,10 @@ import FadeCarousel from "@/components/Main/FadeCarousel";
 import Advantages from "@/components/Main/Advantages";
 
 const slides = [
-  {
-    src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/0.webp",
-    href: "/",
-  },
+  // {
+  //   src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/0.webp",
+  //   href: "/",
+  // },
   {
     src: "https://9qy6ktzgsu2nlgvi.public.blob.vercel-storage.com/webbanner/1.webp",
     href: "/branded",
