@@ -1,0 +1,8 @@
+{
+  "android": {
+    "package": "com.arthur_dombrovsk1y.cho_a_cho"
+  },
+  "ios": {
+    "bundleIdentifier": "com.arthur-dombrovsk1y.cho-a-cho"
+  }
+}

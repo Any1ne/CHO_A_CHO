@@ -46,11 +46,28 @@ function DialogOverlay({
   );
 }
 
+// Phase 32 Subtask 4: explicit size tokens for dialogs. `sm` (24rem)
+// fits confirmation prompts; `md` (28rem) is the default — forms /
+// submission dialog; `lg` (42rem) is reserved for content-heavy
+// surfaces (currently unused). Callers pass `size={"sm"}` etc.; the
+// resolved class layers on top of the radix default so any explicit
+// `className` still wins for one-off tweaks.
+const DIALOG_SIZE_CLASSES = {
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-2xl",
+} as const;
+
+type DialogSize = keyof typeof DIALOG_SIZE_CLASSES;
+
 function DialogContent({
   className,
+  size = "md",
   children,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) {
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  size?: DialogSize;
+}) {
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
@@ -58,6 +75,7 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200",
+          DIALOG_SIZE_CLASSES[size],
           className
         )}
         {...props}

@@ -73,6 +73,64 @@
   }
 }
 
+/* Builder TopBar — pulses the active flavor name briefly when the user
+   picks a new flavor. Applied with a `key` remount so the animation
+   re-runs on every change.
+   Phase 31 Subtask 5: cranked further — bigger scale (1.18) +
+   amber colour flash mid-animation so the change is unmissable on
+   phones and at arm's length. Spring-leaning easing gives it bounce. */
+@keyframes flavor-pulse {
+  0%   { transform: scale(1);    color: inherit; }
+  25%  { transform: scale(1.18); color: rgb(180, 100, 50); }
+  60%  { transform: scale(1.05); color: rgb(180, 100, 50); }
+  100% { transform: scale(1);    color: inherit; }
+}
+.animate-flavor-pulse {
+  animation: flavor-pulse 720ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Phase 24 Subtask 7 / Phase 31 Subtask 5: price-tier crossover pulse.
+   Cranked to a clearly-celebratory bounce — spring easing carries the
+   scale into 1.25 then settles back; emerald colour signals "savings
+   unlocked" rather than just "value changed". */
+@keyframes price-pulse {
+  0%   { transform: scale(1);    color: inherit; }
+  30%  { transform: scale(1.25); color: rgb(5, 150, 105); }
+  60%  { transform: scale(1.10); color: rgb(5, 150, 105); }
+  100% { transform: scale(1);    color: inherit; }
+}
+.animate-price-pulse {
+  animation: price-pulse 800ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Phase 30 Subtask 1: onboarding tour highlight via outline (not box-
+   shadow + position). Outline overlays the element without affecting
+   layout flow, so highlighting a flex/grid child doesn't shift the
+   surrounding content. Trade-off: the outline is rectangular (it
+   ignores the element's own border-radius), but layout stability wins.
+   Earlier `position:relative` + `z-index` approach broke layout on
+   step 6 (right panel anchor). */
+@keyframes tour-outline-pulse {
+  0%, 100% {
+    outline-color: rgba(255, 176, 40, 0.85);
+    outline-offset: 4px;
+  }
+  50% {
+    outline-color: rgba(255, 176, 40, 0.25);
+    outline-offset: 8px;
+  }
+}
+.tour-highlight {
+  outline: 3px solid rgba(255, 176, 40, 0.85);
+  outline-offset: 4px;
+  border-radius: 8px;
+  animation: tour-outline-pulse 1.4s ease-in-out infinite;
+}
+
 
 @theme inline {
   --color-background: var(--background);

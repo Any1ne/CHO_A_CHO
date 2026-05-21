@@ -47,3 +47,11 @@ example.json
 /scripts/image-preview
 /scripts
 /draft
+.claude/
+
+# Claude Code working docs — kept local, never shipped to prod
+CLAUDE.md
+**/CLAUDE.md
+*.handoff.md
+HANDOFF.md
+SESSION.md

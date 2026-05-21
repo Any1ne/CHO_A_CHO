@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import Providers from "./providers";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import SiteChrome from "@/components/Layout/SiteChrome";
 import CookieConsent from "@/components/modal/CookieConsent";
 import { Toaster } from "sonner";
 import StructuredData from "@/components/StructuredData";
@@ -147,11 +148,14 @@ export default function RootLayout({
         </noscript>
         <Providers>
           <StructuredData />
-          <Header />
           <BasketInit />
-          {children}
+          {/* SiteChrome hides the global Header + Footer on /builder/*
+              routes. Builder pages get their own minimal layout so the
+              canvas can claim the full viewport. */}
+          <SiteChrome header={<Header />} footer={<Footer />}>
+            {children}
+          </SiteChrome>
           <CookieConsent />
-          <Footer />
           <Toaster richColors position="bottom-right" />
         </Providers>
 
