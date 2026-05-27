@@ -53,8 +53,17 @@ export default function WebBanner({
 }: Props) {
   return (
     <div className="flex flex-col px-2 md:px-10 py-5 gap-2">
-      {/* Carousel */}
-      <div className="relative w-full aspect-[16/9] max-h-[calc(100vh-15rem)] min-h-[200px] md:min-h-[17rem] overflow-hidden">
+      {/* Carousel.
+          Safari fix: the box height is set EXPLICITLY via clamp() instead of
+          `aspect-[16/9] + max-h`. Reason — next/image `fill` is an absolutely
+          positioned `height:100%` child; Safari does NOT treat an
+          aspect-ratio-derived height as "definite" for such a child, so the
+          image collapsed / failed to center (Chrome resolves it fine). A real
+          height makes the fill resolve identically in both.
+          clamp(min-h, 16:9 of the content width, 100vh-15rem) reproduces the
+          previous look exactly: content width = 100vw minus the wrapper
+          padding (px-2 → 1rem total, md:px-10 → 5rem total); 0.5625 = 9/16. */}
+      <div className="relative w-full overflow-hidden h-[clamp(200px,calc((100vw-1rem)*0.5625),calc(100vh-15rem))] md:h-[clamp(272px,calc((100vw-5rem)*0.5625),calc(100vh-15rem))]">
         <FadeCarousel
           slides={slides}
           unoptimized={unoptimized}
