@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Package, TruckIcon, ShoppingCart } from "lucide-react";
+import { WHOLESALE_THRESHOLD_LABEL } from "@/config/pricing";
 
 export default function PathwayLeftSection() {
   return (
@@ -34,7 +35,7 @@ export default function PathwayLeftSection() {
         <div className="flex items-center gap-3">
           <ShoppingCart className="w-6 h-6 text-primary" />
           <p className="text-sm text-left">
-            При замовленні від 1350 грн — оптова закупівля
+            При замовленні від {WHOLESALE_THRESHOLD_LABEL} грн оптової ціни — оптова закупівля
           </p>
         </div>
         <div className="flex items-center gap-3">

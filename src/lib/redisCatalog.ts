@@ -33,6 +33,10 @@ async function fetchAllProductsFromDB(): Promise<ProductType[]> {
     data = result.rows;
   }
 
+  // node-postgres returns `numeric` columns as strings ("19.50"); keep
+  // wholesale_price a number on both the Supabase and local paths.
+  data = data.map((p) => ({ ...p, wholesale_price: Number(p.wholesale_price) }));
+
   // Кешування в Redis
   await redis.set(REDIS_KEY_ALL, JSON.stringify(data), "EX", CACHE_TTL);
   // console.log(`🧩 ${JSON.stringify(data)}`);

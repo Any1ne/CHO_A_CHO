@@ -6,16 +6,14 @@
 // Postgres table is a follow-up; the email contains everything needed to
 // fulfil an order in the meantime.
 //
-// Recipient is hardcoded for the development phase — see ADMIN_RECIPIENT
-// below. Swap to ADMIN_EMAIL env var once the staging value is settled.
+// Recipient comes from ADMIN_EMAIL — same inbox as regular shop orders.
 
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { generateBuilderOrderEmailHtml } from "@/lib/email/generateBuilderOrderEmailHtml";
 import type { SubmissionDesignElement } from "@/lib/builder/designElements";
 
-// TODO: replace with ADMIN_EMAIL env var once the staging value is set.
-const ADMIN_RECIPIENT = "anytguy@gmail.com";
+const ADMIN_RECIPIENT = process.env.ADMIN_EMAIL || "";
 
 const LOCAL_MODE = process.env.LOCAL_MODE === "true";
 
@@ -275,9 +273,9 @@ export async function POST(req: NextRequest) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  if (!apiKey || !ADMIN_RECIPIENT) {
     console.warn(
-      "[builder-orders] RESEND_API_KEY not set — order will be lost"
+      "[builder-orders] RESEND_API_KEY or ADMIN_EMAIL not set — order will be lost"
     );
     return NextResponse.json(
       { ok: false, error: "Email service not configured" },

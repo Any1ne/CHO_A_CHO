@@ -7,6 +7,7 @@ import { createInvoiceOnServer } from "@/vendor/monobank";
 import { Step, ContactInfo, DeliveryInfo, PaymentInfo, CheckoutSummary, OrderSummary } from "@/types";
 import { submitOrder, fetchOrderStatus, fetchRedisOrder, saveRedisOrderToServer, checkInvoiceStatus } from "@/lib/api";
 import { nanoid } from 'nanoid';
+import { WHOLESALE_THRESHOLD } from "@/config/pricing";
 
 interface LastOrder {
   orderId: string;
@@ -256,7 +257,7 @@ const checkoutSlice = createSlice({
       return initialState;
     },
     updateWholesale(state, action: PayloadAction<number>) {
-      state.checkoutSummary.isWholesale = action.payload >= 1350;
+      state.checkoutSummary.isWholesale = action.payload >= WHOLESALE_THRESHOLD;
     },
     beginCheckout(state) {
       state.checkoutStartedAt = new Date().toISOString();
