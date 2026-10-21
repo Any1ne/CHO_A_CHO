@@ -69,32 +69,9 @@ export const placeOrder = createAsyncThunk<
   let invoiceId: string | undefined;
   let invoiceResponse: { invoiceId: string; paymentUrl: string } | undefined;
 
-  let checkoutSummaryWithInvoice = checkoutSummary;
-
-  if (paymentMethod === "monobank") {
-    try {
-      const redirectUrl = `${window.location.origin}/checkout/confirm`;
-      invoiceResponse = await createInvoiceOnServer(orderId, total, redirectUrl);
-      invoiceId = invoiceResponse.invoiceId;
-
-      // Створюємо копію з invoiceId
-      checkoutSummaryWithInvoice = {
-        ...checkoutSummary,
-        paymentInfo: {
-          ...checkoutSummary.paymentInfo,
-          invoiceId,
-        },
-      };
-    } catch (error) {
-      console.error("Не вдалося створити інвойс:", error);
-      toast.error("Не вдалося створити інвойс.");
-      return;
-    }
-  }
-
   const redisOrderData: OrderSummary = {
     orderId,
-    checkoutSummary: checkoutSummaryWithInvoice ? checkoutSummaryWithInvoice : checkoutSummary,
+    checkoutSummary,
     status: paymentMethod === "monobank" ? "pending_payment" : "created",
     items,
     total,
@@ -107,7 +84,29 @@ export const placeOrder = createAsyncThunk<
   }));
 
   try {
+    // Order must be in Redis before the invoice: the invoice route reads
+    // amount + basket (fiscal receipt lines) from it server-side.
     await saveRedisOrderToServer(redisOrderData);
+
+    if (paymentMethod === "monobank") {
+      try {
+        const redirectUrl = `${window.location.origin}/checkout/confirm`;
+        invoiceResponse = await createInvoiceOnServer(orderId, redirectUrl);
+        invoiceId = invoiceResponse.invoiceId;
+      } catch (error) {
+        console.error("Не вдалося створити інвойс:", error);
+        toast.error("Не вдалося створити інвойс.");
+        return;
+      }
+
+      await saveRedisOrderToServer({
+        ...redisOrderData,
+        checkoutSummary: {
+          ...checkoutSummary,
+          paymentInfo: { ...checkoutSummary.paymentInfo, invoiceId },
+        },
+      });
+    }
 
     sessionStorage.setItem("orderId", orderId);
 
