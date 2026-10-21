@@ -7,17 +7,20 @@ import { RootState } from "@/store/types";
 import { useEffect } from "react";
 import { updateWholesale } from "@/store/slices/checkoutSlice";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  WHOLESALE_THRESHOLD,
+  WHOLESALE_THRESHOLD_LABEL,
+  getWholesaleTotal,
+} from "@/config/pricing";
 
 export default function WholesaleProgress() {
   const dispatch = useDispatch();
+  // Threshold is measured at wholesale prices — see config/pricing.ts.
   const total = useSelector((state: RootState) =>
-    state.basket.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    )
+    getWholesaleTotal(state.basket.items)
   );
 
-  const freeLimit = 1350;
+  const freeLimit = WHOLESALE_THRESHOLD;
   const progress = Math.min((total / freeLimit) * 100, 100);
   const isWholesale = total >= freeLimit;
 
@@ -50,8 +53,10 @@ export default function WholesaleProgress() {
                   </>
                 ) : (
                   <>
-                    Замовляй на суму від {freeLimit}₴, щоб отримати{" "}
-                    <b>оптову ціну</b> та <b>безкоштовну доставку</b>
+                    За оптовими цінами у кошику{" "}
+                    {Math.floor(total).toLocaleString("uk-UA")} з{" "}
+                    {WHOLESALE_THRESHOLD_LABEL}₴ — далі <b>оптова ціна</b> та{" "}
+                    <b>безкоштовна доставка</b>
                   </>
                 )}
               </p>

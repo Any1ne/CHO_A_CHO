@@ -1,3 +1,4 @@
+import { getWholesaleTotal } from "@/config/pricing";
 import type { Middleware } from "@reduxjs/toolkit";
 import type { RootState } from "../types"; // <- не створює циклічність
 
@@ -29,13 +30,7 @@ export const basketListenerMiddleware: Middleware<unknown, RootState> =
     if (isBasketAction) {
       const { items } = store.getState().basket;
 
-      const total = items.reduce(
-        (sum: number, item: { price: number; quantity: number }) =>
-          sum + item.price * item.quantity,
-        0
-      );
-
-      store.dispatch(updateWholesale(total));
+      store.dispatch(updateWholesale(getWholesaleTotal(items)));
     }
 
     return result;

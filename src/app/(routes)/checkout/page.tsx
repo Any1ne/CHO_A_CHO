@@ -1,5 +1,6 @@
 "use client";
 
+import { getWholesaleTotal } from "@/config/pricing";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/types";
 import CheckoutForm from "@/components/Checkout/CheckoutForm";
@@ -21,11 +22,7 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
-    const total = basketItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-    dispatch(updateWholesale(total));
+    dispatch(updateWholesale(getWholesaleTotal(basketItems)));
   }, [basketItems, dispatch]);
 
   useEffect(() => {
