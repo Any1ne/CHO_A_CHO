@@ -1,16 +1,13 @@
-export async function createInvoiceOnServer(orderId: string, amount: number, redirectUrl: string): Promise<{paymentUrl: string, invoiceId: string}> {
+export async function createInvoiceOnServer(orderId: string, redirectUrl: string): Promise<{paymentUrl: string, invoiceId: string}> {
   const fullRedirectUrl = `${redirectUrl}?orderId=${orderId}`;
 
-  const webHookUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/payment/monobank/webhook`; // обов'язково HTTPS!
-
+  // Amount, basket and webhook URL are built server-side from the Redis order.
   const response = await fetch('/api/payment/monobank/invoice', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       orderId,
-      amount,
       redirectUrl: fullRedirectUrl,
-      webHookUrl,
     }),
   });
 

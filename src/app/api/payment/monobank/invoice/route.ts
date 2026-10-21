@@ -1,51 +1,36 @@
 import { NextResponse } from "next/server";
+import { getRedisOrder } from "@/lib/redisOrder";
+import { createMonoInvoice } from "@/lib/monobank";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+// Invoice is built from the order already saved in Redis (amount + basket for
+// fiscalization), so the client only sends the orderId.
 export async function POST(request: Request) {
-  const apiToken = process.env.MONOBANK_API_TOKEN;
+  const { orderId, redirectUrl } = await request.json();
 
-  if (!apiToken) {
+  if (!orderId || !redirectUrl) {
     return NextResponse.json(
-      { error: "Monobank API token missing" },
-      { status: 500 }
+      { error: "Missing orderId or redirectUrl" },
+      { status: 400 }
     );
   }
 
-  const { orderId, redirectUrl, amount} = await request.json(); //
-
   try {
-    console.log("--MONOBANK INVOICE", apiToken);
-    const res = await fetch(
-      "https://api.monobank.ua/api/merchant/invoice/create",
-      {
-        method: "POST",
-        headers: {
-          "X-Token": apiToken,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: Math.round(amount * 100), // копійки
-          ccy: 980, // UAH
-          redirectUrl,
-          reference: orderId,
-          webHookUrl: `${baseUrl}/api/payment/monobank/webhook?orderId=${orderId}`,
-        }),
-      }
-    );
-
-    const text = await res.text();
-
-    if (!res.ok) {
-      return NextResponse.json({ error: text }, { status: 500 });
+    const order = await getRedisOrder(orderId);
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    const data = JSON.parse(text);
+    const webHookUrl = `${siteUrl}/api/payment/monobank/webhook?orderId=${orderId}`;
+    const data = await createMonoInvoice(order, redirectUrl, webHookUrl);
+
     return NextResponse.json({
       paymentUrl: data.pageUrl,
       invoiceId: data.invoiceId,
     });
   } catch (error: unknown) {
+    console.error("[MONO INVOICE] Error:", error);
     const message = error instanceof Error ? error.message : "Невідома помилка";
     return NextResponse.json({ error: message }, { status: 500 });
   }
