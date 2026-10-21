@@ -1,6 +1,6 @@
 {
   "name": "cho_a_cho",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "dev": "env-cmd -f .env.local next dev -H 0.0.0.0 --turbopack",
