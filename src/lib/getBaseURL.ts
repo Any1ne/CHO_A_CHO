@@ -5,5 +5,6 @@ export const getBaseURL = () => {
   }
 
   // Сервер
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  // Strip trailing slashes so `${base}/api/...` never becomes `//api`.
+  return (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/+$/, "");
 };
