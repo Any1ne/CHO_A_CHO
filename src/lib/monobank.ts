@@ -144,13 +144,21 @@ async function fetchMonoPubKey(): Promise<string> {
 }
 
 function verifyWithKey(pubKeyBase64: string, rawBody: string, xSign: string) {
-  const verify = crypto.createVerify("SHA256");
-  verify.update(rawBody);
-  verify.end();
-  return verify.verify(
-    Buffer.from(pubKeyBase64, "base64"),
-    Buffer.from(xSign, "base64")
-  );
+  try {
+    const verify = crypto.createVerify("SHA256");
+    verify.update(rawBody);
+    verify.end();
+    return verify.verify(
+      Buffer.from(pubKeyBase64, "base64"),
+      Buffer.from(xSign, "base64")
+    );
+  } catch (err) {
+    // A malformed key (e.g. a broken MONOBANK_PUBLIC_KEY env value) throws
+    // instead of returning false — treat it as a mismatch so the caller
+    // falls back to the key from mono's /pubkey endpoint.
+    console.warn("[MONO] Signature check threw:", err);
+    return false;
+  }
 }
 
 // Mono rotates the key occasionally: on a failed check, refetch once and retry.

@@ -13,6 +13,16 @@ import clsx from "clsx";
 import { CircleAlertIcon } from "lucide-react";
 import { ContactInfo } from "@/types";
 
+// iOS autofill can insert invisible characters (directional marks, zero-width
+// or non-breaking spaces) that fail the patterns below while looking fine.
+const INVISIBLE_CHARS = /[\s\u00A0\u200B-\u200F\u202A-\u202E\u2060\uFEFF]/g;
+
+const cleanEmail = (value: unknown) =>
+  typeof value === "string" ? value.replace(INVISIBLE_CHARS, "") : value;
+
+const cleanPhone = (value: unknown) =>
+  typeof value === "string" ? value.replace(/[^\d+]/g, "") : value;
+
 export default function ContactInfoBlock({ isActive }: { isActive: boolean }) {
   const dispatch = useAppDispatch();
   const defaultValues = useAppSelector(
@@ -119,6 +129,7 @@ export default function ContactInfoBlock({ isActive }: { isActive: boolean }) {
       placeholder="Телефон"
       {...register("phone", {
         required: "Обов'язкове поле",
+        setValueAs: cleanPhone,
         pattern: {
           value: /^\+?[0-9]{10,15}$/,
           message: "Невірний формат телефону",
@@ -134,6 +145,7 @@ export default function ContactInfoBlock({ isActive }: { isActive: boolean }) {
       placeholder="Email"
       {...register("email", {
         required: "Обов'язкове поле",
+        setValueAs: cleanEmail,
         pattern: {
           value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
           message: "Невірний формат email",
@@ -148,7 +160,11 @@ export default function ContactInfoBlock({ isActive }: { isActive: boolean }) {
     {Object.keys(errors).length > 0 && (
   <div className="flex items-center gap-2 text-red-600 text-sm font-medium mt-1 select-none bg-red-50 rounded-md p-2">
     <CircleAlertIcon className="w-5 h-5" />
-    <span>Заповніть правильно всі необхідні поля</span>
+    <span>
+      {/* Name the failing field — a generic message left users guessing. */}
+      {Object.values(errors)[0]?.message?.toString() ||
+        "Заповніть правильно всі необхідні поля"}
+    </span>
   </div>
 )}
 

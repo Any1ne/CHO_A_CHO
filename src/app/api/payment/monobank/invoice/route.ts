@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { getRedisOrder } from "@/lib/redisOrder";
 import { createMonoInvoice } from "@/lib/monobank";
+import { getBaseURL } from "@/lib/getBaseURL";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = getBaseURL();
 
 // Invoice is built from the order already saved in Redis (amount + basket for
 // fiscalization), so the client only sends the orderId.
